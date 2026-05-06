@@ -1,0 +1,4637 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AETHRA - Kosár</title>
+
+  <!-- BOOTSTRAP -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/6.7.0/css/flag-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="style">
+    <link rel="stylesheet" href="css/style.css">
+   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF8C00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='8' cy='21' r='1'/><circle cx='19' cy='21' r='1'/><path d='M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12'/></svg>">
+  
+  <style>
+    /* KOSÁR OLDAL STÍLUSOK - TÉMA ÉRZÉKENY */
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+      --accent: #ff6b35;
+      
+      /* Kosár specifikus változók */
+      --cart-bg: var(--black);
+      --cart-card-bg: var(--gray-900);
+      --cart-text: var(--white);
+      --cart-border: var(--gray-800);
+      --cart-hover: var(--gray-800);
+      --cart-input-bg: var(--gray-700);
+      --cart-input-border: var(--gray-600);
+      --cart-section-bg: var(--gray-800);
+      --cart-shadow: rgba(0, 0, 0, 0.3);
+    }
+
+    /* VILÁGOS TÉMA - KOSÁR OLDAL */
+    [data-theme="light"] {
+      --cart-bg: #ffffff;
+      --cart-card-bg: #f8fafc;
+      --cart-text: #1a1a1a;
+      --cart-border: #e2e8f0;
+      --cart-hover: #f1f5f9;
+      --cart-input-bg: #ffffff;
+      --cart-input-border: #cbd5e1;
+      --cart-section-bg: #f1f5f9;
+      --cart-shadow: rgba(0, 0, 0, 0.1);
+      --navbar-bg: transparent;
+      --navbar-scrolled-bg: rgba(255, 255, 255, 0.95);
+      --navbar-text: #1e293b;
+      --dropdown-bg: rgba(255, 255, 255, 0.98);
+      --dropdown-border: rgba(37, 99, 235, 0.1);
+      
+      /* Light mode specifikus színek */
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      
+      /* Accent szín light mode-hoz */
+      --accent: #4c9eed;
+    }
+
+    .navbar-custom {
+      --navbar-text: #ffffff !important;
+    }
+
+    [data-theme="light"] .navbar-custom {
+      --navbar-text: #1e293b !important;
+    }
+
+    [data-theme="dark"] .navbar-custom {
+      --navbar-text: #ffffff !important;
+    }
+
+    [data-theme="light"] .navbar-custom.scrolled {
+      --navbar-scrolled-bg: rgba(255, 255, 255, 0.95) !important;
+    }
+
+    [data-theme="light"] .navbar-custom.scrolled .navbar-nav .nav-link {
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .navbar-custom.scrolled .navbar-brand {
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .navbar-custom.scrolled .profile-btn {
+      border-color: #1e293b !important;
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .navbar-custom.scrolled .profile-btn:hover {
+      background-color: rgba(37, 99, 235, 0.1) !important;
+      color: #1e293b !important;
+      border-color: var(--accent) !important;
+    }
+
+    .navbar-custom .navbar-nav .nav-link {
+      color: var(--navbar-text) !important;
+      font-weight: 500 !important;
+      transition: color 0.3s ease !important;
+    }
+
+    .navbar-custom .navbar-nav .nav-link:hover {
+      color: var(--accent) !important;
+    }
+
+    .navbar-custom .navbar-nav .nav-link.active {
+      color: var(--accent) !important;
+      font-weight: 600 !important;
+    }
+
+    .navbar-custom .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      max-width: 60%;
+      height: 2px;
+      background-color: var(--accent);
+      border-radius: 2px;
+    }
+
+    .navbar-custom .navbar-brand {
+      color: var(--navbar-text) !important;
+      font-weight: 700 !important;
+    }
+
+    /* PROFIL GOMB SZÍNEI */
+    .navbar-custom .profile-btn {
+      border-color: var(--navbar-text) !important;
+      color: var(--navbar-text) !important;
+    }
+
+    .navbar-custom .profile-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      color: var(--navbar-text) !important;
+      border-color: var(--accent) !important;
+    }
+
+    /* SCROLLED NAVBAR SZÍNEI */
+    .navbar-custom.scrolled {
+      background: var(--navbar-scrolled-bg) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .navbar-custom.scrolled .navbar-nav .nav-link {
+      color: var(--navbar-text) !important;
+    }
+
+    .navbar-custom.scrolled .navbar-nav .nav-link:hover {
+      color: var(--accent) !important;
+    }
+
+    .navbar-custom.scrolled .navbar-nav .nav-link.active {
+      color: var(--accent) !important;
+    }
+
+    .navbar-custom.scrolled .navbar-brand {
+      color: var(--navbar-text) !important;
+    }
+
+    .navbar-custom.scrolled .profile-btn {
+      border-color: var(--navbar-text) !important;
+      color: var(--navbar-text) !important;
+    }
+
+    .navbar-custom.scrolled .profile-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      color: var(--navbar-text) !important;
+      border-color: var(--accent) !important;
+    }
+
+    body {
+      background: var(--cart-bg);
+      font-family: 'Merriweather', serif;
+      margin: 0;
+      padding: 0;
+      color: var(--cart-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .page-container {
+      padding-top: 60px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0.5rem;
+      padding-top: 70px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+      background: var(--cart-bg);
+    }
+
+    .page-container.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cart-container {
+      width: 100%;
+      max-width: 1000px;
+      height: auto;
+      margin-top: 1.5%;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease 0.3s;
+    }
+
+    .cart-container.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cart-card {
+      background: var(--cart-card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid var(--cart-border);
+      box-shadow: 0 8px 32px var(--cart-shadow);
+      margin-top: 0;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.6s ease 0.5s;
+    }
+
+    .cart-card.animated {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cart-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease 0.7s;
+    }
+
+    .cart-header.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cart-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--accent), #e55a2b);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.8rem;
+      font-size: 1.8rem;
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+      opacity: 0;
+      transform: scale(0.8) rotate(-10deg);
+      transition: all 0.4s ease 0.8s;
+    }
+
+    [data-theme="light"] .cart-icon {
+      background: linear-gradient(135deg, #89E6F6, #8EC5FF);
+      color: #000000;
+      box-shadow: 0 4px 12px rgba(137, 230, 246, 0.4);
+    }
+
+    .cart-icon.animated {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    .cart-title {
+      font-family: 'Merriweather', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      color: var(--cart-text);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease 0.9s;
+    }
+
+    .cart-title.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cart-subtitle {
+      color: var(--gray-400);
+      font-size: 0.95rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease 1s;
+    }
+
+    .cart-subtitle.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Kosár tartalom */
+    .cart-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .cart-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Kosár elemek */
+    .cart-items-section {
+      background: var(--cart-section-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 1px solid var(--cart-border);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .cart-items-section.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-family: 'Merriweather', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--cart-text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title i {
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .cart-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      background: var(--cart-input-bg);
+      border: 1px solid var(--cart-border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .cart-item.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cart-item:hover {
+      background: var(--cart-hover);
+      border-color: var(--gray-500);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--cart-shadow);
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+    }
+
+    .item-name {
+      font-weight: 600;
+      color: var(--cart-text);
+      font-size: 1rem;
+      flex: 1;
+    }
+
+    .item-price {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .item-description {
+      color: var(--gray-400);
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .item-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .quantity-btn {
+      background: var(--cart-section-bg);
+      border: 1px solid var(--cart-border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cart-text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000000;
+    }
+
+    .quantity-input {
+      background: var(--cart-input-bg);
+      border: 1px solid var(--cart-border);
+      border-radius: 6px;
+      width: 50px;
+      height: 32px;
+      text-align: center;
+      color: var(--cart-text);
+      font-weight: 600;
+    }
+
+    .remove-btn {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      color: #dc3545;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background: rgba(220, 53, 69, 0.2);
+      border-color: #dc3545;
+    }
+
+    /* Asztalfoglalás rész - CSAK MEGJELENÍTÉS */
+    .reservation-display-section {
+      background: var(--cart-section-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 1px solid var(--cart-border);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .reservation-display-section.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reservation-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .reservation-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem;
+      background: var(--cart-input-bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .reservation-label {
+      color: var(--gray-300);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .reservation-value {
+      color: var(--cart-text);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .reservation-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .btn-modify {
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      color: #000000;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    [data-theme="light"] .btn-modify {
+      background: #4c9eed;
+    }
+
+    .btn-modify:hover {
+      background: #e55a2b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    [data-theme="light"] .btn-modify:hover {
+      background: #0CAEED;
+      transform: translateY(-2px);
+            box-shadow: 0 0 15px  rgba(33, 158, 181, 0.3);
+    }
+
+    .btn-cancel {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      color: #dc3545;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-cancel:hover {
+      background: rgba(220, 53, 69, 0.2);
+      border-color: #dc3545;
+    }
+
+    /* Összegzés rész */
+    .summary-section {
+      background: var(--cart-section-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      border: 1px solid var(--cart-border);
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .summary-section.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--cart-border);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .summary-label {
+      color: var(--gray-400);
+      font-weight: 600;
+    }
+
+    .summary-value {
+      color: var(--cart-text);
+      font-weight: 600;
+    }
+
+    .summary-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Elfogadó gomb */
+    .checkout-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #000000;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease 1.6s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    [data-theme="light"] .checkout-btn {
+      background: #89E6F6;
+      color: #000000;
+      box-shadow: 0 4px 12px rgba(137, 230, 246, 0.3);
+    }
+
+    .checkout-btn.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .checkout-btn:hover {
+      background: #e55a2b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 107, 53, 0.4);
+      color: #000000;
+    }
+
+    [data-theme="light"] .checkout-btn:hover {
+      background: #8EC5FF;
+      color: #000000;
+      box-shadow: 0 6px 15px rgba(137, 230, 246, 0.4);
+    }
+
+    .checkout-btn:disabled {
+      background: var(--gray-600);
+      color: var(--gray-400);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ÜRES KOSÁR ÉS NINCS FOGLALÁS STÍLUSOK - KÖZÉPRE IGAZÍTVA */
+    .empty-cart,
+    .no-reservation {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--gray-400);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .empty-cart-icon,
+    .no-reservation-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        color: var(--gray-500);
+        opacity: 0.7;
+    }
+
+    .empty-cart h4,
+    .no-reservation h4 {
+        margin-bottom: 0.8rem;
+        color: var(--cart-text);
+        font-family: 'Merriweather', serif;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+    .empty-cart p,
+    .no-reservation p {
+        margin-bottom: 2rem;
+        color: var(--gray-400);
+        font-size: 1rem;
+        max-width: 300px;
+        line-height: 1.5;
+    }
+
+    .empty-cart .btn-modify,
+    .no-reservation .btn-modify {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 220px;
+        margin: 0 auto;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    /* Animációk az üres állapotokhoz */
+    .empty-cart,
+    .no-reservation {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+
+    .empty-cart.animated,
+    .no-reservation.animated {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .empty-cart-icon,
+    .no-reservation-icon {
+        transform: scale(0.8);
+        transition: all 0.4s ease 0.2s;
+    }
+
+    .empty-cart.animated .empty-cart-icon,
+    .no-reservation.animated .no-reservation-icon {
+        transform: scale(1);
+    }
+
+    .empty-cart h4,
+    .no-reservation h4,
+    .empty-cart p,
+    .no-reservation p {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.4s ease 0.3s;
+    }
+
+    .empty-cart.animated h4,
+    .no-reservation.animated h4,
+    .empty-cart.animated p,
+    .no-reservation.animated p {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .empty-cart .btn-modify,
+    .no-reservation .btn-modify {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.4s ease 0.4s;
+    }
+
+    .empty-cart.animated .btn-modify,
+    .no-reservation.animated .btn-modify {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Loading state */
+    .navbar-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: var(--gray-400);
+      background: transparent;
+      min-height: 70px;
+    }
+
+    .loading-spinner {
+      border: 3px solid var(--gray-700);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Scrollbar styling */
+    .cart-items::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .cart-items::-webkit-scrollbar-track {
+      background: var(--gray-700);
+      border-radius: 2px;
+    }
+
+    .cart-items::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* MODAL STÍLUSOK KOSÁRHOZ */
+    .order-success-modal .modal-content,
+    .notes-modal .modal-content,
+    .address-modal .modal-content,
+    .payment-modal .modal-content {
+      background: var(--cart-card-bg) !important;
+      border: 1px solid var(--cart-border) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 40px var(--cart-shadow) !important;
+    }
+    
+    .order-success-modal .modal-header,
+    .notes-modal .modal-header,
+    .address-modal .modal-header,
+    .payment-modal .modal-header {
+      border-bottom: 1px solid var(--cart-border) !important;
+      padding: 1.2rem 1.5rem !important;
+    }
+    
+    .order-success-modal .modal-title,
+    .notes-modal .modal-title,
+    .address-modal .modal-title,
+    .payment-modal .modal-title {
+      color: var(--cart-text) !important;
+      font-family: 'Merriweather', serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    
+    .order-success-modal .modal-body,
+    .notes-modal .modal-body,
+    .address-modal .modal-body,
+    .payment-modal .modal-body {
+      color: var(--cart-text) !important;
+      padding: 1.5rem !important;
+      font-family: 'Open Sans', sans-serif;
+    }
+    
+    .order-success-modal .modal-footer,
+    .notes-modal .modal-footer,
+    .address-modal .modal-footer,
+    .payment-modal .modal-footer {
+      border-top: 1px solid var(--cart-border) !important;
+      padding: 1.2rem 1.5rem !important;
+    }
+    
+    .order-success-modal .modal-backdrop,
+    .notes-modal .modal-backdrop,
+    .address-modal .modal-backdrop,
+    .payment-modal .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.7) !important;
+    }
+    
+    .order-success-modal .modal-backdrop.show,
+    .notes-modal .modal-backdrop.show,
+    .address-modal .modal-backdrop.show,
+    .payment-modal .modal-backdrop.show {
+      opacity: 0.8 !important;
+    }
+    
+    .order-success-modal .close,
+    .notes-modal .close,
+    .address-modal .close,
+    .payment-modal .close {
+      color: var(--cart-text) !important;
+      opacity: 0.7;
+    }
+    
+    .order-success-modal .close:hover,
+    .notes-modal .close:hover,
+    .address-modal .close:hover,
+    .payment-modal .close:hover {
+      color: var(--accent) !important;
+      opacity: 1;
+    }
+    
+    .order-success-modal .btn-secondary,
+    .notes-modal .btn-secondary,
+    .address-modal .btn-secondary,
+    .payment-modal .btn-secondary {
+      background: var(--gray-600) !important;
+      border-color: var(--gray-600) !important;
+      color: white !important;
+    }
+    
+    .order-success-modal .btn-primary,
+    .notes-modal .btn-primary,
+    .address-modal .btn-primary,
+    .payment-modal .btn-primary {
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+      color: #000000 !important;
+      font-weight: 600;
+    }
+    
+    .order-success-modal .btn-primary:hover,
+    .notes-modal .btn-primary:hover,
+    .address-modal .btn-primary:hover,
+    .payment-modal .btn-primary:hover {
+      background: #e55a2b !important;
+      border-color: #e55a2b !important;
+      color: #000000 !important;
+    }
+    
+    [data-theme="light"] .order-success-modal .btn-primary,
+    [data-theme="light"] .notes-modal .btn-primary,
+    [data-theme="light"] .address-modal .btn-primary,
+    [data-theme="light"] .payment-modal .btn-primary {
+      background: #89E6F6 !important;
+      border-color: #89E6F6 !important;
+    }
+    
+    [data-theme="light"] .order-success-modal .btn-primary:hover,
+    [data-theme="light"] .notes-modal .btn-primary:hover,
+    [data-theme="light"] .address-modal .btn-primary:hover,
+    [data-theme="light"] .payment-modal .btn-primary:hover {
+      background: #8EC5FF !important;
+      border-color: #8EC5FF !important;
+    }
+
+    /* Notes modal specific styles */
+    .notes-modal textarea,
+    .address-modal textarea,
+    .address-modal input {
+      background: var(--cart-input-bg) !important;
+      border: 1px solid var(--cart-border) !important;
+      color: var(--cart-text) !important;
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-size: 0.95rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+    
+    .notes-modal textarea:focus,
+    .address-modal textarea:focus,
+    .address-modal input:focus {
+      outline: none;
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1) !important;
+    }
+    
+    .notes-modal .form-label,
+    .address-modal .form-label,
+    .payment-modal .form-label {
+      color: var(--cart-text);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .notes-modal .optional-text,
+    .address-modal .optional-text {
+      color: var(--gray-400);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+    
+    /* Payment modal specific styles */
+    .payment-option {
+      background: var(--cart-section-bg);
+      border: 2px solid var(--cart-border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .payment-option:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--cart-shadow);
+    }
+    
+    .payment-option.selected {
+      border-color: var(--accent);
+      background: rgba(255, 107, 53, 0.1);
+    }
+    
+    .payment-option i {
+      font-size: 1.5rem;
+      margin-right: 0.8rem;
+      color: var(--accent);
+    }
+    
+    .payment-details {
+      padding: 1rem;
+      background: var(--cart-input-bg);
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .payment-details.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* KOMPAKT SIKERES RENDELÉS MODAL */
+    .compact-success-modal .modal-content {
+      background: var(--cart-card-bg) !important;
+      border: 1px solid var(--cart-border) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 40px var(--cart-shadow) !important;
+    }
+    
+    .compact-success-modal .modal-header {
+      border-bottom: 1px solid var(--cart-border) !important;
+      padding: 1rem 1.5rem !important;
+    }
+    
+    .compact-success-modal .modal-body {
+      padding: 1.5rem !important;
+    }
+    
+    .compact-success-modal .modal-footer {
+      border-top: 1px solid var(--cart-border) !important;
+      padding: 1rem 1.5rem !important;
+    }
+    
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+      animation: scaleIn 0.5s ease;
+    }
+    
+    .success-info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 0;
+    }
+    
+    .success-info-item i {
+      width: 24px;
+      color: var(--accent);
+      margin-right: 0.75rem;
+    }
+    
+    .success-info-label {
+      font-weight: 600;
+      color: var(--gray-300);
+      min-width: 120px;
+    }
+    
+    .success-info-value {
+      color: var(--cart-text);
+      font-weight: 500;
+    }
+    
+    .delivery-address-compact {
+      background: var(--cart-section-bg);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .notes-compact {
+      background: var(--cart-section-bg);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+    
+    .reservation-compact {
+      background: var(--cart-section-bg);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .status-badge.success {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4CAF50;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+    
+    .notification-item {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--cart-section-bg);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .notification-item i {
+      color: var(--accent);
+      margin-right: 0.75rem;
+      margin-top: 0.1rem;
+    }
+
+
+
+    /* Reszponzív design */
+    @media (max-width: 768px) {
+      .page-container {
+        padding-top: 60px;
+        min-height: calc(100vh - 60px);
+        padding: 0.3rem;
+        padding-top: 60px;
+      }
+      
+      .cart-container {
+        margin-top: 0;
+      }
+      
+      .cart-card {
+        padding: 1.2rem;
+        margin-top: 0;
+      }
+      
+      .cart-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .cart-title {
+        font-size: 1.5rem;
+      }
+      
+      .item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .item-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+      }
+      
+      .quantity-controls {
+        align-self: flex-start;
+      }
+      
+      .reservation-actions {
+        flex-direction: column;
+      }
+      
+      .empty-cart,
+      .no-reservation {
+        padding: 2rem 1rem;
+        min-height: 250px;
+      }
+      
+      .empty-cart-icon,
+      .no-reservation-icon {
+        font-size: 3rem;
+      }
+      
+      /* Reszponzív modal */
+      .order-success-modal .modal-dialog,
+      .notes-modal .modal-dialog,
+      .address-modal .modal-dialog,
+      .payment-modal .modal-dialog,
+      .compact-success-modal .modal-dialog {
+        margin: 0.5rem;
+      }
+      
+      .order-success-modal .modal-body,
+      .notes-modal .modal-body,
+      .address-modal .modal-body,
+      .payment-modal .modal-body,
+      .compact-success-modal .modal-body {
+        padding: 1rem !important;
+      }
+      
+      .success-info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+      
+      .success-info-label {
+        min-width: auto;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cart-items-section,
+      .reservation-display-section,
+      .summary-section {
+        padding: 1rem;
+      }
+      
+      .cart-item {
+        padding: 0.8rem;
+      }
+      
+      .empty-cart .btn-modify,
+      .no-reservation .btn-modify {
+        min-width: 180px;
+        padding: 0.7rem 1.2rem;
+      }
+      
+      .success-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: var(--accent) !important;
+    }
+    /* Lemondás modal stílusok */
+.cancel-modal .modal-content {
+  background: var(--cart-card-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px var(--cart-shadow) !important;
+}
+
+.cancel-modal .modal-header {
+  border-bottom: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.cancel-modal .modal-title {
+  color: var(--cart-text) !important;
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.cancel-modal .modal-body {
+  color: var(--cart-text) !important;
+  padding: 1.5rem !important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.cancel-modal .modal-footer {
+  border-top: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.cancel-modal .reservation-details {
+  background: var(--cart-section-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+}
+
+.cancel-modal .table {
+  color: var(--cart-text) !important;
+  margin-bottom: 0 !important;
+}
+
+.cancel-modal .table-sm td {
+  padding: 0.5rem !important;
+  border-color: var(--cart-border) !important;
+}
+
+/* Sikeres/Hiba modal stílusok */
+.success-modal .modal-content,
+.error-modal .modal-content {
+  background: var(--cart-card-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px var(--cart-shadow) !important;
+}
+
+.success-modal .modal-header,
+.error-modal .modal-header {
+  border-bottom: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.success-modal .modal-title,
+.error-modal .modal-title {
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.success-modal .modal-body,
+.error-modal .modal-body {
+  padding: 1.5rem !important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.success-modal .modal-footer,
+.error-modal .modal-footer {
+  border-top: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+/* Üres kosár modal */
+.empty-cart-modal .modal-content {
+  background: var(--cart-card-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px var(--cart-shadow) !important;
+}
+
+.empty-cart-modal .modal-header {
+  border-bottom: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.empty-cart-modal .modal-title {
+  color: var(--cart-text) !important;
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.empty-cart-modal .modal-body {
+  color: var(--cart-text) !important;
+  padding: 1.5rem !important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.empty-cart-modal .modal-footer {
+  border-top: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+/* Modal backdrop minden modálnál */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.modal-backdrop.show {
+  opacity: 0.8 !important;
+}
+
+/* API hívás modal stílusok */
+.api-modal .modal-content {
+  background: var(--cart-card-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px var(--cart-shadow) !important;
+}
+
+.api-modal .modal-header {
+  border-bottom: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.api-modal .modal-title {
+  color: var(--cart-text) !important;
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.api-modal .modal-body {
+  color: var(--cart-text) !important;
+  padding: 1.5rem !important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.api-modal .modal-footer {
+  border-top: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.api-modal .alert-info {
+  background: var(--cart-section-bg) !important;
+  border-color: var(--accent) !important;
+  color: var(--cart-text) !important;
+}
+/* Extra services details in success modal */
+.extra-services-compact-details {
+    background: var(--cart-section-bg);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Status badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-badge.success {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-badge.info {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+/* Notification item */
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: var(--cart-section-bg);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.notification-item i {
+    color: var(--accent);
+    margin-right: 0.75rem;
+    margin-top: 0.1rem;
+}
+
+.notification-item.text-info i {
+    color: #17a2b8;
+}
+
+/* Success icon animation */
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive design for modal */
+@media (max-width: 768px) {
+    .success-info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .success-info-label {
+        min-width: auto;
+        font-size: 0.85rem;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+/* GUEST INFO MODAL - DARK MODE TÁMOGATÁS */
+.guest-info-modal .modal-content {
+  background: var(--cart-card-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px var(--cart-shadow) !important;
+}
+
+.guest-info-modal .modal-header {
+  border-bottom: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.guest-info-modal .modal-title {
+  color: var(--cart-text) !important;
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.guest-info-modal .modal-body {
+  color: var(--cart-text) !important;
+  padding: 1.5rem !important;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.guest-info-modal .modal-footer {
+  border-top: 1px solid var(--cart-border) !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.guest-info-modal .close {
+  color: var(--cart-text) !important;
+  opacity: 0.7;
+}
+
+.guest-info-modal .close:hover {
+  color: var(--accent) !important;
+  opacity: 1;
+}
+
+.guest-info-modal .form-label {
+  color: var(--cart-text) !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.guest-info-modal .form-control {
+  background: var(--cart-input-bg) !important;
+  border: 1px solid var(--cart-border) !important;
+  color: var(--cart-text) !important;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.guest-info-modal .form-control:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1) !important;
+}
+
+.guest-info-modal .form-text {
+  color: var(--gray-400) !important;
+}
+
+.guest-info-modal .alert-info {
+  background: var(--cart-section-bg) !important;
+  border-color: var(--accent) !important;
+  color: var(--cart-text) !important;
+}
+
+.guest-info-modal .alert-warning {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border-color: #ffc107 !important;
+  color: var(--cart-text) !important;
+}
+
+.guest-info-modal .btn-secondary {
+  background: var(--gray-600) !important;
+  border-color: var(--gray-600) !important;
+  color: white !important;
+}
+
+.guest-info-modal .btn-primary {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+.guest-info-modal .btn-primary:hover {
+  background: #e55a2b !important;
+  border-color: #e55a2b !important;
+}
+
+[data-theme="light"] .guest-info-modal .btn-primary {
+  background: #89E6F6 !important;
+  border-color: #89E6F6 !important;
+}
+
+[data-theme="light"] .guest-info-modal .btn-primary:hover {
+  background: #8EC5FF !important;
+  border-color: #8EC5FF !important;
+}
+  </style>
+</head>
+
+<body>
+  <!-- Navbar konténer -->
+  <div id="navbar-container">
+    <div class="navbar-loading">
+      <div class="loading-spinner"></div>
+      <p class="mb-0">Navbar betöltése...</p>
+    </div>
+  </div>
+
+  <!-- Fő tartalom -->
+  <div class="page-container" id="page-container">
+    <div class="cart-container" id="cart-container">
+      
+      <!-- Kosár kártya -->
+      <div class="cart-card" id="cart-card">
+        <div class="cart-header" id="cart-header">
+          <div class="cart-icon" id="cart-icon">
+            <i class="bi bi-cart3"></i>
+          </div>
+          <h1 class="cart-title" id="cart-title">Kosár tartalma</h1>
+          <p class="cart-subtitle" id="cart-subtitle">Ellenőrizd rendelésedet és asztalfoglalásodat</p>
+        </div>
+
+        <!-- Kosár tartalom -->
+        <div class="cart-content">
+          <!-- Kosár elemek -->
+          <div class="cart-items-section" id="cart-items-section">
+            <h3 class="section-title">
+              <i class="bi bi-basket"></i>
+              Ételeim
+            </h3>
+            
+            <ul class="cart-items" id="cart-items">
+              <!-- Kosár elemek dinamikusan töltődnek -->
+            </ul>
+            
+            <!-- Üres kosár üzenet -->
+            <div class="empty-cart" id="empty-cart" style="display: none;">
+              <div class="empty-cart-icon">
+                <i class="bi bi-cart-x"></i>
+              </div>
+              <h4>Üres a kosarad</h4>
+              <p>Még nem adtál hozzá ételeket a kosaradhoz.</p>
+              <button class="btn btn-modify" onclick="window.location.href='menu.html'">
+                <i class="bi bi-arrow-left"></i> Menü megtekintése
+              </button>
+            </div>
+          </div>
+
+          <!-- Asztalfoglalás megjelenítése -->
+          <div class="reservation-display-section" id="reservation-display-section">
+            <h3 class="section-title">
+              <i class="bi bi-calendar-check"></i>
+              Asztalfoglalásom
+            </h3>
+            
+            <div class="reservation-info" id="reservation-info">
+              <!-- Asztalfoglalás információk dinamikusan töltődnek -->
+            </div>
+            
+            <!-- Nincs foglalás üzenet -->
+            <div class="no-reservation" id="no-reservation" style="display: none;">
+              <div class="no-reservation-icon">
+                <i class="bi bi-calendar-x"></i>
+              </div>
+              <h4>Nincs aktív asztalfoglalás</h4>
+              <p>Még nem foglaltál asztalt.</p>
+              <button class="btn btn-modify" onclick="window.location.href='reserve.html'">
+                <i class="bi bi-plus-circle"></i> Asztal foglalása
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Összegzés -->
+        <div class="summary-section" id="summary-section">
+          <h3 class="section-title">
+            <i class="bi bi-receipt"></i>
+            Összegzés
+          </h3>
+          
+          <div class="summary-row">
+            <span class="summary-label">Ételek összege:</span>
+            <span class="summary-value" id="items-total">0 Ft</span>
+          </div>
+          
+          <div class="summary-row">
+            <span class="summary-label">Szolgáltatási díj:</span>
+            <span class="summary-value" id="service-fee">0 Ft</span>
+          </div>
+          
+          <div class="summary-row">
+            <span class="summary-label">Összesen:</span>
+            <span class="summary-value summary-total" id="total-amount">0 Ft</span>
+          </div>
+        </div>
+
+        <!-- Elfogadó gomb -->
+        <button class="checkout-btn" id="checkout-btn">
+          <i class="bi bi-check-lg"></i> Rendelés elfogadása
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script betöltési sorrend -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ELŐSZÖR auth.js, AZTÁN smart-cart-manager.js -->
+  <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+  <script src="js/smart-cart-manager.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/modal-feedback.js"></script>
+
+<script>
+    $(document).ready(function() {
+      console.log('🛒 Kosár oldal betöltve');
+      
+      // Globális változók a rendeléshez
+      let orderUserData = null;
+      let orderCartData = null;
+      let orderFoodTotal = 0;
+      let orderServiceFee = 0;
+      let orderTotalAmount = 0;
+      let orderItems = [];
+      let currentReservationDetails = null;
+      let deliveryAddress = null;
+      let paymentMethod = 'card'; // Alapértelmezett fizetési mód
+
+          let extraServicesTotal = 0;  
+    let extraServicesList = [];  
+      
+      // EXTRA SZOLGÁLTATÁSOK ÁRAI
+const EXTRA_SERVICES_PRICES = {
+    'Bélelt légballonok': 5000,
+    'Friss virágok': 8000,
+    'Üdvözlő pezsgő': 12000,
+    'Prémium desszert': 6000,
+    'Extra kényelmi szék': 2500,
+    'Prémium kiszolgálás': 15000,
+    'Privát parkoló': 3000,
+    'Professzionális fotózás': 25000
+};
+      // Dátum/idő segédfüggvény
+      function formatDateTimeForDisplay(reservationData) {
+          if (!reservationData) {
+              return { date: 'Nincs megadva', time: 'Nincs megadva' };
+          }
+          
+          // Először próbáljuk az originalTime-t
+          if (reservationData.originalTime && reservationData.originalTime !== 'Nincs megadva') {
+              return {
+                  date: reservationData.originalDate || reservationData.date || 'Nincs megadva',
+                  time: reservationData.originalTime
+              };
+          }
+          
+          // Aztán a time mezőt
+          if (reservationData.time && reservationData.time !== 'Nincs megadva') {
+              return {
+                  date: reservationData.date || 'Nincs megadva',
+                  time: reservationData.time
+              };
+          }
+          
+          // Végül a datetime-t
+          if (reservationData.datetime) {
+              try {
+                  const dateObj = new Date(reservationData.datetime);
+                  const localTime = new Date(dateObj.getTime());
+                  
+                  const date = localTime.toLocaleDateString('hu-HU', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit'
+                  });
+                  
+                  const time = localTime.toLocaleTimeString('hu-HU', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false
+                  });
+                  
+                  return { date, time };
+              } catch (error) {
+                  console.error('❌ Hiba a dátum formázásakor:', error);
+              }
+          }
+          
+          return { date: 'Nincs megadva', time: 'Nincs megadva' };
+      }
+      
+      
+      // Extra szolgáltatások formázása
+      function formatExtraServices(extraServices) {
+          if (!extraServices) return 'Nincsenek extra szolgáltatások';
+          
+          try {
+              // Ha JSON string, parse-oljuk
+              if (typeof extraServices === 'string' && extraServices.trim().startsWith('[')) {
+                  const services = JSON.parse(extraServices);
+                  if (Array.isArray(services)) {
+                      return services.map(service => {
+                          if (typeof service === 'string') return service;
+                          if (service.name) return service.name;
+                          return service;
+                      }).join(', ');
+                  }
+              }
+              
+              // Ha már tömb
+              if (Array.isArray(extraServices)) {
+                  return extraServices.map(service => {
+                      if (typeof service === 'string') return service;
+                      if (service.name) return service.name;
+                      return service;
+                  }).join(', ');
+              }
+              
+              // Egyéb esetek
+              return String(extraServices);
+              
+          } catch (error) {
+              console.error('❌ Extra szolgáltatások formázási hiba:', error);
+              return String(extraServices);
+          }
+      }
+      
+// Ellenőrizzük, van-e házihozszállítás a kosárban - JAVÍTVA
+function hasDeliveryItems() {
+    if (!orderCartData || !orderCartData.items) return false;
+    
+    const deliveryItems = orderCartData.items.filter(item => 
+        item.consumption === 'delivery' || 
+        (item.consumption && item.consumption.toLowerCase() === 'delivery')
+    );
+    
+    return deliveryItems.length > 0;
+}
+      
+      // Várakozás a CartManager teljes inicializálására
+      function waitForCartManager(callback, maxWaitTime = 15000) {
+          const startTime = Date.now();
+          
+          function check() {
+              if (window.cartManager && window.cartManager.isInitialized) {
+                  console.log('✅ CartManager inicializálva');
+                  console.log('🔍 CartManager debug:', window.cartManager.getDebugInfo());
+                  
+                  callback();
+              } else if (Date.now() - startTime < maxWaitTime) {
+                  console.log('⏳ Várakozás a CartManager inicializálására...');
+                  setTimeout(check, 300);
+              } else {
+                  console.warn('⚠️ CartManager nem inicializálódott a várt időn belül');
+                  if (window.cartManager) {
+                      callback();
+                  } else {
+                      loadCartDataFallback();
+                  }
+              }
+          }
+          
+          check();
+      }
+
+      // Kosár adatok betöltése
+      function loadCartData() {
+        if (!window.cartManager || !window.cartManager.isInitialized) {
+          console.error('❌ CartManager nem elérhető');
+          loadCartDataFallback();
+          return;
+        }
+
+        const cartData = cartManager.getCartData();
+        console.log('📊 Kosár adatok betöltése:', cartData);
+
+        updateCartDisplay(cartData);
+        updateSummary(cartData);
+      }
+
+function updateCartDisplay(cartData) {
+    const cartItemsContainer = $('#cart-items');
+    const emptyCartMessage = $('#empty-cart');
+    const checkoutBtn = $('#checkout-btn');
+
+    // Csak az ételeket jelenítjük meg
+    const foodItems = cartData.items ? cartData.items.filter(item => 
+        item.type !== 'reservation' && 
+        !item.reservationData
+    ) : [];
+    
+    // MENTJÜK A TÉTELEKET az email küldéshez
+    orderItems = JSON.parse(JSON.stringify(foodItems)); // Deep copy
+    
+    if (foodItems.length === 0) {
+        cartItemsContainer.hide();
+        emptyCartMessage.show();
+        
+        // JAVÍTÁS ITT: Ne tiltsuk le automatikusan a gombot
+        // checkoutBtn.prop('disabled', true); <- EZT KI kell venni
+        
+        // Ellenőrizzük, van-e extra szolgáltatás
+        const hasExtraServices = cartData.reservationDetails && 
+                                 cartData.reservationDetails.extraServices && 
+                                 String(cartData.reservationDetails.extraServices).trim() !== '' &&
+                                 !String(cartData.reservationDetails.extraServices).toLowerCase().includes('nincsenek');
+        
+        // Ha van extra szolgáltatás, engedélyezzük a gombot
+        checkoutBtn.prop('disabled', !hasExtraServices);
+        
+        setTimeout(() => {
+            emptyCartMessage.addClass('animated');
+        }, 100);
+        return;
+    }
+
+    // Kosár elemek megjelenítése
+    cartItemsContainer.show();
+    emptyCartMessage.hide();
+    
+    // JAVÍTÁS ITT: Ha vannak ételek, mindenképp engedélyezzük
+    checkoutBtn.prop('disabled', false);
+
+    cartItemsContainer.empty();
+    
+    foodItems.forEach((item, index) => {
+        const cartItem = `
+            <li class="cart-item">
+              <div class="item-header">
+                <div class="item-name">${item.name}</div>
+                <div class="item-price">${item.price.toLocaleString()} Ft</div>
+              </div>
+              <div class="item-description">${item.description}</div>
+              ${item.date ? `<div class="item-description"><small>Időpont: ${item.date} ${item.time}</small></div>` : ''}
+              ${item.consumption ? `<div class="item-description"><small>Fogyasztás: ${getConsumptionText(item.consumption)}</small></div>` : ''}
+              <div class="item-controls">
+                <div class="quantity-controls">
+                  <button class="quantity-btn" onclick="updateQuantity('${item.itemId}', ${item.quantity - 1})">
+                    <i class="bi bi-dash"></i>
+                  </button>
+                  <input type="number" class="quantity-input" value="${item.quantity}" 
+                         onchange="updateQuantity('${item.itemId}', parseInt(this.value))">
+                  <button class="quantity-btn" onclick="updateQuantity('${item.itemId}', ${item.quantity + 1})">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+                <button class="remove-btn" onclick="removeItem('${item.itemId}')">
+                  <i class="bi bi-trash"></i> Törlés
+                </button>
+              </div>
+            </li>
+          `;
+        cartItemsContainer.append(cartItem);
+        
+        // Animáció hozzáadása
+        setTimeout(() => {
+            $('.cart-item').eq(index).addClass('animated');
+        }, index * 100);
+    });
+}
+
+      // Mennyiség frissítése
+      window.updateQuantity = function(itemId, newQuantity) {
+        if (!window.cartManager || !window.cartManager.isInitialized) {
+          console.error('❌ CartManager nem elérhető a mennyiség frissítéséhez');
+          return;
+        }
+
+        if (newQuantity < 1) {
+          window.removeItem(itemId);
+          return;
+        }
+
+        cartManager.updateQuantity(itemId, newQuantity)
+          .then(() => {
+            console.log(`✅ Mennyiség frissítve: ${itemId} -> ${newQuantity}`);
+          })
+          .catch(error => {
+            console.error('❌ Hiba a mennyiség frissítésekor:', error);
+          });
+      };
+
+      // Elem eltávolítása
+      window.removeItem = function(itemId) {
+        if (!window.cartManager || !window.cartManager.isInitialized) {
+          console.error('❌ CartManager nem elérhető az elem eltávolításához');
+          return;
+        }
+
+        cartManager.removeItem(itemId)
+          .then(() => {
+            console.log(`✅ Elem eltávolítva: ${itemId}`);
+          })
+          .catch(error => {
+            console.error('❌ Hiba az elem eltávolításakor:', error);
+        });
+      };
+
+      // Fogyasztási mód szöveges formája
+      function getConsumptionText(value) {
+        switch(value) {
+          case 'restaurant': return 'Étteremben';
+          case 'takeaway': return 'Elvitelre';
+          case 'delivery': return 'Házhozszállítás';
+          default: return 'Ismeretlen';
+        }
+      }
+
+      // Fallback kosár betöltés
+      function loadCartDataFallback() {
+        console.log('🔄 Fallback kosár betöltés');
+        try {
+          if (window.cartManager && window.cartManager.cartItems) {
+            const foodItems = window.cartManager.cartItems.filter(item => 
+                item.type !== 'reservation' && 
+                !item.reservationData
+            );
+            orderItems = JSON.parse(JSON.stringify(foodItems));
+            const cartData = {
+              items: foodItems,
+              totalItems: foodItems.reduce((total, item) => total + item.quantity, 0),
+              totalPrice: foodItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+            };
+            updateCartDisplay(cartData);
+            updateSummary(cartData);
+          } else {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const foodItems = cartItems.filter(item => 
+                item.type !== 'reservation' && 
+                !item.reservationData
+            );
+            orderItems = JSON.parse(JSON.stringify(foodItems));
+            const cartData = {
+              items: foodItems,
+              totalItems: foodItems.reduce((total, item) => total + item.quantity, 0),
+              totalPrice: foodItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+            };
+            updateCartDisplay(cartData);
+            updateSummary(cartData);
+          }
+        } catch (error) {
+          console.error('❌ Fallback kosár betöltési hiba:', error);
+        }
+      }
+// ÖSSZEGZÉS HTML FRISSÍTÉSE
+function updateSummaryHTML(data) {
+    console.log('📊 Összegzés HTML frissítése:', data);
+    
+    // Alap összeg
+    $('#items-total').text(data.foodTotal.toLocaleString() + ' Ft');
+    $('#service-fee').text(data.serviceFee.toLocaleString() + ' Ft');
+    
+    // Extra szolgáltatások sor (csak ha vannak)
+    if (data.extraServicesTotal > 0) {
+        updateExtraServicesRowSimple(data);
+    } else {
+        $('#extra-services-row').remove();
+    }
+    
+// Végösszeg
+$('#total-amount').text(totalAmount.toLocaleString() + ' Ft');
+
+// JAVÍTÁS: Checkout gomb állapota - ha van aktív foglalás, engedélyezzük
+const checkoutBtn = $('#checkout-btn');
+
+// Ellenőrizzük, van-e aktív foglalás
+const hasActiveReservation = !!(cartData.reservationDetails && cartData.reservationDetails.reservationId);
+const hasFood = foodTotal > 0;
+
+// Gomb engedélyezése: ha van étel VAGY van aktív foglalás
+const shouldEnable = hasFood || hasActiveReservation;
+
+console.log('🔘 updateSummary - gomb állapota:', {
+    hasFood,
+    hasActiveReservation,
+    shouldEnable,
+    foodTotal,
+    reservationId: cartData.reservationDetails?.reservationId
+});
+
+checkoutBtn.prop('disabled', !shouldEnable);
+}
+
+// EXTRA SZOLGÁLTATÁKOS SOR (EGYSZERŰ, KEDVEZMÉNY NÉLKÜL)
+function updateExtraServicesRowSimple(data) {
+    // Fő sor
+    if (!$('#extra-services-row').length) {
+        $('.summary-row:has(#service-fee)').after(`
+            <div class="summary-row" id="extra-services-row">
+                <span class="summary-label">
+                    <i class="bi bi-stars"></i> Extra szolgáltatások:
+                </span>
+                <span class="summary-value" id="extra-services-total">${data.extraServicesTotal.toLocaleString()} Ft</span>
+            </div>
+        `);
+    } else {
+        $('#extra-services-total').text(data.extraServicesTotal.toLocaleString() + ' Ft');
+    }
+    
+    // Részletek tooltip
+    if (data.extraServicesList && data.extraServicesList.length > 0) {
+        const tooltipText = data.extraServicesList.map(service => 
+            `${service.name}: ${service.price.toLocaleString()} Ft`
+        ).join('\n');
+        
+        $('#extra-services-row .summary-label')
+            .attr('title', tooltipText)
+            .attr('data-toggle', 'tooltip');
+        
+        // Bootstrap tooltip inicializálás
+        if ($.fn.tooltip) {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+    }
+}
+function updateSummary(cartData) {
+    console.log('💰 Összegzés frissítése:', cartData);
+    
+    // Csak az ételek
+    const foodItems = cartData.items ? cartData.items.filter(item => 
+        item.type !== 'reservation' && !item.reservationData
+    ) : [];
+    
+    const foodTotal = foodItems.reduce((total, item) => {
+        return total + (item.price * (item.quantity || 1));
+    }, 0);
+    
+    // Szolgáltatási díj: 10%
+    const serviceFee = Math.round(foodTotal * 0.1);
+    
+    // **EXTRA SZOLGÁLTATÁSOK ÖSSZEGZÉSE**
+    let extraServicesTotal = 0;
+    let extraServicesList = [];
+    
+    if (cartData.reservationDetails && cartData.reservationDetails.extraServices) {
+        const extraResult = calculateExtraServicesNoDiscount(cartData.reservationDetails);
+        extraServicesTotal = extraResult.total;
+        extraServicesList = extraResult.services;
+        
+        console.log('✨ Extra szolgáltatások a kosárban:', {
+            total: extraServicesTotal,
+            services: extraServicesList
+        });
+    }
+    
+    // Végösszeg (ételek + szolgáltatási díj + extra szolgáltatások)
+    const totalAmount = foodTotal + serviceFee + extraServicesTotal;
+    
+    // **MENTJÜK GLOBÁLISAN IS**
+    orderFoodTotal = foodTotal;
+    orderServiceFee = serviceFee;
+    extraServicesTotal = extraServicesTotal;
+    extraServicesList = extraServicesList;
+    orderTotalAmount = totalAmount;
+    
+    // **HTML FRISSÍTÉSE**
+    $('#items-total').text(foodTotal.toLocaleString() + ' Ft');
+    $('#service-fee').text(serviceFee.toLocaleString() + ' Ft');
+    
+    // **EXTRA SZOLGÁLTATÁSOK SOR HOZZÁADÁSA (ha vannak)**
+    if (extraServicesTotal > 0) {
+        // Ha még nincs extra szolgáltatások sor, hozzuk létre
+        if ($('#extra-services-row').length === 0) {
+            $('.summary-row:has(#service-fee)').after(`
+                <div class="summary-row" id="extra-services-row">
+                    <span class="summary-label">
+                        <i class="bi bi-stars" style="color: var(--accent);"></i> 
+                        Extra szolgáltatások:
+                    </span>
+                    <span class="summary-value" id="extra-services-total">${extraServicesTotal.toLocaleString()} Ft</span>
+                </div>
+            `);
+            
+            // **Tooltip a részletekkel**
+            if (extraServicesList.length > 0) {
+                const tooltipText = extraServicesList.map(service => 
+                    `${service.name}: ${service.price.toLocaleString()} Ft`
+                ).join('\n');
+                
+                $('#extra-services-row .summary-label')
+                    .attr('title', tooltipText)
+                    .attr('data-toggle', 'tooltip')
+                    .css('cursor', 'help');
+                
+                // Bootstrap tooltip inicializálás
+                if ($.fn.tooltip) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+            }
+        } else {
+            // Ha már létezik, frissítsük az értéket
+            $('#extra-services-total').text(extraServicesTotal.toLocaleString() + ' Ft');
+        }
+    } else {
+        // Ha nincsenek extra szolgáltatások, távolítsuk el a sort
+        $('#extra-services-row').remove();
+    }
+    
+    // **VÉGÖSSZEG MEGJELENÍTÉSE**
+    $('#total-amount').text(totalAmount.toLocaleString() + ' Ft');
+    
+    // Checkout gomb állapota
+    const hasActiveReservation = !!(cartData.reservationDetails && cartData.reservationDetails.reservationId);
+    const hasFood = foodTotal > 0;
+    const shouldEnable = hasFood || hasActiveReservation;
+    
+    $('#checkout-btn').prop('disabled', !shouldEnable);
+    
+    console.log('✅ Összegzés frissítve:', {
+        foodTotal,
+        serviceFee,
+        extraServicesTotal,
+        totalAmount,
+        extraServicesCount: extraServicesList.length
+    });
+}
+
+
+function calculateExtraServicesNoDiscount(reservationDetails) {
+    console.log('🔍 calculateExtraServicesNoDiscount hívva:', reservationDetails);
+    
+    if (!reservationDetails || !reservationDetails.extraServices) {
+        console.log('❌ Nincs extraServices a reservationDetails-ben');
+        return {
+            total: 0,
+            services: [],
+            serviceCount: 0
+        };
+    }
+    
+    console.log('📦 Extra szolgáltatások feldolgozása:', reservationDetails.extraServices);
+    console.log('🔍 Type of extraServices:', typeof reservationDetails.extraServices);
+    
+    let extraServicesTotal = 0;
+    let extraServicesList = [];
+    let processedServices = new Set(); // A duplikációk elkerülésére
+    
+    try {
+        let servicesArray = [];
+        
+        // **FONTOS: Ha már eleve tömb formátumban van az extraServices**
+        if (Array.isArray(reservationDetails.extraServices)) {
+            console.log('✅ Már tömb formátumban van az extraServices');
+            servicesArray = reservationDetails.extraServices;
+        }
+        // **Ha string, akkor próbáljuk JSON-ként parse-olni**
+        else if (typeof reservationDetails.extraServices === 'string') {
+            const servicesText = reservationDetails.extraServices;
+            console.log('📝 Szöveg formátum:', servicesText);
+            
+            // Ha üres vagy "Nincsenek extra szolgáltatások"
+            if (!servicesText || servicesText.trim() === '' || 
+                servicesText.toLowerCase().includes('nincsenek')) {
+                console.log('ℹ️ Nincsenek extra szolgáltatások');
+                return { total: 0, services: [], serviceCount: 0 };
+            }
+            
+            // **Próbáljuk JSON-ként értelmezni**
+            try {
+                const parsed = JSON.parse(servicesText);
+                if (Array.isArray(parsed)) {
+                    servicesArray = parsed;
+                    console.log('✅ JSON parse sikeres, tömb:', servicesArray);
+                } else {
+                    console.warn('⚠️ JSON parse sikeres, de nem tömb:', parsed);
+                    servicesArray = [parsed];
+                }
+            } catch (e) {
+                console.warn('⚠️ Nem JSON string, vesszővel elválasztott listaként kezeljük');
+                // Ha vesszővel van elválasztva
+                if (servicesText.includes(',')) {
+                    servicesArray = servicesText.split(',').map(s => s.trim()).filter(s => s);
+                    console.log('📊 Vesszővel elválasztott lista:', servicesArray);
+                } else {
+                    // Egyébként egyetlen szolgáltatás
+                    servicesArray = [servicesText.trim()];
+                }
+            }
+        }
+        // **Ha object, de nem tömb**
+        else if (typeof reservationDetails.extraServices === 'object') {
+            console.log('🔄 Object formátum, átalakítás tömbbé');
+            // Ha kulcs-érték párok (pl. {balloons: {name: "Bélelt légballonok", price: 5000}})
+            servicesArray = Object.values(reservationDetails.extraServices);
+        }
+        
+        console.log(`📊 Feldolgozandó szolgáltatások (${servicesArray.length} db):`, servicesArray);
+        
+        // **SZOLGÁLTATÁSOK FELDOLGOZÁSA - DUPLIKÁCIÓK KISZŰRÉSE**
+        servicesArray.forEach((service, index) => {
+            console.log(`🔄 ${index + 1}. szolgáltatás feldolgozása:`, service);
+            
+            let serviceName = '';
+            let servicePrice = 0;
+            let serviceId = '';
+            
+            // **Ha a service egy object (name, price tulajdonságokkal)**
+            if (service && typeof service === 'object') {
+                serviceName = service.name || '';
+                servicePrice = service.price || 0;
+                serviceId = service.id || serviceName.toLowerCase().replace(/\s+/g, '-');
+                
+                console.log(`   Object formátum - név: "${serviceName}", ár: ${servicePrice} Ft`);
+            }
+            // **Ha a service egy string**
+            else if (typeof service === 'string') {
+                serviceName = service;
+                servicePrice = EXTRA_SERVICES_PRICES[service] || estimateServicePrice(service);
+                serviceId = service.toLowerCase().replace(/\s+/g, '-');
+                
+                console.log(`   String formátum - név: "${serviceName}", ár: ${servicePrice} Ft (becsült)`);
+            }
+            
+            // **Ha van név és ár, és még nem dolgoztuk fel**
+            if (serviceName && servicePrice > 0) {
+                // Egyedi azonosító a duplikációk kiszűrésére
+                const uniqueKey = `${serviceName}_${servicePrice}`;
+                
+                if (!processedServices.has(uniqueKey)) {
+                    processedServices.add(uniqueKey);
+                    
+                    const serviceInfo = {
+                        id: serviceId,
+                        name: serviceName,
+                        price: servicePrice,
+                        type: 'extra'
+                    };
+                    
+                    extraServicesList.push(serviceInfo);
+                    extraServicesTotal += servicePrice;
+                    
+                    console.log(`   ✅ Szolgáltatás hozzáadva: ${serviceName} (${servicePrice} Ft)`);
+                } else {
+                    console.log(`   ⚠️ Duplikált szolgáltatás kihagyva: ${serviceName}`);
+                }
+            } else {
+                console.warn(`   ❌ Érvénytelen szolgáltatás, kihagyva:`, service);
+            }
+        });
+        
+        console.log('💰 Extra szolgáltatások végösszeg:', extraServicesTotal.toLocaleString() + ' Ft');
+        console.log('📋 Extra szolgáltatások listája (egyedi):', extraServicesList);
+        
+        return {
+            total: extraServicesTotal,
+            services: extraServicesList,
+            serviceCount: extraServicesList.length
+        };
+        
+    } catch (error) {
+        console.error('❌ Hiba az extra szolgáltatások feldolgozásakor:', error);
+        console.error('❌ Error stack:', error.stack);
+        return {
+            total: 0,
+            services: [],
+            serviceCount: 0
+        };
+    }
+}
+
+// SEGÉDFÜGGVÉNY: Ár becslése, ha nincs előre definiálva
+function estimateServicePrice(serviceName) {
+    // Alapár
+    const defaultPrice = 5000;
+    
+    // Kulcsszavak alapján becslés
+    const keywords = {
+        'ballon': 5000,
+        'virág': 8000,
+        'pezsgő': 12000,
+        'champagne': 12000,
+        'desszert': 6000,
+        'szék': 2500,
+        'kiszolgálás': 15000,
+        'parkoló': 3000,
+        'fotózás': 25000,
+        'zen': 15000,
+        'dj': 12000,
+        'dekor': 10000
+    };
+    
+    const lowerName = serviceName.toLowerCase();
+    
+    for (const [keyword, price] of Object.entries(keywords)) {
+        if (lowerName.includes(keyword)) {
+            return price;
+        }
+    }
+    
+    return defaultPrice;
+}
+function parseExtraServicesData(extraServicesData) {
+    console.log('🔍 parseExtraServicesData hívva:', extraServicesData);
+    console.log('🔍 Input type:', typeof extraServicesData);
+    
+    try {
+        // 0. Ha undefined vagy null
+        if (!extraServicesData) {
+            console.log('❌ extraServicesData undefined vagy null');
+            return [];
+        }
+        
+        // 1. Ha már tömb
+        if (Array.isArray(extraServicesData)) {
+            console.log('✅ Már tömb formátum');
+            return extraServicesData;
+        }
+        
+        // 2. Ha string (és nem tömb stringként)
+        if (typeof extraServicesData === 'string') {
+            console.log('📝 String formátum:', extraServicesData.substring(0, 100) + '...');
+            
+            // Próbáljuk meg JSON-ként
+            try {
+                const parsed = JSON.parse(extraServicesData);
+                console.log('✅ JSON parse sikeres:', parsed);
+                // Rekurzívan hívjuk meg magát a parse-olt adattal
+                return parseExtraServicesData(parsed);
+            } catch (e) {
+                console.warn('⚠️ Nem JSON string');
+                
+                // Ha vesszővel elválasztott lista
+                if (extraServicesData.includes(',')) {
+                    console.log('🔄 Vesszővel elválasztott lista feldolgozása...');
+                    return extraServicesData.split(',').map(item => {
+                        const trimmed = item.trim();
+                        return {
+                            id: trimmed.toLowerCase().replace(/\s+/g, '-'),
+                            name: trimmed,
+                            price: 0 // Ismeretlen ár
+                        };
+                    });
+                }
+                
+                // Egyébként egy szolgáltatás
+                return [{
+                    id: extraServicesData.toLowerCase().replace(/\s+/g, '-'),
+                    name: extraServicesData,
+                    price: 0
+                }];
+            }
+        }
+        
+        // 3. Ha object (de nem tömb)
+        if (typeof extraServicesData === 'object' && extraServicesData !== null) {
+            console.log('🔄 Object formátum feldolgozása...');
+            console.log('🔑 Object kulcsok:', Object.keys(extraServicesData));
+            
+            // Különleges eset: a te példád szerinti objektum
+            // {balloons: {name: '...', price: 5000}, flowers: {name: '...', price: 8000}, ...}
+            const firstKey = Object.keys(extraServicesData)[0];
+            const firstValue = extraServicesData[firstKey];
+            
+            console.log('🔍 Első kulcs:', firstKey);
+            console.log('🔍 Első érték:', firstValue);
+            
+            // Ha az érték object és van name/price property-je
+            if (firstValue && typeof firstValue === 'object' && 
+                (firstValue.name || firstValue.price !== undefined)) {
+                console.log('🎯 Megtalálva: nested object struktúra');
+                
+                return Object.entries(extraServicesData).map(([key, value]) => {
+                    return {
+                        id: key,
+                        name: value.name || key,
+                        price: value.price || 0,
+                        rawValue: value // DEBUG
+                    };
+                });
+            }
+            
+            // Ha az érték szám (direct mapping)
+            if (typeof firstValue === 'number') {
+                console.log('🎯 Megtalálva: key->number mapping');
+                
+                return Object.entries(extraServicesData).map(([key, value]) => {
+                    return {
+                        id: key,
+                        name: key,
+                        price: value
+                    };
+                });
+            }
+            
+            // Általános object -> array konvertálás
+            console.log('🔄 Általános object -> array konvertálás');
+            return Object.entries(extraServicesData).map(([key, value]) => {
+                // Ha az érték object
+                if (value && typeof value === 'object') {
+                    return {
+                        id: key,
+                        name: value.name || key,
+                        price: value.price || 0,
+                        ...value
+                    };
+                }
+                // Ha az érték szám
+                else if (typeof value === 'number') {
+                    return {
+                        id: key,
+                        name: key,
+                        price: value
+                    };
+                }
+                // Egyéb esetek
+                else {
+                    return {
+                        id: key,
+                        name: key,
+                        price: 0
+                    };
+                }
+            });
+        }
+        
+        console.log('❌ Nem feldolgozható formátum:', typeof extraServicesData);
+        return [];
+        
+    } catch (error) {
+        console.error('❌ Parse hiba:', error);
+        console.error('❌ Error stack:', error.stack);
+        return [];
+    }
+}
+
+      // Asztalfoglalás kezelése
+function loadReservation() {
+    if (!window.cartManager || !window.cartManager.isInitialized) {
+        console.error('❌ CartManager nem elérhető a foglalás betöltéséhez');
+        showNoReservationMessage();
+        return;
+    }
+    
+    const reservationData = cartManager.getActiveReservation();
+    const reservationInfo = $('#reservation-info');
+    const noReservationMessage = $('#no-reservation');
+    const checkoutBtn = $('#checkout-btn');
+    
+    if (!reservationData) {
+        showNoReservationMessage();
+        
+        // Ha nincs foglalás, ellenőrizzük a kosarat
+        if (window.cartManager) {
+            const cartData = cartManager.getCartData();
+            const foodItems = cartData.items ? cartData.items.filter(item => 
+                item.type !== 'reservation' && !item.reservationData
+            ) : [];
+            
+            checkoutBtn.prop('disabled', foodItems.length === 0);
+        }
+        return;
+    }
+    
+    console.log('📅 Asztalfoglalás adatok betöltve:', reservationData);
+    
+    reservationInfo.show();
+    noReservationMessage.hide();
+    
+    // Dátum/idő formázása
+    const { date: displayDate, time: displayTime } = formatDateTimeForDisplay(reservationData);
+    
+    const tableNumber = reservationData.tableNumber || 'N/A';
+    
+    reservationInfo.html(`
+        <div class="reservation-item">
+            <span class="reservation-label">Asztal szám:</span>
+            <span class="reservation-value">${tableNumber}</span>
+        </div>
+        <div class="reservation-item">
+            <span class="reservation-label">Asztal neve:</span>
+            <span class="reservation-value">${reservationData.tableName}</span>
+        </div>
+        <div class="reservation-item">
+            <span class="reservation-label">Dátum:</span>
+            <span class="reservation-value">${displayDate}</span>
+        </div>
+        <div class="reservation-item">
+            <span class="reservation-label">Időpont:</span>
+            <span class="reservation-value">${displayTime}</span>
+        </div>
+        <div class="reservation-item">
+            <span class="reservation-label">Vendégek:</span>
+            <span class="reservation-value">${reservationData.guests} fő</span>
+        </div>
+        <div class="reservation-item">
+            <span class="reservation-label">Helyszín:</span>
+            <span class="reservation-value">${reservationData.tableLocation}</span>
+        </div>
+        ${reservationData.message ? `
+        <div class="reservation-item">
+            <span class="reservation-label">Megjegyzés:</span>
+            <span class="reservation-value">${reservationData.message}</span>
+        </div>
+        ` : ''}
+        ${reservationData.extraServices ? `
+        <div class="reservation-item extra-services">
+            <span class="reservation-label">Extra szolgáltatások:</span>
+            <span class="reservation-value">${formatExtraServices(reservationData.extraServices)}</span>
+        </div>
+        ` : ''}
+        <div class="reservation-actions">
+            <button class="btn-cancel" id="cancel-reservation-btn" data-reservation-id="${reservationData.reservationId}" data-toggle="modal" data-target="#cancelReservationModal">
+                <i class="bi bi-x-circle"></i> Lemondás
+            </button>
+        </div>
+    `);
+    
+    $('#cancel-reservation-btn').data('reservation-data', reservationData);
+    
+    // JAVÍTÁS ITT: Ellenőrizzük a gomb állapotát
+    setTimeout(() => {
+        const cartData = cartManager.getCartData();
+        const foodItems = cartData.items ? cartData.items.filter(item => 
+            item.type !== 'reservation' && !item.reservationData
+        ) : [];
+        
+        const hasExtraServices = reservationData.extraServices && 
+                                String(reservationData.extraServices).trim() !== '' &&
+                                !String(reservationData.extraServices).toLowerCase().includes('nincsenek');
+        
+        
+        checkoutBtn.prop('disabled', false);
+        
+        console.log('🔘 Checkout gomb állapota (foglalás betöltése után):', {
+            hasFood: foodItems.length > 0,
+            hasExtraServices,
+            disabled: foodItems.length === 0 && !hasExtraServices
+        });
+    }, 100);
+    
+    setTimeout(() => {
+        $('.reservation-item').each(function(index) {
+            setTimeout(() => {
+                $(this).addClass('animated');
+            }, index * 100);
+        });
+    }, 200);
+}
+
+      // Üres foglalás üzenet
+      function showNoReservationMessage() {
+        const noReservationMessage = $('#no-reservation');
+        $('#reservation-info').hide();
+        noReservationMessage.show();
+        
+        setTimeout(() => {
+          noReservationMessage.addClass('animated');
+        }, 100);
+      }
+
+      // Lemondás megerősítő modal
+      function showCancelConfirmationModal(reservationData) {
+        if ($('#cancelReservationModal').length) {
+          $('#cancelReservationModal').remove();
+        }
+        
+        // Dátum/idő formázása
+        const { date: formattedDate, time: formattedTime } = formatDateTimeForDisplay(reservationData);
+        
+        const modalHTML = `
+          <div class="modal fade cancel-modal" id="cancelReservationModal" tabindex="-1" role="dialog" aria-labelledby="cancelReservationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cancelReservationModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning mr-2"></i>
+                    Asztalfoglalás lemondása
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-warning mb-3">
+                    <i class="bi bi-exclamation-circle mr-2"></i>
+                    <strong>Biztosan le szeretnéd mondani az asztalfoglalást?</strong>
+                  </div>
+                  
+                  <div class="reservation-details p-3 bg-light rounded mb-3">
+                    <h6 class="font-weight-bold mb-2">Foglalás részletei:</h6>
+                    <table class="table table-sm mb-0">
+                      <tbody>
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Asztal:</strong></td>
+                          <td class="border-0">${reservationData.tableName} (${reservationData.tableNumber || 'N/A'})</td>
+                        </tr>
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Dátum:</strong></td>
+                          <td class="border-0">${formattedDate}</td>
+                        </tr>
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Időpont:</strong></td>
+                          <td class="border-0">${formattedTime}</td>
+                        </tr>
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Vendégek:</strong></td>
+                          <td class="border-0">${reservationData.guests} fő</td>
+                        </tr>
+                        ${reservationData.tableLocation ? `
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Helyszín:</strong></td>
+                          <td class="border-0">${reservationData.tableLocation}</td>
+                        </tr>
+                        ` : ''}
+                        ${reservationData.message ? `
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Megjegyzés:</strong></td>
+                          <td class="border-0">${reservationData.message}</td>
+                        </tr>
+                        ` : ''}
+                        ${reservationData.extraServices ? `
+                        <tr>
+                          <td class="border-0 pl-0"><strong>Extra szolgáltatások:</strong></td>
+                          <td class="border-0">${formatExtraServices(reservationData.extraServices)}</td>
+                        </tr>
+                        ` : ''}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <p class="text-muted mb-0">
+                    <small><i class="bi bi-info-circle mr-1"></i>A lemondás nem vonható vissza.</small>
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="bi bi-x-lg mr-1"></i> Mégse
+                  </button>
+                  <button type="button" class="btn btn-danger" id="confirm-cancel-btn" data-reservation-id="${reservationData.reservationId}">
+                    <i class="bi bi-check-lg mr-1"></i> Igen, lemondom
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        
+        $('#cancelReservationModal').modal('show');
+        
+        $('#cancelReservationModal').on('shown.bs.modal', function () {
+// A confirm-cancel-btn eseménykezelőjének módosítása a showCancelConfirmationModal függvényben
+$('#confirm-cancel-btn').off('click').on('click', async function() {
+  const reservationId = $(this).data('reservation-id');
+  await cancelReservation(reservationId);
+  
+  // **JAVÍTÁS: Extra szolgáltatások nullázása és összegzés frissítése**
+  extraServicesTotal = 0;
+  extraServicesList = [];
+  
+  if (window.cartManager) {
+    const cartData = cartManager.getCartData();
+    updateSummary(cartData);
+  }
+  
+  $('#cancelReservationModal').modal('hide');
+});
+        });
+        
+        $('#cancelReservationModal').on('hidden.bs.modal', function () {
+          $(this).remove();
+        });
+      }
+
+      // Asztalfoglalás lemondása
+// Asztalfoglalás lemondása - JAVÍTVA
+async function cancelReservation(reservationId) {
+  if (!reservationId) {
+    console.error('❌ Nincs foglalás ID a lemondáshoz');
+    return;
+  }
+  
+  try {
+    if (window.cartManager && window.cartManager.cancelReservation) {
+      await cartManager.cancelReservation(reservationId);
+      console.log('✅ Asztalfoglalás sikeresen lemondva');
+      
+      // **JAVÍTÁS: Extra szolgáltatások nullázása**
+      extraServicesTotal = 0;
+      extraServicesList = [];
+      
+      // **JAVÍTÁS: Összegzés újraszámítása**
+      const cartData = cartManager.getCartData();
+      updateSummary(cartData);
+      
+      showSuccessModal();
+      
+      loadReservation();
+    } else {
+      throw new Error('CartManager nem elérhető');
+    }
+  } catch (error) {
+    console.error('❌ Hiba a foglalás lemondásakor:', error);
+    showErrorModal('Hiba történt a foglalás lemondása közben: ' + error.message);
+  }
+}
+
+
+      // Sikeres lemondás modal
+      function showSuccessModal() {
+        if ($('#cancelSuccessModal').length) {
+          $('#cancelSuccessModal').remove();
+        }
+        
+        const modalHTML = `
+          <div class="modal fade success-modal" id="cancelSuccessModal" tabindex="-1" role="dialog" aria-labelledby="cancelSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cancelSuccessModalLabel">
+                    <i class="bi bi-check-circle-fill text-success mr-2"></i>
+                    Sikeres lemondás
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  <div class="mb-4">
+                    <i class="bi bi-check-circle" style="font-size: 4rem; color: #28a745;"></i>
+                  </div>
+                  <h4 class="text-success mb-3">Asztalfoglalás lemondva!</h4>
+                  <p class="mb-0">Az asztalfoglalását sikeresen lemondta.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                  <button type="button" class="btn btn-success" data-dismiss="modal">
+                    <i class="bi bi-check-lg mr-1"></i> Rendben
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        $('#cancelSuccessModal').modal('show');
+        
+        $('#cancelSuccessModal').on('hidden.bs.modal', function () {
+          $(this).remove();
+        });
+      }
+
+      // Hiba modal
+      function showErrorModal(message) {
+        if ($('#cancelErrorModal').length) {
+          $('#cancelErrorModal').remove();
+        }
+        
+        const modalHTML = `
+          <div class="modal fade error-modal" id="cancelErrorModal" tabindex="-1" role="dialog" aria-labelledby="cancelErrorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cancelErrorModalLabel">
+                    <i class="bi bi-exclamation-circle-fill text-danger mr-2"></i>
+                    Hiba történt
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  <div class="mb-4">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: #dc3545;"></i>
+                  </div>
+                  <h4 class="text-danger mb-3">Hiba!</h4>
+                  <p class="mb-0">${message}</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <i class="bi bi-x-lg mr-1"></i> Bezárás
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        $('#cancelErrorModal').modal('show');
+        
+        $('#cancelErrorModal').on('hidden.bs.modal', function () {
+          $(this).remove();
+        });
+      }
+
+      // Lemondás gomb eseménykezelő
+      $(document).on('click', '#cancel-reservation-btn', function(e) {
+        e.preventDefault();
+        const reservationData = $(this).data('reservation-data');
+        if (reservationData) {
+          showCancelConfirmationModal(reservationData);
+        }
+      });
+
+      // **FELHASZNÁLÓI ADATOK LEKÉRÉSE**
+      async function getUserData() {
+        try {
+          console.log('📡 Felhasználói adatok lekérése...');
+          
+          const response = await fetch('/Session/GetUserId');
+          
+          if (!response.ok) {
+            if (response.status === 401) {
+              console.log('🔒 Felhasználó nincs bejelentkezve (401)');
+              return { isAuthenticated: false };
+            }
+            throw new Error(`HTTP ${response.status}`);
+          }
+          
+          const data = await response.json();
+          console.log('👤 API válasz (teljes adatok):', data);
+          
+          return {
+            isAuthenticated: !!data.userName,
+            userName: data.userName || '',
+            userId: data.userId || data.userName || '',
+            email: data.email || '',
+            ...data
+          };
+          
+        } catch (error) {
+          console.error('❌ Hiba a felhasználói adatok lekérésében:', error);
+          return { isAuthenticated: false };
+        }
+      }
+
+      // **EMAIL KÜLDÉSE**
+// **JAVÍTOTT: EMAIL KÜLDÉSE - EXTRA SERVICES HOZZÁADÁSA**
+async function sendOrderConfirmationEmail(orderId, totalAmount, orderDate, notes, reservationDetails) {
+    try {
+        console.log('📧 Rendelés megerősítő email küldése indítava...');
+        
+        if (!orderUserData?.email) {
+            console.error('❌ Nincs email cím');
+            return false;
+        }
+
+        // DEBUG: Ellenőrizzük, mi van a reservationDetails-ben
+        console.log('🔍 ReservationDetails a rendeléshez:', reservationDetails);
+        console.log('🔍 ExtraServices a reservationDetails-ben:', reservationDetails?.extraServices);
+        console.log('🔍 ExtraServices type:', typeof reservationDetails?.extraServices);
+
+        // Email adatok előkészítése
+        const emailData = {
+            UserName: orderUserData.userName || "Vendég",
+            Email: orderUserData.email,
+            OrderId: orderId,
+            Items: orderItems.map(item => ({
+                Name: item.name || "Termék",
+                Quantity: item.quantity || 1,
+                Price: item.price || 0
+            })),
+            TotalAmount: totalAmount || orderTotalAmount || 0,
+            ServiceFee: orderServiceFee || 0,
+            // Extra szolgáltatások (kedvezmény nélkül)
+            ExtraServicesTotal: extraServicesTotal || 0,
+            ExtraServices: extraServicesList || [],
+            OrderDate: orderDate || new Date().toISOString(),
+            Notes: notes || '',
+            DeliveryAddress: deliveryAddress || null,
+            PaymentMethod: paymentMethod || 'card'
+        };
+
+        // **JAVÍTOTT: HA VAN ASZTALFOGLALÁS, ADJUK HOZZÁ A TELJES ADATOKAT**
+        if (reservationDetails && reservationDetails.reservationId) {
+            // Dátum/idő formázása
+            const { date: formattedDate, time: formattedTime } = formatDateTimeForDisplay(reservationDetails);
+            
+            emailData.ReservationId = reservationDetails.reservationId;
+            
+            // **FONTOS: Az összes foglalási adatot átadjuk, beleértve az extra services-t**
+            emailData.Reservation = {
+                ReservationId: reservationDetails.reservationId,
+                TableName: reservationDetails.tableName || "Asztal",
+                TableNumber: reservationDetails.tableNumber || "",
+                Date: formattedDate,
+                Time: formattedTime,
+                Guests: reservationDetails.guests || 1,
+                TableLocation: reservationDetails.tableLocation || "",
+                Message: reservationDetails.message || "",
+                // **FONTOS JAVÍTÁS: ExtraServices közvetlenül átadva**
+                ExtraServices: reservationDetails.extraServices || "",
+                // Extra property-k, ha vannak
+                dbReservationId: reservationDetails.dbReservationId,
+                originalDate: reservationDetails.originalDate,
+                originalTime: reservationDetails.originalTime
+            };
+            
+            console.log('📅 Emailhez hozzáadva asztalfoglalás (TELJES):', emailData.Reservation);
+            console.log('📦 ExtraServices átadva az emailhez:', emailData.Reservation.ExtraServices);
+            console.log('📦 ExtraServices type az emailben:', typeof emailData.Reservation.ExtraServices);
+        } else {
+            console.log('⚠️ Nincs reservationDetails a rendeléshez');
+        }
+
+        console.log('📧 Email küldés adatok (TELJES):', emailData);
+
+        const response = await fetch('/Email/SendOrderConfirmation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(emailData)
+        });
+
+        if (!response.ok) {
+            console.error('❌ Email API hiba:', response.status);
+            return false;
+        }
+
+        const apiResult = await response.json();
+        console.log('📧 Email API válasz:', apiResult);
+
+        if (apiResult.success) {
+            console.log('✅ Email sikeresen elküldve');
+            return true;
+        } else {
+            console.warn('⚠️ Email küldés sikertelen:',apiResult.message);
+            return false;
+        }
+
+    } catch (error) {
+        console.error('❌ Hiba az email küldésekor:', error);
+        return false;
+    }
+}
+
+// **JAVÍTOTT: ASZTALFOGLALÁS STÁTUSZ FRISSÍTÉSE AZ ADATBÁZISBAN**
+async function updateReservationStatusInDatabase(reservationId, status, orderId) {
+    try {
+        console.log(`🔄 Asztalfoglalás státusz frissítése adatbázisban: ${reservationId} -> ${status}, OrderId: ${orderId}`);
+        
+        // **FONTOS: A CartManager-ben lévő foglalás adatainak lekérése**
+        let dbReservationId = null;
+        let extraServices = null;
+        let reservationData = null;
+        
+        if (window.cartManager) {
+            // Keresd meg a foglalást a CartManager-ben
+            const reservation = window.cartManager.userReservations?.find(
+                r => r.reservationId === reservationId
+            );
+            
+            if (reservation) {
+                reservationData = reservation;
+                console.log('✅ Foglalás megtalálva CartManager-ben:', reservation);
+                
+                // **FONTOS: Extra services kimentése**
+                extraServices = reservation.extraServices;
+                console.log('📦 ExtraServices a CartManager-ből:', extraServices);
+                console.log('📦 ExtraServices type:', typeof extraServices);
+                
+                // Először próbáljuk a dbReservationId-t használni
+                if (reservation.dbReservationId) {
+                    dbReservationId = reservation.dbReservationId;
+                    console.log('✅ dbReservationId megtalálva:', dbReservationId);
+                } else {
+                    // Ha nincs dbReservationId, használjuk a helyi reservationId-t
+                    dbReservationId = reservationId;
+                    console.log('⚠️ Nincs dbReservationId, helyi ID használata:', reservationId);
+                }
+            } else {
+                console.error('❌ Foglalás nem található a CartManager-ben');
+                return { success: false, error: 'Foglalás nem található' };
+            }
+        }
+        
+        if (!dbReservationId) {
+            console.error('❌ Nem található foglalás ID');
+            return { success: false, error: 'Nem található foglalás ID' };
+        }
+        
+        console.log('📡 Küldött foglalás ID:', dbReservationId);
+        console.log('📡 Küldött ExtraServices:', extraServices);
+        
+        // **FONTOS: Küldjük az extra services-t is az API-nak**
+        const updateData = {
+            ReservationId: dbReservationId, // **FONTOS: dbReservationId küldése!**
+            Status: status,
+            OrderId: orderId
+        };
+        
+        // **HA VAN EXTRA SERVICES, ADJUK HOZZÁ**
+        if (extraServices) {
+            updateData.ExtraServices = extraServices;
+            console.log('📦 ExtraServices hozzáadva az API kéréshez');
+        }
+        
+        // **HA VAN RESERVATION DATA, KÜLDJÜK A TÖBBI ADATOT IS**
+        if (reservationData) {
+            updateData.ReservationData = {
+                TableName: reservationData.tableName,
+                TableNumber: reservationData.tableNumber,
+                TableLocation: reservationData.tableLocation,
+                Date: reservationData.date,
+                Time: reservationData.time,
+                Guests: reservationData.guests,
+                Message: reservationData.message,
+                ExtraServices: reservationData.extraServices
+            };
+        }
+        
+        console.log('📤 API küldendő adatok:', updateData);
+        
+        const response = await fetch('/Reservation/UpdateReservationStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateData)
+        });
+        
+        console.log('📡 API válasz státusz:', response.status);
+        
+        if (response.ok) {
+            const apiResult = await response.json();
+            console.log('📦 API válasz adatok:', apiResult);
+            
+            if (apiResult.success) {
+                console.log('✅ Asztalfoglalás státusza frissítve az adatbázisban');
+                console.log('📊 Frissített foglalás adatok:', apiResult);
+                return { success: true, data: apiResult.reservation };
+            } else {
+                console.error('❌ API válasz hibát jelzett:', apiResult);
+                return { success: false, error: apiResult};
+            }
+        } else {
+            let errorText = await response.text();
+            console.error('❌ HTTP hiba:', response.status, errorText);
+            return { success: false, error: `HTTP ${response.status}: ${errorText.substring(0, 100)}` };
+        }
+        
+    } catch (error) {
+        console.error('❌ Adatbázis frissítés hiba:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+      // **CÍM MODAL MEGJELENÍTÉSE**
+      function showAddressModal() {
+        const modalHTML = `
+          <div class="modal fade address-modal" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addressModalLabel">
+                    <i class="bi bi-house-door mr-2"></i>
+                    Szállítási cím megadása
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle mr-2"></i>
+                    A kosaradban házhozszállításra rendelt ételek találhatók. Kérjük, add meg a szállítási címedet.
+                  </div>
+                  
+                  <form id="addressForm">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="address-street" class="form-label">Utca, házszám *</label>
+                          <input type="text" class="form-control" id="address-street" required placeholder="Pl. Fő utca 123">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="address-city" class="form-label">Város *</label>
+                          <input type="text" class="form-control" id="address-city" required placeholder="Pl. Budapest">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="address-zip" class="form-label">Irányítószám *</label>
+                          <input type="text" class="form-control" id="address-zip" required placeholder="Pl. 1011">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="address-floor" class="form-label">Emelet, ajtószám</label>
+                          <input type="text" class="form-control" id="address-floor" placeholder="Pl. 2. emelet, 12. ajtó">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="address-notes" class="form-label">Megjegyzés a futárnak</label>
+                      <textarea class="form-control" id="address-notes" rows="3" placeholder="Pl. csengő neve, speciális instrukciók..."></textarea>
+                    </div>
+                    
+                    <div class="alert alert-secondary mt-3">
+                      <small><i class="bi bi-shield-check mr-1"></i>A címedet biztonságosan tároljuk és csak a szállításhoz használjuk fel.</small>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="bi bi-x-lg mr-1"></i> Mégse
+                  </button>
+                  <button type="button" class="btn btn-primary" id="saveAddressBtn">
+                    <i class="bi bi-check-lg mr-1"></i> Cím mentése
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        
+        $('#addressModal').modal('show');
+        
+        $('#addressModal').on('shown.bs.modal', function() {
+          $('#saveAddressBtn').off('click').on('click', function() {
+            const street = $('#address-street').val().trim();
+            const city = $('#address-city').val().trim();
+            const zip = $('#address-zip').val().trim();
+            
+            if (!street || !city || !zip) {
+              alert('Kérjük, töltsd ki a kötelező mezőket!');
+              return;
+            }
+            
+            deliveryAddress = {
+              street: street,
+              city: city,
+              zip: zip,
+              floor: $('#address-floor').val().trim(),
+              notes: $('#address-notes').val().trim()
+            };
+            
+            console.log('📍 Cím mentve:', deliveryAddress);
+            $('#addressModal').modal('hide');
+            
+            // Fizetési modal megjelenítése
+            setTimeout(() => {
+              showPaymentModal();
+            }, 300);
+          });
+        });
+        
+        $('#addressModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+      // **FIZETÉSI MODAL MEGJELENÍTÉSE**
+      function showPaymentModal() {
+        const modalHTML = `
+          <div class="modal fade payment-modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="paymentModalLabel">
+                    <i class="bi bi-credit-card mr-2"></i>
+                    Fizetési mód választása
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle mr-2"></i>
+                    Válaszd ki a számodra legkényelmesebb fizetési módot.
+                  </div>
+                  
+                  <div class="payment-options">
+                    <div class="payment-option ${paymentMethod === 'card' ? 'selected' : ''}" data-payment="card">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-credit-card"></i>
+                        <div>
+                          <h6 class="mb-1">Bankkártya</h6>
+                          <p class="mb-0 small text-muted">Online bankkártyás fizetés</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="payment-option ${paymentMethod === 'cash' ? 'selected' : ''}" data-payment="cash">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-cash"></i>
+                        <div>
+                          <h6 class="mb-1">Készpénz</h6>
+                          <p class="mb-0 small text-muted">Készpénzben a kiszállításkor / átvételkor</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="payment-details ${paymentMethod === 'card' ? 'show' : ''}" id="cardDetails">
+                    <div class="alert alert-warning">
+                      <i class="bi bi-shield-check mr-2"></i>
+                      <small>A bankkártyás fizetés biztonságos, és a rendelés megerősítése után irányítunk a fizetéshez.</small>
+                    </div>
+                  </div>
+                  
+                  <div class="payment-details ${paymentMethod === 'cash' ? 'show' : ''}" id="cashDetails">
+                    <div class="alert alert-warning">
+                      <i class="bi bi-info-circle mr-2"></i>
+                      <small>A készpénzes fizetésnél a pontos összeget kérjük készítsd elő a kiszállításkor / átvételkor.</small>
+                    </div>
+                  </div>
+                  
+                 ${deliveryAddress ? `
+<div class="alert alert-secondary mt-4">
+    <h6 class="mb-2"><i class="bi bi-house-door mr-2"></i>Szakítási cím:</h6>
+    <p class="mb-0 small">
+        ${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.zip}
+        ${deliveryAddress.floor ? `<br>${deliveryAddress.floor}` : ''}
+    </p>
+</div>
+` : ''}${extraServicesList && extraServicesList.length > 0 ? `
+<div class="alert alert-info mt-4">
+    <h6 class="mb-2"><i class="bi bi-stars mr-2"></i>Extra szolgáltatások:</h6>
+    <div class="extra-services-details">
+        ${extraServicesList.map(service => `
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                <div>
+                    <i class="bi bi-check-circle-fill text-success mr-2"></i>
+                    <span class="small">${service.name}</span>
+                </div>
+                <span class="font-weight-bold">${service.price.toLocaleString()} Ft</span>
+            </div>
+        `).join('')}
+        
+        <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+            <strong>Extra szolgáltatások összege:</strong>
+            <strong>${extraServicesTotal.toLocaleString()} Ft</strong>
+        </div>
+    </div>
+</div>
+` : ''}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="bi bi-x-lg mr-1"></i> Mégse
+                  </button>
+                  <button type="button" class="btn btn-primary" id="savePaymentBtn">
+                    <i class="bi bi-check-lg mr-1"></i> Fizetési mód mentése
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        
+        $('#paymentModal').modal('show');
+        
+        // Fizetési opciók kiválasztása
+        $('.payment-option').on('click', function() {
+          $('.payment-option').removeClass('selected');
+          $(this).addClass('selected');
+          
+          const selectedPayment = $(this).data('payment');
+          $('.payment-details').removeClass('show');
+          $(`#${selectedPayment}Details`).addClass('show');
+          
+          paymentMethod = selectedPayment;
+        });
+        
+        $('#paymentModal').on('shown.bs.modal', function() {
+          $('#savePaymentBtn').off('click').on('click', function() {
+            console.log('💳 Fizetési mód mentve:', paymentMethod);
+            $('#paymentModal').modal('hide');
+            
+            // Megjegyzés modal megjelenítése
+            setTimeout(() => {
+              showNotesModal(currentReservationDetails);
+            }, 300);
+          });
+        });
+        
+        $('#paymentModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+// RENDELÉS GOMB - JAVÍTOTT VERZIÓ (BÁRMILYEN ASZTALFOGLALÁS ESETÉN MŰKÖDIK)
+$('#checkout-btn').on('click', async function() {
+    const $btn = $(this);
+    
+    // 1. KOSÁR ADATOK ÖSSZEGYŰJTÉSE
+    if (window.cartManager && window.cartManager.isInitialized) {
+        orderCartData = cartManager.getCartData();
+    } else {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        orderCartData = {
+            items: cartItems,
+            totalItems: cartItems.reduce((total, item) => total + item.quantity, 0),
+            totalPrice: cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+        };
+    }
+    
+    // JAVÍTÁS: Ételek és foglalás ellenőrzése
+    const foodItems = orderCartData.items ? orderCartData.items.filter(item => 
+        item.type !== 'reservation' && 
+        !item.reservationData
+    ) : [];
+    
+    // Aktív foglalás lekérése - BÁRMILYEN ASZTALFOGLALÁS
+    const activeReservation = window.cartManager ? cartManager.getActiveReservation() : null;
+    
+    // Ha nincs étel ÉS nincs aktív foglalás, akkor hiba
+    if (foodItems.length === 0 && !activeReservation) {
+        showEmptyCartModal();
+        return;
+    }
+    
+    // HA VAN AKTÍV FOGLALÁS (akár extra szolgáltatások nélkül is), FOLYTATHATJUK
+    if (activeReservation) {
+        console.log('📅 Asztalfoglalás találva, rendelés folytatása:', activeReservation.reservationId);
+    }
+    
+    // HA VANNAK ÉTELEK, AKKOR IS FOLYTATHATJUK
+    if (foodItems.length > 0) {
+        console.log('🍽️ Ételek találva a kosárban:', foodItems.length);
+    }
+    
+    // MENTJÜK A TÉTELEKET az email küldéshez (lehet üres is)
+    orderItems = JSON.parse(JSON.stringify(foodItems));
+    
+    // 2. FELHASZNÁLÓI ADATOK LEKÉRÉSE
+    orderUserData = await getUserData();
+    
+    console.log('👤 Felhasználó adatok a rendeléshez:', {
+        isAuthenticated: orderUserData.isAuthenticated,
+        userName: orderUserData.userName,
+        email: orderUserData.email
+    });
+    
+    // 3. AKTÍV FOGLALÁS RÉSZLETES ADATAI
+    currentReservationDetails = null;
+    if (window.cartManager) {
+        currentReservationDetails = cartManager.getReservationDetails();
+        console.log('📅 Asztalfoglalás részletei rendeléshez:', currentReservationDetails);
+    }
+    
+    // 4. ÖSSZEGZÉS KISZÁMÍTÁSA
+    orderFoodTotal = foodItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+    orderServiceFee = Math.round(orderFoodTotal * 0.1);
+    
+    // Extra szolgáltatások számolása (ha vannak)
+    extraServicesTotal = 0;
+    extraServicesList = [];
+    
+    if (currentReservationDetails && currentReservationDetails.extraServices) {
+        const extraResult = calculateExtraServicesNoDiscount(currentReservationDetails);
+        extraServicesTotal = extraResult.total;
+        extraServicesList = extraResult.services;
+    }
+    
+    orderTotalAmount = orderFoodTotal + orderServiceFee + extraServicesTotal;
+    
+    console.log('💰 Végösszeg számítás:', {
+        foodTotal: orderFoodTotal,
+        serviceFee: orderServiceFee,
+        extraServicesTotal: extraServicesTotal,
+        totalAmount: orderTotalAmount,
+        hasReservation: !!currentReservationDetails
+    });
+    
+    // 5. HA NINCS BEJELENTKEZVE, KÉRJÜK BE A NEVET ÉS EMAIL CÍMET
+    if (!orderUserData.isAuthenticated) {
+        console.log('👤 Guest user rendelés - adatok bekérése');
+        showGuestInfoModal();
+        return;
+    }
+    
+    // 6. ELLENŐRIZD, HOGY VAN-E EMAIL CÍM (bejelentkezett felhasználónál)
+    if (orderUserData.isAuthenticated && (!orderUserData.email || orderUserData.email.trim() === '')) {
+        console.error('❌ NINCS EMAIL CÍM a felhasználónak!');
+        showEmailMissingModal();
+        return;
+    }
+    
+    // 7. ELLENŐRZÉS: HÁZHOZSZÁLLÍTÁS?
+    proceedWithOrder();
+});
+
+// GUEST ADATOK BEKÉRŐ MODAL
+function showGuestInfoModal() {
+    const modalHTML = `
+        <div class="modal fade guest-info-modal" id="guestInfoModal" tabindex="-1" role="dialog" aria-labelledby="guestInfoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="guestInfoModalLabel">
+                            <i class="bi bi-person-badge mr-2"></i>
+                            Vendég adatok megadása
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-info-circle mr-2"></i>
+                            A rendelés megerősítéséhez kérjük, add meg a neved és email címedet.
+                            Az email címre elküldjük a rendelés részleteit.
+                        </div>
+                        
+                        <form id="guestInfoForm">
+                            <div class="form-group">
+                                <label for="guest-name" class="form-label">Teljes név *</label>
+                                <input type="text" class="form-control" id="guest-name" required 
+                                       placeholder="Pl. Kovács János">
+                                <small class="form-text text-muted">A név, amivel a rendelést rögzítjük</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="guest-email" class="form-label">Email cím *</label>
+                                <input type="email" class="form-control" id="guest-email" required 
+                                       placeholder="pelda@email.com">
+                                <small class="form-text text-muted">Erre a címre küldjük a rendelés megerősítését</small>
+                            </div>
+                            
+                            <div class="alert alert-warning mt-3">
+                                <i class="bi bi-shield-check mr-2"></i>
+                                <small>Az adatokat biztonságosan tároljuk és csak a rendelés feldolgozásához használjuk fel.</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="bi bi-x-lg mr-1"></i> Mégse
+                        </button>
+                        <button type="button" class="btn btn-primary" id="saveGuestInfoBtn">
+                            <i class="bi bi-check-lg mr-1"></i> Tovább a rendeléshez
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('body').append(modalHTML);
+    
+    $('#guestInfoModal').modal('show');
+    
+    $('#guestInfoModal').on('shown.bs.modal', function() {
+        $('#saveGuestInfoBtn').off('click').on('click', function() {
+            const guestName = $('#guest-name').val().trim();
+            const guestEmail = $('#guest-email').val().trim();
+            
+            if (!guestName) {
+                alert('Kérjük, add meg a neved!');
+                return;
+            }
+            
+            if (!guestEmail) {
+                alert('Kérjük, add meg az email címed!');
+                return;
+            }
+            
+            if (!isValidEmail(guestEmail)) {
+                alert('Kérjük, adj meg egy érvényes email címet!');
+                return;
+            }
+            
+            // Guest adatok mentése
+            orderUserData = {
+                isAuthenticated: false,
+                userName: guestName,
+                email: guestEmail,
+                userId: window.cartManager?.userId || 'guest_' + Date.now()
+            };
+            
+            console.log('✅ Guest adatok mentve:', orderUserData);
+            
+            $('#guestInfoModal').modal('hide');
+            
+            // Tovább a rendelési folyamathoz
+            setTimeout(() => {
+                proceedWithOrder();
+            }, 300);
+        });
+    });
+    
+    $('#guestInfoModal').on('hidden.bs.modal', function() {
+        $(this).remove();
+    });
+}
+
+// Email cím validáció
+function isValidEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Rendelési folyamat folytatása - JAVÍTVA
+function proceedWithOrder() {
+    const hasDelivery = hasDeliveryItems();
+    
+    // Ha van házhozszállítás, először cím, majd fizetési modal
+    if (hasDelivery) {
+        showAddressModal();
+    } else {
+        // Ha nincs házhozszállítás (vagy csak asztalfoglalás), csak fizetési modal
+        showPaymentModal();
+    }
+}
+      // Hiányzó email cím modal
+      function showEmailMissingModal() {
+        const modalHTML = `
+          <div class="modal fade api-modal" id="emailMissingModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title text-warning">
+                    <i class="bi bi-envelope-exclamation mr-2"></i>
+                    Email cím hiányzik
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: var(--accent);"></i>
+                  <h4 class="mt-3">Email cím nem található</h4>
+                  <p>A rendelés megerősítéséhez email cím szükséges.</p>
+                  <p class="text-muted small mt-2">
+                    <i class="bi bi-info-circle"></i>
+                    Kérjük, frissítsd a profilodban az email címedet!
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>
+                  <button type="button" class="btn btn-primary" onclick="window.location.href='profile.html'">
+                    <i class="bi bi-person-circle"></i> Profil módosítása
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        $('#emailMissingModal').modal('show');
+        
+        $('#emailMissingModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+      // **MEGJEGYZÉS MODAL**
+      function showNotesModal(reservationDetails) {
+        // Dátum/idő formázása
+        let formattedDate = 'Nincs megadva';
+        let formattedTime = 'Nincs megadva';
+        
+        if (reservationDetails) {
+          const { date, time } = formatDateTimeForDisplay(reservationDetails);
+          formattedDate = date;
+          formattedTime = time;
+        }
+        
+        const modalHTML = `
+          <div class="modal fade notes-modal" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="notesModalLabel">
+                    <i class="bi bi-pencil-square mr-2"></i>
+                    Rendelés megerősítése
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                  <div class="mb-4">
+                      <h5 class="font-weight-bold mb-3"><i class="bi bi-cart-check mr-2"></i>Rendelés összegzése</h5>
+                      <div class="alert alert-info">
+                          <div class="d-flex justify-content-between mb-2">
+                              <span>Ételek összege:</span>
+                              <strong>${orderFoodTotal.toLocaleString()} Ft</strong>
+                          </div>
+                          <div class="d-flex justify-content-between mb-2">
+                              <span>Szolgáltatási díj:</span>
+                              <strong>${orderServiceFee.toLocaleString()} Ft</strong>
+                          </div>
+                          
+                        
+${extraServicesList && extraServicesList.length > 0 ? `
+<div class="alert alert-info mt-4">
+    <h6 class="mb-2"><i class="bi bi-stars mr-2"></i>Extra szolgáltatások:</h6>
+    <div class="extra-services-details">
+        ${extraServicesList.map(service => `
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                <div>
+                    <i class="bi bi-check-circle-fill text-success mr-2"></i>
+                    <span class="small">${service.name}</span>
+                </div>
+                <span class="font-weight-bold">${service.price.toLocaleString()} Ft</span>
+            </div>
+        `).join('')}
+        
+        <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+            <strong>Extra szolgáltatások összege:</strong>
+            <strong>${extraServicesTotal.toLocaleString()} Ft</strong>
+        </div>
+    </div>
+</div>
+` : ''}
+
+${orderFoodTotal === 0 && extraServicesTotal > 0 ? `
+<div class="alert alert-warning mt-4">
+    <i class="bi bi-info-circle mr-2"></i>
+    <strong>Figyelem!</strong> Jelenleg csak extra szolgáltatásokat tartalmazó asztalfoglalást rendelsz meg, ételeket nem.
+</div>
+` : ''}
+                          
+                          <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+                              <span class="font-weight-bold">Összesen:</span>
+                              <strong class="text-success">${orderTotalAmount.toLocaleString()} Ft</strong>
+                          </div>
+                      </div>
+                  </div>
+                      
+                      ${deliveryAddress ? `
+                      <div class="mb-4">
+                        <h5 class="font-weight-bold mb-3"><i class="bi bi-truck mr-2"></i>Szállítási adatok</h5>
+                        <div class="alert alert-secondary">
+                          <div class="mb-1"><strong>Cím:</strong> ${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.zip}</div>
+                          ${deliveryAddress.floor ? `<div class="mb-1"><strong>Emelet/ajtó:</strong> ${deliveryAddress.floor}</div>` : ''}
+                          <div class="mb-1"><strong>Fizetési mód:</strong> ${paymentMethod === 'card' ? 'Bankkártya' : 'Készpénz'}</div>
+                          ${deliveryAddress.notes ? `<div class="mt-2"><strong>Megjegyzés futárnak:</strong> ${deliveryAddress.notes}</div>` : ''}
+                        </div>
+                      </div>
+                      ` : ''}
+                    </div>
+                    
+                    <div class="col-md-6">
+                      ${reservationDetails ? `
+                      <div class="mb-4">
+                        <h5 class="font-weight-bold mb-3"><i class="bi bi-calendar-check mr-2"></i>Asztalfoglalás részletei</h5>
+                        <div class="alert alert-secondary">
+                          <div class="mb-1"><strong>Asztal:</strong> ${reservationDetails.tableName} (${reservationDetails.tableNumber || 'N/A'})</div>
+                          <div class="mb-1"><strong>Dátum:</strong> ${formattedDate}</div>
+                          <div class="mb-1"><strong>Időpont:</strong> ${formattedTime}</div>
+                          <div class="mb-1"><strong>Vendégek:</strong> ${reservationDetails.guests} fő</div>
+                          <div><strong>Helyszín:</strong> ${reservationDetails.tableLocation || 'Nincs megadva'}</div>
+                          ${reservationDetails.message ? `<div class="mt-2"><strong>Megjegyzés:</strong> ${reservationDetails.message}</div>` : ''}
+                          ${reservationDetails.extraServices ? `<div class="mt-2"><strong>Extra szolgáltatások:</strong> ${formatExtraServices(reservationDetails.extraServices)}</div>` : ''}
+                        </div>
+                        <div class="alert alert-warning">
+                          <i class="bi bi-info-circle mr-2"></i>
+                          <small>Figyelem! A rendelés elküldése után ez az asztalfoglalás státusza 'ordered'-re változik.</small>
+                        </div>
+                      </div>
+                      ` : ''}
+                      
+                      <div class="mb-4">
+                        <h5 class="font-weight-bold mb-3"><i class="bi bi-chat-text mr-2"></i>Megjegyzés hozzáadása</h5>
+                        <p class="text-muted small mb-2 optional-text">(Opcionális - például allergiák, speciális kérések)</p>
+                        <div class="form-group">
+                          <label for="orderNotes" class="form-label">Megjegyzés:</label>
+                          <textarea class="form-control" id="orderNotes" rows="6" placeholder="Ide írhatod megjegyzéseidet, speciális kéréseidet..."></textarea>
+                          <small class="form-text text-muted">Maximum 500 karakter</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="bi bi-x-lg mr-1"></i> Mégse
+                  </button>
+                  <button type="button" class="btn btn-primary" id="confirmOrderWithNotes">
+                    <i class="bi bi-check-lg mr-1"></i> Rendelés elküldése
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        
+        $('#notesModal').modal('show');
+        
+        // Karakter limit ellenőrzése
+        $('#orderNotes').on('input', function() {
+          const maxLength = 500;
+          const currentLength = $(this).val().length;
+          
+          if (currentLength > maxLength) {
+            $(this).val($(this).val().substring(0, maxLength));
+          }
+          
+          const counter = $(this).next('.form-text');
+          if (counter.length) {
+            counter.text(`${maxLength - $(this).val().length} karakter maradt`);
+          }
+        });
+
+// Cím formázása stringgé az adatbázisba - ÚJ FÜGGVÉNY
+function formatDeliveryAddressForDB(address) {
+    if (!address) return null;
+    
+    // Ha már string és JSON, próbáljuk parse-olni
+    if (typeof address === 'string') {
+        try {
+            const parsed = JSON.parse(address);
+            if (parsed && typeof parsed === 'object') {
+                // Ha már objektum, visszaadjuk
+                return {
+                    Street: parsed.street || parsed.Street || '',
+                    City: parsed.city || parsed.City || '',
+                    Zip: parsed.zip || parsed.Zip || '',
+                    Floor: parsed.floor || parsed.Floor || '',
+                    Notes: parsed.notes || parsed.Notes || ''
+                };
+            }
+        } catch (e) {
+            // Nem JSON, ignoráljuk
+        }
+        return null;
+    }
+    
+    // Objektum formázása a backend által várt formátumra
+    if (typeof address === 'object') {
+        return {
+            Street: address.street || address.Street || '',
+            City: address.city || address.City || '',
+            Zip: address.zip || address.Zip || '',
+            Floor: address.floor || address.Floor || '',
+            Notes: address.notes || address.Notes || ''
+        };
+    }
+    
+    return null;
+}
+// Segédfüggvény: cím objektum formázása olvasható stringgé 
+function formatAddressObjectToString(address) {
+    let formattedAddress = '';
+    
+    // Utca, házszám
+    if (address.street || address.Street) {
+        formattedAddress += (address.street || address.Street);
+    }
+    
+    // Város
+    if (address.city || address.City) {
+        if (formattedAddress) formattedAddress += ', ';
+        formattedAddress += (address.city || address.City);
+    }
+    
+    // Irányítószám
+    if (address.zip || address.Zip) {
+        if (formattedAddress) formattedAddress += ', ';
+        formattedAddress += (address.zip || address.Zip);
+    }
+    
+    // Emelet, ajtószám
+    if (address.floor || address.Floor) {
+        if (formattedAddress) formattedAddress += ', ';
+        formattedAddress += (address.floor || address.Floor);
+    }
+    
+    // Megjegyzés a futárnak
+    if (address.notes || address.Notes) {
+        formattedAddress += ` (${address.notes || address.Notes})`;
+    }
+    
+    return formattedAddress || null;
+}
+
+// **CONFIRM GOMB ESEMÉNYKEZELŐJE (asztalfoglalás támogatással)**
+$('#notesModal').on('shown.bs.modal', function() {
+    $('#confirmOrderWithNotes').off('click').on('click', async function() {
+        const $confirmBtn = $(this);
+        const originalText = $confirmBtn.html();
+        
+        // Loading állapot
+        $confirmBtn.prop('disabled', true);
+        $confirmBtn.html('<span class="spinner-border spinner-border-sm mr-2"></span> Küldés...');
+        
+        try {
+            // Megjegyzés beolvasása
+            const notes = $('#orderNotes').val() || '';
+            
+            // **Használjuk a globális változót vagy kérjük le újra**
+            let activeReservationDetails = currentReservationDetails;
+            if (!activeReservationDetails && window.cartManager) {
+                activeReservationDetails = cartManager.getReservationDetails();
+                currentReservationDetails = activeReservationDetails;
+            }
+            
+            console.log('📊 Foglalás részletek rendeléshez:', activeReservationDetails);
+            
+            // **KOSÁR ADATOK FRISS ELLENŐRZÉSE**
+            let finalOrderItems = [];
+            let finalFoodTotal = 0;
+            let finalServiceFee = 0;
+            let finalTotalAmount = 0;
+            let finalExtraServicesTotal = extraServicesTotal || 0;
+            let finalExtraServicesList = extraServicesList || [];
+            
+            if (window.cartManager && window.cartManager.isInitialized) {
+                const cartData = cartManager.getCartData();
+                const foodItems = cartData.items ? cartData.items.filter(item => 
+                    item.type !== 'reservation' && !item.reservationData
+                ) : [];
+                
+                finalOrderItems = JSON.parse(JSON.stringify(foodItems));
+                finalFoodTotal = foodItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+                finalServiceFee = Math.round(finalFoodTotal * 0.1);
+                finalTotalAmount = finalFoodTotal + finalServiceFee + finalExtraServicesTotal;
+                
+                console.log('🔄 Kosár adatok újraszámolva:', {
+                    foodItems: finalOrderItems.length,
+                    foodTotal: finalFoodTotal,
+                    serviceFee: finalServiceFee,
+                    extraServicesTotal: finalExtraServicesTotal,
+                    totalAmount: finalTotalAmount
+                });
+            }
+            
+            // Ha nincs CartManager, használjuk a globális változókat
+            if (finalOrderItems.length === 0 && orderItems.length > 0) {
+                finalOrderItems = [...orderItems];
+                finalFoodTotal = orderFoodTotal || 0;
+                finalServiceFee = orderServiceFee || 0;
+                finalTotalAmount = orderTotalAmount || 0;
+                finalExtraServicesTotal = extraServicesTotal || 0;
+                finalExtraServicesList = extraServicesList || [];
+            }
+            
+            // **JAVÍTÁS: Ellenőrizzük, hogy van-e aktív foglalás**
+            const hasActiveReservation = !!(activeReservationDetails && activeReservationDetails.reservationId);
+            
+            // Ha nincs étel ÉS nincs aktív foglalás, akkor hiba
+            if (finalOrderItems.length === 0 && !hasActiveReservation) {
+                $('#notesModal').modal('hide');
+                setTimeout(() => {
+                    showOrderErrorModal("Nincs mit rendelned! Adj ételeket a kosárhoz, vagy foglalj asztalt.");
+                }, 300);
+                $confirmBtn.prop('disabled', false);
+                $confirmBtn.html(originalText);
+                return;
+            }
+            
+            // Ha van aktív foglalás (akár ételek nélkül is), folytatjuk
+            if (hasActiveReservation) {
+                console.log('📅 Asztalfoglalással rendelés, ételek nélkül is folytatjuk');
+            }
+            
+            console.log('💰 Végleges összegek:', {
+                foodTotal: finalFoodTotal.toLocaleString() + ' Ft',
+                serviceFee: finalServiceFee.toLocaleString() + ' Ft',
+                extraServicesTotal: finalExtraServicesTotal.toLocaleString() + ' Ft',
+                totalAmount: finalTotalAmount.toLocaleString() + ' Ft',
+                hasReservation: hasActiveReservation
+            });
+let formattedDeliveryAddress = null;
+
+// Ellenőrizzük, van-e házhozszállítás a kosárban
+const hasDeliveryInCart = finalOrderItems.some(item => 
+    item.consumption === 'delivery' || 
+    (item.consumption && item.consumption.toLowerCase() === 'delivery')
+);
+
+if (hasDeliveryInCart && deliveryAddress) {
+    formattedDeliveryAddress = formatDeliveryAddressForDB(deliveryAddress);
+    console.log('📦 Formázott szállítási cím (objektum):', formattedDeliveryAddress);
+} else {
+    formattedDeliveryAddress = null;
+    console.log('📦 Nincs házhozszállítás, cím törölve');
+}
+// API hívás előkészítése
+const orderData = {
+    UserId: orderUserData.userName || orderUserData.userId,
+    Items: finalOrderItems.map(item => ({
+        Name: item.name || "",
+        Description: item.description || "",
+        Price: item.price || 0,
+        Quantity: item.quantity || 1,
+        Consumption: item.consumption || 'restaurant',
+        Date: item.date || null,
+        Time: item.time || null
+    })),
+    TotalAmount: finalTotalAmount,
+    ServiceFee: finalServiceFee,
+    ReservationId: activeReservationDetails?.reservationId || null,
+    DeliveryAddress: formattedDeliveryAddress,  // <-- MÁR OBJEKTUM (vagy null)
+    PaymentMethod: paymentMethod || 'card',
+    Notes: notes || ""
+};
+
+console.log('📤 Order API hívás adatok:', JSON.stringify(orderData, null, 2));
+            
+            // 1. ELŐSZÖR RENDELÉS API HÍVÁS
+            const response = await fetch('/Order/CreateOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            const apiResult = await response.json();
+            console.log('📥 Order API válasz:', apiResult);
+            
+            if (apiResult.success) {
+                // 2. **ASZTALFOGLALÁS STÁTUSZ FRISSÍTÉSE AZ ADATBÁZISBAN**
+                let reservationUpdated = false;
+                let reservationUpdateResult = null;
+                
+                if (activeReservationDetails?.reservationId) {
+                    console.log('🔄 Asztalfoglalás frissítése...');
+                    reservationUpdateResult = await updateReservationStatusInDatabase(
+                        activeReservationDetails.reservationId,
+                        'ordered',
+                        apiResult.orderId
+                    );
+                    
+                    reservationUpdated = reservationUpdateResult?.success || false;
+                    
+                    console.log('📊 Asztalfoglalás frissítés eredménye:', {
+                        success: reservationUpdated,
+                        details: reservationUpdateResult
+                    });
+                }
+                
+                // 3. EMAIL KÜLDÉSE
+                const emailSuccess = await sendOrderConfirmationEmail(
+                    apiResult.orderId, 
+                    finalTotalAmount, 
+                    apiResult.orderDate, 
+                    notes,
+                    activeReservationDetails
+                );
+                
+                // 4. **CARTMANAGER-BEN ASZTALFOGLALÁS STÁTUSZ FRISSÍTÉSE**
+                if (window.cartManager && activeReservationDetails?.reservationId) {
+                    try {
+                        const updateResult = await cartManager.markReservationAsOrdered(
+                            activeReservationDetails.reservationId,
+                            apiResult.orderId
+                        );
+                        
+                        if (updateResult.success) {
+                            console.log('✅ Asztalfoglalás státusza frissítve a CartManager-ben');
+                        } else {
+                            console.warn('⚠️ CartManager státusz frissítés hiba:', updateResult.message);
+                        }
+                    } catch (reservationError) {
+                        console.warn('⚠️ CartManager asztalfoglalás frissítés hiba:', reservationError);
+                    }
+                }
+                
+                // 5. KOSÁR KIÜRÍTÉSE
+                if (window.cartManager) {
+                    cartManager.clearCart();
+                } else {
+                    localStorage.removeItem('cartItems');
+                }
+                
+                // 6. Modal bezárása
+                $('#notesModal').modal('hide');
+                
+                // 7. **KOMPAKT SIKERES RENDELÉS MODAL MEGJELENÍTÉSE**
+                setTimeout(() => {
+                    showCompactSuccessModal(
+                        apiResult.orderId,
+                        apiResult.orderDate, 
+                        notes,
+                        emailSuccess,
+                        activeReservationDetails,
+                        reservationUpdated,
+                        finalFoodTotal,
+                        finalServiceFee,
+                        finalTotalAmount,
+                        finalExtraServicesTotal,
+                        finalExtraServicesList
+                    );
+                }, 300);
+                
+                // 8. UI frissítése
+                const emptyCartData = {
+                    items: [],
+                    totalItems: 0,
+                    totalPrice: 0
+                };
+                updateCartDisplay(emptyCartData);
+                updateSummary(emptyCartData);
+                
+                // 9. Asztalfoglalás UI frissítése
+                setTimeout(() => {
+                    loadReservation();
+                }, 800);
+                
+            } else {
+                // Hiba esetén
+                $('#notesModal').modal('hide');
+                
+                setTimeout(() => {
+                    showOrderErrorModal(apiResult.message || "Hiba történt a rendelés feldolgozása során.");
+                }, 300);
+            }
+            
+        } catch (error) {
+            console.error('❌ Rendelési hiba:', error);
+            $('#notesModal').modal('hide');
+            
+            setTimeout(() => {
+                showOrderErrorModal("Hálózati hiba történt. Kérjük, próbáld újra később.");
+            }, 300);
+        } finally {
+            // Gomb visszaállítása
+            $confirmBtn.prop('disabled', false);
+            $confirmBtn.html(originalText);
+        }
+    });
+});
+        
+        // Modal bezárása esemény
+        $('#notesModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+      // Bejelentkezés szükséges modal
+      function showLoginRequiredModal() {
+        const modalHTML = `
+          <div class="modal fade api-modal" id="loginRequiredModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Bejelentkezés szükséges</h5>
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  <i class="bi bi-person-x" style="font-size: 4rem; color: var(--accent);"></i>
+                  <h4 class="mt-3">Bejelentkezés szükséges</h4>
+                  <p>A rendelés leadásához be kell jelentkezned.</p>
+                  <p class="text-muted small mt-2">
+                    <i class="bi bi-info-circle"></i>
+                    Jelenleg vendég módban vagy. Kérjük, jelentkezz be vagy regisztrálj!
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>
+                  <button type="button" class="btn btn-primary" onclick="window.location.href='login.html'">
+                    <i class="bi bi-box-arrow-in-right"></i> Bejelentkezés
+                  </button>
+                  <button type="button" class="btn btn-success" onclick="window.location.href='register.html'">
+                    <i class="bi bi-person-plus"></i> Regisztráció
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        $('#loginRequiredModal').modal('show');
+        
+        $('#loginRequiredModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+      // Rendelési hiba modal
+      function showOrderErrorModal(message) {
+        const modalHTML = `
+          <div class="modal fade error-modal api-modal" id="orderErrorModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title text-danger">
+                    <i class="bi bi-exclamation-triangle mr-2"></i>
+                    Hiba történt
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                  <i class="bi bi-x-circle" style="font-size: 4rem; color: #dc3545;"></i>
+                  <h4 class="mt-3 text-danger">Rendelési hiba</h4>
+                  <p>${message}</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Rendben</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        $('body').append(modalHTML);
+        $('#orderErrorModal').modal('show');
+        
+        $('#orderErrorModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      }
+
+
+// **KOMPAKT SIKERES RENDELÉS MODAL** 
+function showCompactSuccessModal(
+    orderId, 
+    orderDate, 
+    notes, 
+    emailSent = true, 
+    reservationDetails = null,
+    reservationUpdated = false,
+    // ÚJ PARAMÉTEREK: az összegek
+    foodTotal = 0,
+    serviceFee = 0,
+    totalAmount = 0,
+    extraServicesTotal = 0,  // ITT ÁTVESZÜK PARAMÉTERKÉNT
+    extraServicesList = []    // ITT ÁTVESZÜK PARAMÉTERKÉNT
+) {
+    // Dátum/idő formázása
+    let formattedDate = 'Nincs megadva';
+    let formattedTime = 'Nincs megadva';
+    
+    if (reservationDetails) {
+        const { date, time } = formatDateTimeForDisplay(reservationDetails);
+        formattedDate = date;
+        formattedTime = time;
+    }
+    
+    // **FONTOS: HASZNÁLD A PARAMÉTEREKBEN KAPOTT VÁLTOZÓKAT**
+    // Ne használd a globális extraServicesTotal-t, hanem a paraméterként kapottat
+    const displayFoodTotal = foodTotal ? foodTotal.toLocaleString() : '0';
+    const displayServiceFee = serviceFee ? serviceFee.toLocaleString() : '0';
+    const displayTotalAmount = totalAmount ? totalAmount.toLocaleString() : '0';
+    const displayExtraServicesTotal = extraServicesTotal ? extraServicesTotal.toLocaleString() : '0';
+    const displayExtraServicesList = extraServicesList || [];
+    
+    console.log('💰 Modal összegek:', {
+        foodTotal: displayFoodTotal,
+        serviceFee: displayServiceFee,
+        totalAmount: displayTotalAmount,
+        extraServicesTotal: displayExtraServicesTotal,
+        extraServicesCount: displayExtraServicesList.length
+    });
+    
+    const modalHTML = `
+        <div class="modal fade compact-success-modal" id="orderSuccessModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-check-circle-fill text-success mr-2"></i>
+                            Rendelés sikeres!
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <!-- Success icon -->
+                        <div class="success-icon">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+                        
+                        <h4 class="mb-3" style="color: var(--accent);">Köszönjük a rendelését!</h4>
+                        <p class="text-muted mb-4">Rendelését sikeresen rögzítettük. Az alábbiakban láthatja a részleteket.</p>
+                        
+                        <!-- Order info -->
+                        <div class="mb-4">
+                            <div class="success-info-item">
+                                <i class="bi bi-receipt"></i>
+                                <span class="success-info-label">Rendelési azonosító:</span>
+                                <span class="success-info-value font-weight-bold">${orderId}</span>
+                            </div>
+                            <div class="success-info-item">
+                                <i class="bi bi-calendar"></i>
+                                <span class="success-info-label">Rendelés dátuma:</span>
+                                <span class="success-info-value">${orderDate}</span>
+                            </div>
+                            <div class="success-info-item">
+                                <i class="bi bi-cash-stack"></i>
+                                <span class="success-info-label">Ételek:</span>
+                                <span class="success-info-value">${displayFoodTotal} Ft</span>
+                            </div>
+                            <div class="success-info-item">
+                                <i class="bi bi-percent"></i>
+                                <span class="success-info-label">Szolgáltatási díj:</span>
+                                <span class="success-info-value">${displayServiceFee} Ft</span>
+                            </div>
+                            
+                            ${extraServicesTotal > 0 ? `  <!-- ITT A PARAMÉTER! -->
+                            <div class="success-info-item">
+                                <i class="bi bi-stars"></i>
+                                <span class="success-info-label">Extra szolgáltatások:</span>
+                                <span class="success-info-value text-info">${displayExtraServicesTotal} Ft</span>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="success-info-item">
+                                <i class="bi bi-credit-card"></i>
+                                <span class="success-info-label">Fizetési mód:</span>
+                                <span class="success-info-value">${paymentMethod === 'card' ? 'Bankkártya' : 'Készpénz'}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Delivery address -->
+                        ${deliveryAddress ? `
+                        <div class="mb-4 text-left">
+                            <div class="success-info-item">
+                                <i class="bi bi-truck"></i>
+                                <span class="success-info-label">Szállítási cím:</span>
+                            </div>
+                            <div class="delivery-address-compact">
+                                ${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.zip}
+                                ${deliveryAddress.floor ? `<br><small class="text-muted">${deliveryAddress.floor}</small>` : ''}
+                                ${deliveryAddress.notes ? `<br><small class="text-muted"><i>"${deliveryAddress.notes}"</i></small>` : ''}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Extra services details (if any) -->
+                        ${displayExtraServicesList.length > 0 ? `
+                        <div class="mb-4 text-left">
+                            <div class="success-info-item">
+                                <i class="bi bi-stars"></i>
+                                <span class="success-info-label">Extra szolgáltatások:</span>
+                            </div>
+                            <div class="extra-services-compact-details">
+                                ${displayExtraServicesList.map(service => `
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>${service.name}:</span>
+                                        <span class="font-weight-bold">${service.price ? service.price.toLocaleString() : '0'} Ft</span>
+                                    </div>
+                                `).join('')}
+                                <div class="d-flex justify-content-between border-top mt-2 pt-2">
+                                    <strong>Összesen:</strong>
+                                    <strong class="text-info">${displayExtraServicesTotal} Ft</strong>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Notes -->
+                        ${notes ? `
+                        <div class="mb-4 text-left">
+                            <div class="success-info-item">
+                                <i class="bi bi-chat-text"></i>
+                                <span class="success-info-label">Megjegyzés:</span>
+                            </div>
+                            <div class="notes-compact">
+                                "${notes}"
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Reservation -->
+                        ${reservationDetails ? `
+                        <div class="mb-4 text-left">
+                            <div class="success-info-item">
+                                <i class="bi bi-calendar-check"></i>
+                                <span class="success-info-label">Asztalfoglalás:</span>
+                            </div>
+                            <div class="reservation-compact">
+                                <div class="mb-2">
+                                    <strong>${reservationDetails.tableName}</strong> (${reservationDetails.tableNumber || 'N/A'})
+                                </div>
+                                <div class="mb-1"><small>${formattedDate}, ${formattedTime}</small></div>
+                                <div class="mb-1"><small>${reservationDetails.guests} fő</small></div>
+                                <div class="mt-2">
+                                    <span class="status-badge success">
+                                        <i class="bi bi-check-circle mr-1"></i>
+                                        Rendeléshez csatolva
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Notifications -->
+                        <div class="mt-4">
+                            ${emailSent ? `
+                            <div class="notification-item">
+                                <i class="bi bi-envelope-check"></i>
+                                <div>
+                                    <strong>Email elküldve</strong>
+                                    <p class="mb-0 small">A rendelés részleteiről emailt küldtünk a megadott címre.</p>
+                                </div>
+                            </div>
+                            ` : `
+                            <div class="notification-item">
+                                <i class="bi bi-envelope-exclamation text-warning"></i>
+                                <div>
+                                    <strong>Email nem lett elküldve</strong>
+                                    <p class="mb-0 small">A rendelés sikeresen rögzítve, de technikai hiba miatt az email nem lett elküldve.</p>
+                                </div>
+                            </div>
+                            `}
+                            
+                            <div class="notification-item">
+                                <i class="bi bi-clock-history"></i>
+                                <div>
+                                    <strong>Feldolgozás</strong>
+                                    <p class="mb-0 small">Rendelését hamarosan elkezdjük feldolgozni. Emailben értesítjük a státusz változásokról.</p>
+                                </div>
+                            </div>
+                            
+                            ${displayExtraServicesList.length > 0 ? `
+                            <div class="notification-item">
+                                <i class="bi bi-stars text-info"></i>
+                                <div>
+                                    <strong>Extra szolgáltatások</strong>
+                                    <p class="mb-0 small">Kiválasztott extra szolgáltatásait előkészítjük.</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Total amount summary -->
+                        <div class="alert alert-success mt-4">
+                            <div class="d-flex justify-content-between">
+                                <span class="font-weight-bold">Összesen fizetendő:</span>
+                                <span class="font-weight-bold h5 mb-0">${displayTotalAmount} Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                            Bezárás
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='index.html'">
+                            <i class="bi bi-house mr-2"></i> Főoldal
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="window.location.href='profile.html'">
+                            <i class="bi bi-list-check mr-2"></i> Rendeléseim
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('body').append(modalHTML);
+    $('#orderSuccessModal').modal('show');
+    
+    $('#orderSuccessModal').on('hidden.bs.modal', function () {
+        $(this).remove();
+    });
+}
+// Üres kosár modal - JAVÍTOTT ÜZENET (asztalfoglalás nélküli esetre)
+function showEmptyCartModal() {
+    const modalHTML = `
+        <div class="modal fade empty-cart-modal" id="emptyCartModal" tabindex="-1" role="dialog" aria-labelledby="emptyCartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emptyCartModalLabel">
+                            <i class="bi bi-cart-x text-warning mr-2"></i>
+                            Nincs rendelhető elem
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="mb-4">
+                            <i class="bi bi-emoji-frown" style="font-size: 4rem; color: var(--accent);"></i>
+                        </div>
+                        <h4 class="mb-3">Nincs mit rendelned!</h4>
+                        <p>A kosarad üres és nincs aktív asztalfoglalásod sem.</p>
+                        <p class="text-muted small">Rendeléshez adj ételeket a kosárhoz, vagy foglalj asztalt!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Bezárás
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='menu.html'">
+                            <i class="bi bi-arrow-left mr-2"></i> Menü
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="window.location.href='reserve.html'">
+                            <i class="bi bi-calendar-plus"></i> Asztalfoglalás
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (!$('#emptyCartModal').length) {
+        $('body').append(modalHTML);
+    }
+    
+    $('#emptyCartModal').modal('show');
+    
+    $('#emptyCartModal').on('hidden.bs.modal', function () {
+        $(this).remove();
+    });
+}
+
+      // Kosár változás figyelése
+      window.addEventListener('cartUpdated', function(event) {
+        console.log('🔄 Kosár frissült, újratöltés...', event.detail);
+        
+        if (window.cartManager && window.cartManager.isInitialized) {
+          const cartData = cartManager.getCartData();
+          updateCartDisplay(cartData);
+          updateSummary(cartData);
+        } else {
+          loadCartDataFallback();
+        }
+      });
+
+      // Asztalfoglalás változás figyelése
+      window.addEventListener('reservationUpdated', function() {
+        console.log('🔄 Asztalfoglalás frissült, újratöltés...');
+        loadReservation();
+      });
+
+      // CartManager esemény figyelése
+      window.addEventListener('cartManagerReady', function() {
+        console.log('✅ CartManager kész, kosár adatok betöltése');
+        loadCartData();
+        loadReservation();
+      });
+
+      // Kezdeti betöltés - Várakozás a CartManager-re
+      waitForCartManager(function() {
+        loadCartData();
+        loadReservation();
+      });
+
+      // Animációk indítása
+      setTimeout(function() {
+        $('#page-container').addClass('animated');
+        $('#cart-container').addClass('animated');
+        $('#cart-card').addClass('animated');
+        $('#cart-header').addClass('animated');
+        $('#cart-icon').addClass('animated');
+        $('#cart-title').addClass('animated');
+        $('#cart-subtitle').addClass('animated');
+        $('#checkout-btn').addClass('animated');
+      }, 300);
+
+      setTimeout(function() {
+        $('#cart-items-section').addClass('animated');
+        $('#reservation-display-section').addClass('animated');
+        $('#summary-section').addClass('animated');
+      }, 600);
+
+      // Debug információk
+      setTimeout(function() {
+        if (window.cartManager && window.cartManager.getDebugInfo) {
+          console.log('🔍 Kosár adatok:', cartManager.getDebugInfo());
+        }
+      }, 2000);
+    });
+
+
+
+
+    // Debug funkció
+function debugExtraServicesNoDiscount() {
+    console.log('🔍 EXTRA SZOLGÁLTATÁSOK DEBUG (Kedvezmény nélkül):');
+    console.log('Ételek összege:', orderFoodTotal?.toLocaleString() + ' Ft');
+    console.log('Szolgáltatási díj:', orderServiceFee?.toLocaleString() + ' Ft');
+    
+    if (extraServicesList && extraServicesList.length > 0) {
+        console.log('📋 Extra szolgáltatások:');
+        let calculatedTotal = 0;
+        extraServicesList.forEach((service, index) => {
+            console.log(`  ${index + 1}. ${service.name}: ${service.price.toLocaleString()} Ft`);
+            calculatedTotal += service.price;
+        });
+        console.log(`💰 Extra szolgáltatások összege: ${calculatedTotal.toLocaleString()} Ft`);
+        console.log(`✅ Ellenőrzés: ${extraServicesTotal === calculatedTotal ? 'OK' : 'HIBA'}`);
+        console.log(`   Stored: ${extraServicesTotal?.toLocaleString()} Ft`);
+        console.log(`   Calculated: ${calculatedTotal.toLocaleString()} Ft`);
+    } else {
+        console.log('ℹ️ Nincsenek extra szolgáltatások');
+    }
+    
+    console.log('🎯 Végösszeg:', orderTotalAmount?.toLocaleString() + ' Ft');
+    
+    const expectedTotal = (orderFoodTotal || 0) + (orderServiceFee || 0) + (extraServicesTotal || 0);
+    console.log(`✅ Ellenőrzés (összeg): ${orderTotalAmount === expectedTotal ? 'OK' : 'HIBA'}`);
+    console.log(`   Stored: ${orderTotalAmount?.toLocaleString()} Ft`);
+    console.log(`   Calculated: ${expectedTotal.toLocaleString()} Ft`);
+}
+</script>
+</body>
+</html>

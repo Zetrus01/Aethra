@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AETHRA - Főoldal</title>
+  
+  <!-- BOOTSTRAP + ICONS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/6.7.0/css/flag-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF8C00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8'/><path d='M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/></svg>">
+   
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="style">
+    <style>
+    /* Alap CSS változók - SÖTÉT TÉMA alapértelmezett (eredeti) */
+    :root {
+      --accent: #ff6b35;
+      
+      /* Sötét téma változók - eredeti */
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --background-color: #0f0f0f;
+      --text-color: #ffffff;
+      --text-secondary: #b0b0b0;
+      --card-bg: #1a1a1a;
+      --card-hover: #2a2a2a;
+      --border-color: #333333;
+      --navbar-bg: transparent;
+      --navbar-scrolled-bg: rgba(0, 0, 0, 0.95);
+      --navbar-text: #ffffff;
+           --dropdown-bg: rgba(30, 30, 30, 0.98);
+      --dropdown-border: rgba(255, 255, 255, 0.15);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --gradient-start: rgba(11, 11, 11, 0.8);
+      --gradient-end: rgba(0, 0, 0, 0);
+      --overlay-color: rgba(0, 0, 0, 0.55);
+      --stats-bg: rgba(255, 107, 53, 0.1);
+    }
+
+    /* Világos téma változók - SZÜRKE, TÜRKIZ, FEHÉR (csak ez változott) */
+[data-theme="light"] {
+  --accent: #4c9eed; /* Fő türkiz - a legélénkebb a palettából */
+  
+  /* Színkeverék a megadott palettából */
+  --primary-color: #B0F5FA; /* Világos türkiz - másodlagos hangsúly */
+  --secondary-color: #E0FFFF; /* Nagyon világos türkiz - háttérszínként */
+  --background-color: #FFFFFF; /* Tiszta fehér - fő háttér */
+  --text-color: #2F4F4F; /* Sötét elefántcsont - jó kontraszt fehéren */
+  --text-secondary: #2a5378; /*  másodlagos szöveg */
+  --card-bg: #FFFFFF; /* Tiszta fehér kártyák */
+  --card-hover: #F8F8F8; /* Enyhén szürke fehér hover */
+  --border-color: #ECECEC; /* Világos szürke szegélyek */
+  --navbar-bg: transparent;
+  --navbar-scrolled-bg: #E5E7EB; /* Átlátszó fehér */
+  --navbar-text: #2F4F4F; /* Sötét szürke navbar szöveg */
+  --dropdown-bg: rgba(255, 255, 255, 0.98);
+  --dropdown-border: rgba(176, 245, 250, 0.3); /* Enyhe türkiz szegély */
+  --shadow-color: rgba(137, 230, 246, 0.15); /* Enyhe türkiz árnyék */
+  --gradient-start: rgba(255, 255, 255, 0.9);
+  --gradient-end: rgba(224, 255, 255, 0.1); /* Világos türkiz átmenet */
+  --overlay-color: rgba(0, 0, 0, 0.3);
+  --stats-bg: rgba(137, 230, 246, 0.1); /* Enyhe türkiz háttér */
+}
+[data-theme="light"] .menu-btn:hover {
+  background: #0CAEED;
+  box-shadow: 0 8px 15px rgba(33, 158, 181, 0.3);
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color);
+  font-family: 'Merriweather', serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+
+    /* Navbar konténer */
+    #navbar-container {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      border: 3px solid var(--border-color);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fő tartalom */
+    .main-content {
+      flex: 1;
+      padding-top: 80px;
+      background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      position: relative;
+      padding-top: 0 !important;
+    }
+
+    /* JAVÍTOTT HERO SZAKASZ - TÉNYLEGES KÖZÉPRE IGAZÍTÁS */
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-slideshow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .hero-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+    }
+
+    /* Képek optimalizálva a hero szekcióhoz */
+    .hero-slide:nth-child(1) {
+      background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-position: center 30%;
+    }
+
+    .hero-slide:nth-child(2) {
+      background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+      background-position: center 40%;
+    }
+
+    .hero-slide:nth-child(3) {
+      background-image: url('https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-position: center 35%;
+    }
+
+
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay-color);
+      z-index: 1;
+    }
+
+    /* TÉNYLEGES KÖZÉPRE IGAZÍTÁS - JAVÍTOTT */
+.hero-content {
+  position: absolute;
+  z-index: 2;
+  max-width: 800px;
+  width: 90%;
+  padding: 40px 30px;
+  color: #fff;
+  text-align: center;
+  
+  /* FELJEBB POZÍCIÓ */
+  top: 45%; /* Eredeti 50% helyett */
+  transform: translateY(-50%);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  /* Animáció */
+  animation: fadeInUp 1s ease-out;
+}
+    /* Animacio */
+    .hero-content {
+  position: absolute;
+  z-index: 2;
+  max-width: 800px;
+  width: 90%;
+  padding: 40px 30px;
+  color: #fff;
+  text-align: center;
+  
+  /* FELJEBB POZÍCIÓ */
+  top: 45%;
+  transform: translateY(-50%);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  /* JAVÍTOTT SMOOTH ANIMÁCIÓ */
+  animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) translateY(-50%); /* MEGŐRIZZÜK A CENTER POZÍCIÓT */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateY(-50%); /* MEGŐRIZZÜK A CENTER POZÍCIÓT */
+  }
+}
+
+    .hero-content h3 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    .hero-content h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-family: 'Merriweather', serif;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #ddd;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      font-family: 'Merriweather', serif;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 14px 35px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Merriweather', serif;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+
+    .hero-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+      transform: translateY(-3px);
+      text-decoration: none;
+      color: #fff;
+    }
+    [data-theme="light"] .hero-btn:hover {
+      box-shadow: 0 0 15px  rgba(33, 158, 181, 0.3);
+    }
+
+    .hero-btn:hover::before {
+      width: 100%;
+    }
+
+    /* Szolgáltatások szekció - CSÖKKENTETT PADDING */
+    .features-section {
+      padding: 60px 0 40px 0;
+      background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+    }
+
+    .section-title {
+      font-family: 'Merriweather', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-color), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: 'Merriweather', serif;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2.5rem;
+      height: 100%;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+      opacity: 0;
+      transform: translateY(30px);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 15px 30px var(--shadow-color);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--accent), #e55a2b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .feature-card h4 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+      text-align: center;
+      font-family: 'Merriweather', serif;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.6;
+      font-family: 'Merriweather', serif;
+    }
+
+    /* Menü kiemelés - CSÖKKENTETT PADDING */
+    .menu-highlight-section {
+      padding: 40px 0 60px 0;
+      background: linear-gradient(to bottom, var(--gradient-end), var(--gradient-start));
+    }
+
+    .menu-highlight {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid var(--border-color);
+      margin: 2rem 0;
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s ease;
+      box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .menu-highlight.animated {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .menu-highlight h3 {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    .menu-item {
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border-color);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+    }
+
+    .menu-item.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item h5 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.3rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    .menu-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+      font-family: 'Merriweather', serif;
+    }
+
+    .price-tag {
+      background: var(--accent);
+      color: white;
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .menu-cta {
+      text-align: center;
+      padding: 2rem;
+      transform: translateX(20%);
+    }
+
+    .menu-cta i {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .menu-cta p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    .menu-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Merriweather', serif;
+    }
+
+    .menu-btn:hover {
+      background: #e55a2b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(255, 107, 53, 0.3);
+      color: white;
+      text-decoration: none;
+    }
+
+    /* SPECIALITÁSOK ANIMÁCIÓ */
+    .special-title {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .special-subtitle {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .special-title.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .special-subtitle.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PULZÁLÓ ANIMÁCIÓ A CÍMHEZ */
+/* Sötét téma - narancssárga glow */
+@keyframes pulseGlowDark {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 0 30px rgba(255, 107, 53, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+  }
+}
+
+/* Világos téma - kék glow */
+@keyframes pulseGlowLight {
+  0% {
+    text-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(37, 99, 235, 0.7), 0 0 30px rgba(37, 99, 235, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+  }
+}
+
+/* Alapértelmezett sötét téma */
+.special-title.animated {
+  animation: pulseGlowDark 2s ease-in-out infinite;
+}
+
+/* Világos téma felülírása */
+[data-theme="light"] .special-title.animated {
+  animation: pulseGlowLight 2s ease-in-out infinite;
+}
+
+/* Biztosítsuk, hogy a sötét téma is működjön */
+[data-theme="dark"] .special-title.animated {
+  animation: pulseGlowDark 2s ease-in-out infinite;
+}
+
+    /* Statisztikák */
+    .stats-section {
+      padding: 80px 0;
+      background: var(--stats-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('images/food/index_stats.jpg') center/cover no-repeat;
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .stats-section .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+      font-family: 'Merriweather', serif;
+    }
+
+    /* Vélemények */
+    .testimonials-section {
+      padding: 100px 0;
+      background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+    }
+
+    .testimonial-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 1rem;
+      border: 1px solid var(--border-color);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.5s ease;
+      position: relative;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    .testimonial-card.animated {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .testimonial-card:hover {
+      background: var(--card-hover);
+      transform: scale(1.02);
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 4rem;
+      color: var(--accent);
+      opacity: 0.3;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #e55a2b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .testimonial-card p {
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 0;
+      position: relative;
+      z-index: 1;
+      font-family: 'Merriweather', serif;
+    }
+
+    /* CTA szekció */
+    .cta-section {
+      padding: 100px 0;
+      background: linear-gradient(135deg, var(--accent), #e55a2b);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('images/food/index_cta-section.jpg') center/cover no-repeat;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .cta-section .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: white;
+      font-family: 'Merriweather', serif;
+    }
+
+    .cta-section p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: 'Merriweather', serif;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn-primary {
+      background: white;
+      color: var(--accent);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Merriweather', serif;
+    }
+
+    .cta-btn-primary:hover {
+      background: #f7fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .cta-btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      padding: 10px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Merriweather', serif;
+    }
+
+    .cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Lábléc */
+    footer {
+      background: var(--card-bg);
+      padding: 60px 0 30px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    footer h5 {
+      color: var(--accent);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    footer p {
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      font-family: 'Merriweather', serif;
+    }
+
+    footer i {
+      margin-right: 0.5rem;
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Reszponzív design */
+    @media (max-width: 768px) {
+      .hero-content {
+        width: 95%;
+        padding: 30px 20px;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-content p {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      .cta-section h2 {
+        font-size: 2rem;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .cta-btn-primary,
+      .cta-btn-secondary {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-content h3 {
+        font-size: 1.1rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+      
+      .stat-number {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* Smooth transitions for all elements */
+    .feature-card,
+    .menu-highlight,
+    .testimonial-card,
+    .menu-item,
+    footer,
+    .stats-section,
+    .features-section,
+    .testimonials-section,
+    .menu-highlight-section {
+      transition: all 0.3s ease;
+    }
+    /* Dropdown stabilitás javítása */
+.profile-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    will-change: transform;
+}
+
+.profile-dropdown .dropdown-menu.show {
+    display: block;
+}
+
+/* Biztosítjuk, hogy a dropdown ne tűnjön el visibility change után */
+.profile-dropdown .profile-btn:focus + .dropdown-menu,
+.profile-dropdown .profile-btn:active + .dropdown-menu {
+    display: block;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ NAVBAR konténer-->
+  <div id="navbar-container">
+    <!-- Ide töltődik be a navbar -->
+    <div class="text-center py-5">
+      <div class="loading-spinner" style="width: 30px; height: 30px; margin: 20px auto;"></div>
+      <p>Navbar betöltése...</p>
+    </div>
+  </div>
+
+  <!-- ✅ FŐ TARTALOM -->
+  <div class="main-content">
+    
+    <!-- HERO SZAKASZ - JAVÍTOTT -->
+    <section class="hero-section">
+      <div class="hero-slideshow">
+        <div class="hero-slide active"></div>
+        <div class="hero-slide"></div>
+        <div class="hero-slide"></div>
+
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h3 class="mb-2">Üdvözöllek a</h3>
+        <h1 class="mb-3">AETHRA</h1>
+        <p class="mb-4">Ahol a hagyomány találkozik a modern ízekkel</p>
+        <a href="#features" class="hero-btn">Fedezd fel</a>
+      </div>
+    </section>
+
+    <!-- SZOLGÁLTATÁSOK SZEKCIÓ -->
+    <section id="features" class="features-section">
+      <div class="container">
+        <div class="row text-center mb-5">
+          <div class="col-12">
+            <h2 class="section-title">Miért válassz minket?</h2>
+            <p class="section-subtitle">Prémium gasztroélmény a legjobb alapanyagokból</p>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="feature-card" data-delay="0">
+              <div class="feature-icon">
+                <i class="bi bi-egg-fried"></i>
+              </div>
+              <h4>Friss Alapanyagok</h4>
+              <p>Mindennap friss, helyi termelőktől származó alapanyagokkal dolgozunk, hogy ízeink a legjobbak legyenek.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="feature-card" data-delay="200">
+              <div class="feature-icon">
+                <i class="bi bi-star"></i>
+              </div>
+              <h4>Michelin Csillagos Séf</h4>
+              <p>Séfünk nemzetközi tapasztalattal rendelkezik és folyamatosan új, innovatív ízeket hoz létre.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="feature-card" data-delay="400">
+              <div class="feature-icon">
+                <i class="bi bi-heart"></i>
+              </div>
+              <h4>Romantikus Hangulat</h4>
+              <p>Különleges belső térünk tökéletes választás különleges alkalmakra és romantikus vacsorákra.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENÜ KIEMELÉS -->
+<!-- MENÜ KIEMELÉS -->
+<section class="menu-highlight-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- DINAMIKUS CÍM A NAP SPECIALITÁSAIVAL -->
+        <div class="row text-center mb-4">
+          <div class="col-12">
+            <h2 class="section-title special-title" data-delay="0" id="daily-special-title">Specialitások</h2>
+            <p class="section-subtitle special-subtitle" data-delay="200">Napi különlegességeink, amelyeket csak korlátozott ideig kínálunk</p>
+          </div>
+        </div>
+        
+        <div class="menu-highlight">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- DINAMIKUS MENÜ ELEMEK -->
+              <div id="daily-menu-items">
+                <!-- Ide töltődnek be a nap specialitásai JavaScript segítségével -->
+              </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+              <div class="menu-cta">
+                <i class="bi bi-arrow-right"></i>
+                <p class="mt-3">További ízeket fedezhetsz fel teljes menünkön</p>
+                <a href="menu.html" class="menu-btn">Teljes Menü</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- STATISZTIKÁK -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-3 col-6 mb-4">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Éves tapasztalat</span>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <span class="stat-number">5000+</span>
+            <span class="stat-label">Elégedett vendég</span>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <span class="stat-number">30+</span>
+            <span class="stat-label">Különleges fogás</span>
+          </div>
+          <div class="col-md-3 col-6 mb-4">
+            <span class="stat-number">0-24</span>
+            <span class="stat-label">Online foglalás</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VÉLEMÉNYEK -->
+    <section class="testimonials-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-12 text-center">
+            <h2 class="section-title">Rólunk mondták</h2>
+            <p class="section-subtitle">Vendégeink véleménye</p>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-4">
+            <div class="testimonial-card" data-delay="0">
+              <div class="d-flex align-items-center mb-3">
+                <div class="testimonial-avatar">
+                  <i class="bi bi-person"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0" style="color: var(--text-color)">Kovács Anna</h5>
+                  <small style="color: var(--accent)">Születésnapi partí</small>
+                </div>
+              </div>
+              <p>"Csodálatos volt a születésnapi meglepetés vacsora! A személyzet figyelmes, az ételek fantasztikusak. Mindenképpen visszatérünk!"</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card" data-delay="200">
+              <div class="d-flex align-items-center mb-3">
+                <div class="testimonial-avatar">
+                  <i class="bi bi-person"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0" style="color: var(--text-color)">Nagy Péter</h5>
+                  <small style="color: var(--accent)">Üzleti ebéd</small>
+                </div>
+              </div>
+              <p>"Professzionális környezet, kiváló minőség. A partnereim is el voltak ragadtatva. Tökéletes választás üzleti megbeszélésekre."</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card" data-delay="400">
+              <div class="d-flex align-items-center mb-3">
+                <div class="testimonial-avatar">
+                  <i class="bi bi-person"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0" style="color: var(--text-color)">Tóth Eszter</h5>
+                  <small style="color: var(--accent)">Romantikus vacsora</small>
+                </div>
+              </div>
+              <p>"A hangulata, a kiszolgálás, az ételek - minden tökéletes volt. Az évfordulónkra felejthetetlen élményt teremtettek számunkra."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SZEKCIÓ -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="mb-3">Készen állsz az élményre?</h2>
+        <p class="mb-4">Foglalj asztalt még ma és élvezd a AETHRA gasztroélményt!</p>
+        <div class="cta-buttons">
+          <a href="reserve.html" class="cta-btn-primary">Asztal Foglalása</a>
+          <a href="menu.html" class="cta-btn-secondary">Menü Megtekintése</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- LÁBLÉC -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>AETHRA</h5>
+          <p>Prémium gasztroélmény a szívedben</p>
+        </div>
+        <div class="col-md-6 text-md-right">
+          <p><i class="bi bi-telephone"></i> +12 34 156 7890</p>
+          <p><i class="bi bi-envelope"></i>aethrarestaurant@gmail.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2025 AETHRA. Minden jog fenntartva.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript fájlok -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Saját JavaScript fájlok -->
+<!-- JavaScript fájlok BETÖLTÉSI SORREND MÓDOSÍTÁSA -->
+<script src="js/components.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/smart-cart-manager.js"></script>
+<script src="js/app.js"></script>
+  <script src="js/modal-feedback.js"></script>
+
+  <!-- Animációk -->
+<script>
+    // Naponta változó specialitások
+    const dailySpecials = {
+        0: [ // Vasárnap
+            { name: "Vasárnapi Rostélyos", description: "Lassan párolt marharostélyos friss zöldségekkel", price: "6.290 Ft" },
+            { name: "Truffeles Gombás Pasta", description: "Friss tésztával, gombákkal és fekete trüffellel", price: "5.890 Ft" },
+            { name: "Citromos Pisztráng", description: "Friss pisztráng citromos vajjal és petrezselymes burgonyával", price: "5.490 Ft" }
+        ],
+        1: [ // Hétfő
+            { name: "Hétfői Marhapörkölt", description: "Hagyományos magyar pörkölt galuskával", price: "4.990 Ft" },
+            { name: "Mediterrán Csirkemell", description: "Grillezett csirkemell olívabogyóval és feta sajttal", price: "4.790 Ft" },
+            { name: "Zöldséges Risotto", description: "Friss zöldségek, parmezán és bazsalikom", price: "4.590 Ft" }
+        ],
+        2: [ // Kedd
+            { name: "Keddi Halászlé", description: "Hagyományos magyar halászlé friss halból", price: "5.290 Ft" },
+            { name: "BBQ Csirkeszárnyak", description: "Ropogós csirkeszárnyak házi BBQ szósszal", price: "4.890 Ft" },
+            { name: "Görög Saláta", description: "Friss zöldségek, olívabogyó, feta sajt görög öntettel", price: "3.990 Ft" }
+        ],
+        3: [ // Szerda
+            { name: "Szerdai Lasagne", description: "Házi lasagne friss tésztával és parmezánnal", price: "4.990 Ft" },
+            { name: "Angus Burger", description: "Marhahús, cheddar, bacon, BBQ szósz", price: "5.290 Ft" },
+            { name: "Zöldséges Curry", description: "Friss zöldségek kókusztejes curry szósszal", price: "4.690 Ft" }
+        ],
+        4: [ // Csütörtök
+            { name: "Csütörtöki Pizza", description: "Friss pizza pepperonival, gombával és olívabogyóval", price: "4.790 Ft" },
+            { name: "Grillezett Lazac", description: "Friss lazac citromos vajjal és párolt zöldségekkel", price: "6.490 Ft" },
+            { name: "Gombás Rizotto", description: "Friss gombák, parmezán, fehér bor", price: "4.890 Ft" }
+        ],
+        5: [ // Péntek
+            { name: "Pénteki Friss Hal", description: "A nap friss fogása szezonális zöldségekkel", price: "6.990 Ft" },
+            { name: "Steak Széria", description: "Választható Angus vagy Wagyu steak friss köretével", price: "8.290 Ft" },
+            { name: "Tenger gyümölcsei Tészta", description: "Friss tenger gyümölcsei tejszínes szósszal", price: "6.590 Ft" }
+        ],
+        6: [ // Szombat
+            { name: "Szombati Grill Tál", description: "Választék a hétről - grillkolbász, csirkemell, marhaszelet", price: "7.490 Ft" },
+            { name: "Trufas Gombás Risotto", description: "Friss gombák, parmezán, fehér bor", price: "5.290 Ft" },
+            { name: "Mézes Mustáros Csirke", description: "Grillezett csirkemell, ropogós zöldségek", price: "4.990 Ft" }
+        ]
+    };
+
+    // Nap nevek magyarul
+    const dayNames = [
+        "Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"
+    ];
+
+    // Naponta változó specialitások betöltése
+    function loadDailySpecials() {
+        const today = new Date().getDay(); // 0-6 (vasárnap-szombat)
+        const specials = dailySpecials[today];
+        const dayName = dayNames[today];
+        
+        // Frissítjük a címet
+        document.getElementById('daily-special-title').textContent = `${dayName} Specialitásai`;
+        
+        // Frissítjük a menü elemeket
+        const menuItemsContainer = document.getElementById('daily-menu-items');
+        menuItemsContainer.innerHTML = '';
+        
+        specials.forEach((item, index) => {
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.setAttribute('data-delay', index * 100);
+            
+            menuItem.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>${item.name}</h5>
+                        <p class="mb-0">${item.description}</p>
+                    </div>
+                    <span class="price-tag">${item.price}</span>
+                </div>
+            `;
+            
+            menuItemsContainer.appendChild(menuItem);
+        });
+        
+        // Animációk újra aktiválása
+        setTimeout(() => {
+            animateMenuItems();
+        }, 300);
+    }
+
+    // Menü elemek animálása
+    function animateMenuItems() {
+        $('.menu-item').each(function(index) {
+            const element = $(this);
+            const position = element.offset().top;
+            const scrollPosition = $(window).scrollTop() + $(window).height() - 100;
+            
+            if (position < scrollPosition) {
+                const delay = element.data('delay') || 0;
+                setTimeout(() => {
+                    element.addClass('animated');
+                }, delay + 300);
+            }
+        });
+    }
+
+    // Scroll animációk - BŐVÍTETT VERZIÓ
+    $(document).ready(function() {
+        function animateOnScroll() {
+            // Meglévő elemek
+            $('.feature-card, .menu-highlight, .testimonial-card').each(function() {
+                const element = $(this);
+                const position = element.offset().top;
+                const scrollPosition = $(window).scrollTop() + $(window).height() - 100;
+                
+                if (position < scrollPosition) {
+                    const delay = element.data('delay') || 0;
+                    setTimeout(() => {
+                        element.addClass('animated');
+                    }, delay);
+                }
+            });
+            
+            // Új specialitások animációja
+            $('.special-title, .special-subtitle').each(function() {
+                const element = $(this);
+                const position = element.offset().top;
+                const scrollPosition = $(window).scrollTop() + $(window).height() - 150;
+                
+                if (position < scrollPosition) {
+                    const delay = element.data('delay') || 0;
+                    setTimeout(() => {
+                        element.addClass('animated');
+                    }, delay);
+                }
+            });
+            
+            // Menü item-ek animációja
+            animateMenuItems();
+        }
+        
+        // Hero slideshow
+        let currentSlide = 0;
+        const slides = $('.hero-slide');
+        const totalSlides = slides.length;
+        
+        function nextSlide() {
+            slides.eq(currentSlide).removeClass('active');
+            currentSlide = (currentSlide + 1) % totalSlides;
+            slides.eq(currentSlide).addClass('active');
+        }
+        
+        // Automatikus slideshow
+        setInterval(nextSlide, 5000);
+        
+        // Induláskor
+        setTimeout(() => {
+            loadDailySpecials();
+            animateOnScroll();
+        }, 500);
+        
+        // Scroll esemény
+        $(window).on('scroll', animateOnScroll);
+    });
+</script>
+
+</body>
+</html>

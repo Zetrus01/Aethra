@@ -1,0 +1,39 @@
+Koszonom, hogy dolgozik a dokumnetáción. Kinyomtattam, a héten átolvasom és kuldom majd a javítást és a következő feladatot is, aminek meg kell majd lenni. (2026.03.16.)
+Czakó K.
+---------------------------------------
+
+
+Kedves Christofer,
+
+ezúton itt fogunk konzultálni a bakalár munkával kapcsolatban.
+
+Szakdolgozatok leadási határideje (alapképzés): 2026.05.11.
+----------------------------------------------------------------------------------------------------------------
+kérem, hogy március 16-ig gondolja át a munka Tartalmát! Fejezetekre nézve! a Tartalom előtti részeket is egyidejűleg dolgozza ki a rektori irányelveknek megfelelően! Remélem, kaptak mintát ehhez a szakdolgozatok irásának fórumán. Jelezze mailben (czakoovak@ujs.sk) nekem, ha szüksége van mintára...
+
+A megírt docx-et kérem feltölteni az adott határidőig ilyen név alatt: SajátNév-bcmunka1
+
+Ajánlott szerkezet:
+
+
+Cimlap
+belső cimoldal
+Köszönetnyilvánítás
+Becsületbeli nyilatkozat
+Témakiírás (Anotáció)-Ais2-ből kinyomtatott verzió begépelése
+Absztrakt
+Abstrakt
+Abstract
+
+Tartalom
+
+Bevezetés
+1 Piackutatás - jelen helyzet a témával kapcsolatban
+2 Munka célja - szoftverspecifikáció
+3 Elmélet - keretrendszer megalapozása
+4 Gyakorlati rész - fejlesztés és dizájn
+5 Elért eredmények, következtetések
+Befejezés vagy összegzés
+Resume (szlovák nyelvű leírás, kb. 3-4 oldal terjedelemben)
+Szakirodalom
+Melléklet

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHRA - Regisztráció</title>
+
+  <!-- BOOTSTRAP + ICONS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/6.7.0/css/flag-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF8C00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 21a8 8 0 0 1 10.821-7.487'/><path d='M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z'/><circle cx='10' cy='8' r='5'/></svg>">
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="style">
+  
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+      --accent: #ff6b35;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--black);
+      font-family: 'Merriweather', serif;
+      color: var(--white);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar konténer */
+    #navbar-container {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      border: 3px solid var(--gray-700);
+      border-top: 3px solid var(--white);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fő tartalom */
+    .main-content {
+      flex: 1;
+      padding: 120px 0 60px;
+      background: linear-gradient(to bottom, rgba(11, 11, 11, 0.8), rgba(28, 28, 28, 0));
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Signup container */
+    .signup-container {
+      display: flex;
+      background: var(--gray-900);
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      width: 900px;
+      max-width: 95%;
+      height: 520px;
+      border: 1px solid var(--gray-800);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .signup-container.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-section h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: var(--white);
+      text-align: center;
+      font-family: 'Merriweather', serif;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .form-group.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-group:nth-child(1) { transition-delay: 0.3s; }
+    .form-group:nth-child(2) { transition-delay: 0.4s; }
+    .form-group:nth-child(3) { transition-delay: 0.5s; }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+      color: var(--gray-300);
+      font-size: 15px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      border-radius: 10px;
+      font-size: 15px;
+      color: var(--white);
+      transition: all 0.3s ease;
+      font-family: 'Merriweather', serif;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+      transform: scale(1.02);
+    }
+
+    input::placeholder {
+      color: var(--gray-500);
+    }
+
+    /* Jelszó megjelenítő ikon */
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.3s ease;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      color: var(--accent);
+    }
+
+    .password-toggle i {
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      margin-top: 10px;
+      font-family: 'Merriweather', serif;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease 0.8s;
+    }
+
+    button[type="submit"].animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    button[type="submit"]:hover {
+      background: #e55a2b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    }
+
+    .login-link {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+      color: var(--gray-300);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease 1s;
+    }
+
+    .login-link.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .login-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .image-section {
+      flex: 1;
+      background-image: url("images/food/registragtion_image.jpg");
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      width: 120%;
+    }
+
+    .image-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+      z-index: 1;
+    }
+
+    .image-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(15, 15, 15, 0.85), rgba(5, 5, 5, 0.95));
+    }
+
+    /* Footer */
+    .signup-footer {
+      background: var(--gray-900);
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--gray-800);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .signup-footer.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .signup-footer p {
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+
+    /* Verification Modal Styles */
+    .verification-modal .modal-content {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 20px;
+      color: var(--white);
+    }
+
+    .verification-modal .modal-header {
+      border-bottom: 1px solid var(--gray-800);
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(229, 90, 43, 0.05));
+    }
+
+    .verification-modal .modal-title {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .verification-modal .close {
+      color: var(--white);
+      opacity: 0.7;
+    }
+
+    .verification-modal .close:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .verification-code-input {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 10px;
+      text-align: center;
+      background: var(--gray-800);
+      border: 2px solid var(--gray-700);
+      border-radius: 10px;
+      color: var(--white);
+      padding: 15px;
+      margin: 20px 0;
+    }
+
+    .verification-code-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+    }
+
+    .timer {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .email-info {
+      background: var(--gray-800);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .resend-btn {
+      background: transparent;
+      border: 1px solid var(--gray-600);
+      color: var(--gray-300);
+      padding: 8px 20px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .resend-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .resend-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .success-message {
+      background: rgba(40, 167, 69, 0.1);
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+      color: #28a745;
+    }
+
+    .error-message {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+      color: #dc3545;
+    }
+
+    /* Reszponzív design */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 100px 0 40px;
+      }
+
+      .signup-container {
+        flex-direction: column;
+        height: auto;
+        margin: 10px;
+      }
+
+      .image-section {
+        height: 200px;
+        width: 100%;
+      }
+
+      .form-section {
+        padding: 30px 25px;
+      }
+
+      .form-section h2 {
+        font-size: 28px;
+      }
+
+      .verification-code-input {
+        font-size: 20px;
+        letter-spacing: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-section {
+        padding: 20px;
+      }
+
+      .form-section h2 {
+        font-size: 24px;
+      }
+
+      .verification-code-input {
+        font-size: 18px;
+        letter-spacing: 6px;
+      }
+    }
+
+    /* Animation classes */
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: #ff6b35 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ NAVBAR konténer -->
+  <div id="navbar-container">
+    <!-- Ide töltődik be a navbar -->
+    <div class="text-center py-5">
+      <div class="loading-spinner" style="width: 30px; height: 30px; margin: 20px auto;"></div>
+      <p style="color: var(--gray-400);">Navbar betöltése...</p>
+    </div>
+  </div>
+
+  <!-- FŐ TARTALOM -->
+  <div class="main-content">
+    <div class="signup-container" id="signup-container">
+      <div class="form-section">
+        <h2>Regisztráció</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="UserName">Felhasználónév</label>
+                <input type="text" id="UserName" name="UserName" placeholder="Add meg a felhasználóneved" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="Email">E-mail cím</label>
+                <input type="email" id="Email" name="Email" placeholder="Add meg az e-mail címed" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="UserPassword">Jelszó</label>
+                <div class="input-group">
+                  <input type="password" id="UserPassword" name="UserPassword" placeholder="Add meg a jelszavad" required minlength="6" autocomplete="new-password">
+                  <button type="button" class="password-toggle" id="passwordToggle">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Regisztrálok</button>
+        </form>
+
+        <div class="login-link">
+          Van már profilod? <a href="login.html">Jelentkezz be!</a>
+        </div>
+      </div>
+
+      <div class="image-section"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="signup-footer" id="signup-footer">
+    <div class="container">
+      <p>&copy; 2025 AETHRA . Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <!-- Verification Modal -->
+  <div class="modal fade verification-modal" id="verificationModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Email Megerősítés</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <i class="bi bi-envelope-check" style="font-size: 48px; color: var(--accent); margin-bottom: 20px;"></i>
+            <p>Elküldtünk egy 6 számjegyű kódot a megadott email címre.</p>
+            
+            <div class="email-info">
+              <small>Email cím:</small>
+              <br>
+              <strong id="userEmailDisplay"></strong>
+            </div>
+
+            <form id="verificationForm">
+              <div class="form-group">
+                <label for="verificationCode">Megerősítő Kód</label>
+                <input type="text" 
+                       id="verificationCode" 
+                       class="verification-code-input" 
+                       maxlength="6" 
+                       placeholder="123456" 
+                       required
+                       autocomplete="off">
+              </div>
+              
+              <div class="timer" id="timer">15:00</div>
+              
+              <button type="submit" class="btn btn-primary btn-block" style="background: var(--accent); border: none; padding: 12px;">
+                Megerősítés
+              </button>
+            </form>
+
+            <div class="mt-3">
+              <button id="resendBtn" class="resend-btn" disabled>
+                Új kód küldése (<span id="resendTimer">60</span>s)
+              </button>
+            </div>
+
+            <div id="verificationResult" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript fájlok -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Saját JavaScript fájlok -->
+  <script src="js/components.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+
+<script>
+    // Globális változók
+    let currentEmail = '';
+    let verificationTimer = null;
+    let resendTimer = null;
+    let lastVerificationCode = ''; // Utolsó ellenőrzött kód
+
+    // Jelszó megjelenítő funkció
+    function initPasswordToggle() {
+      const passwordToggle = document.getElementById('passwordToggle');
+      const passwordInput = document.getElementById('UserPassword');
+      
+      if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          
+          // Ikon váltás
+          const icon = this.querySelector('i');
+          if (type === 'text') {
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+          } else {
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+          }
+        });
+        
+        console.log('✅ Jelszó megjelenítő inicializálva');
+      }
+    }
+
+    // Timer funkciók
+    function startVerificationTimer(duration) {
+      clearInterval(verificationTimer);
+      const timerElement = document.getElementById('timer');
+      if (!timerElement) {
+        console.error('❌ Timer element not found');
+        return;
+      }
+      
+      let time = duration;
+      
+      verificationTimer = setInterval(function() {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (time-- <= 0) {
+          clearInterval(verificationTimer);
+          timerElement.innerHTML = '<span style="color: #dc3545;">⏰ A kód lejárt!</span>';
+          const codeInput = document.getElementById('verificationCode');
+          if (codeInput) codeInput.disabled = true;
+        }
+      }, 1000);
+    }
+
+    function startResendTimer(duration) {
+      clearInterval(resendTimer);
+      const resendBtn = document.getElementById('resendBtn');
+      const resendTimerElement = document.getElementById('resendTimer');
+      
+      if (!resendBtn || !resendTimerElement) {
+        console.error('❌ Resend button or timer element not found');
+        return;
+      }
+      
+      let time = duration;
+      
+      resendBtn.disabled = true;
+      
+      resendTimer = setInterval(function() {
+        resendTimerElement.textContent = time;
+        
+        if (time-- <= 0) {
+          clearInterval(resendTimer);
+          resendBtn.disabled = false;
+          resendTimerElement.textContent = '0';
+          resendBtn.innerHTML = 'Új kód küldése';
+        }
+      }, 1000);
+    }
+
+    // Automatikus kód ellenőrzés
+    function initAutoVerification() {
+      const codeInput = document.getElementById('verificationCode');
+      if (!codeInput) {
+        console.error('❌ Verification code input not found');
+        return;
+      }
+
+      codeInput.addEventListener('input', function(e) {
+        const code = this.value.trim();
+        
+        // Csak számokat engedjük meg
+        this.value = code.replace(/[^0-9]/g, '');
+        
+        // Ha elértük a 6 karaktert, automatikusan ellenőrizzük
+        if (code.length === 6 && code !== lastVerificationCode) {
+          lastVerificationCode = code;
+          console.log('🔍 Automatikus kód ellenőrzés:', code);
+          verifyCode(code);
+        } else if (code.length > 6) {
+          // Maximum 6 karakter
+          this.value = code.substring(0, 6);
+        }
+      });
+
+      // Backspace és delete kezelése
+      codeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+          lastVerificationCode = ''; // Reseteljük, hogy újra ellenőrizze
+        }
+      });
+    }
+
+    // Kód ellenőrzése
+    // Kód ellenőrzése
+function verifyCode(verificationCode) {
+    console.log('🔍 Kód ellenőrzése:', {
+        email: currentEmail,
+        code: verificationCode
+    });
+
+    if (verificationCode.length !== 6) {
+        return;
+    }
+
+    // Loading state
+    const submitBtn = document.querySelector('#verificationForm button[type="submit"]');
+    const codeInput = document.getElementById('verificationCode');
+    
+    if (submitBtn) {
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Ellenőrzés...';
+        submitBtn.disabled = true;
+    }
+    
+    if (codeInput) {
+        codeInput.disabled = true;
+    }
+
+    showMessage('<span class="spinner-border spinner-border-sm" role="status"></span> Kód ellenőrzése...', 'info');
+
+    // Részletes AJAX hívás
+    $.ajax({
+        url: "/Session/VerifyEmail",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ 
+            Email: currentEmail, 
+            VerificationCode: verificationCode 
+        }),
+        dataType: 'json', // Expliciten megadjuk, hogy JSON-t várunk
+        success: function(response) {
+            console.log('✅ Verifikációs válasz:', response);
+            
+            // Állapot visszaállítása
+            if (submitBtn) {
+                submitBtn.innerHTML = 'Megerősítés';
+                submitBtn.disabled = false;
+            }
+            
+            if (codeInput) {
+                codeInput.disabled = false;
+            }
+            
+            if (response && response.success) {
+                showMessage('✅ <strong>Sikeres megerősítés!</strong> Átirányítás...', 'success');
+                
+                // Timerek leállítása
+                clearInterval(verificationTimer);
+                clearInterval(resendTimer);
+                
+                // 2 másodperc múlva átirányítás
+                setTimeout(function() {
+                    $('#verificationModal').modal('hide');
+                    window.location.href = response.redirectUrl || '/profile.html';
+                }, 2000);
+            } else {
+                const errorMsg = response ? response.message : 'Ismeretlen hiba történt';
+                showMessage('❌ <strong>Hibás kód!</strong> ' + errorMsg, 'error');
+                
+                // Reseteljük az inputot és az utolsó kódot
+                if (codeInput) {
+                    codeInput.value = '';
+                    codeInput.focus();
+                }
+                lastVerificationCode = '';
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error('❌ Verifikációs hiba:', {
+                status: xhr.status,
+                statusText: xhr.statusText,
+                responseText: xhr.responseText,
+                error: errorThrown
+            });
+            
+            // Állapot visszaállítása
+            if (submitBtn) {
+                submitBtn.innerHTML = 'Megerősítés';
+                submitBtn.disabled = false;
+            }
+            
+            if (codeInput) {
+                codeInput.disabled = false;
+                codeInput.focus();
+            }
+            
+            lastVerificationCode = '';
+            
+            // Részletes hibaüzenet
+            let errorMessage = 'Hálózati hiba történt';
+            
+            if (xhr.responseText) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    errorMessage = response.message || errorMessage;
+                } catch (e) {
+                    // Ha nem JSON a válasz
+                    errorMessage = xhr.responseText || errorMessage;
+                }
+            }
+            
+            showMessage('❌ <strong>Hiba!</strong> ' + errorMessage, 'error');
+        },
+        complete: function() {
+            console.log('✅ Verifikációs kérés befejezve');
+        }
+    });
+}
+
+    // Verifikációs modal kezelése
+    function showVerificationModal(email) {
+      currentEmail = email;
+      lastVerificationCode = ''; // Reseteljük az utolsó kódot
+      
+      // Várjunk egy kicsit, hogy biztosan betöltődött a modal
+      setTimeout(() => {
+        const emailDisplay = document.getElementById('userEmailDisplay');
+        const codeInput = document.getElementById('verificationCode');
+        const resultElement = document.getElementById('verificationResult');
+        
+        if (emailDisplay) {
+          emailDisplay.textContent = email;
+        } else {
+          console.error('❌ userEmailDisplay element not found');
+        }
+        
+        // Reset állapotok
+        if (codeInput) {
+          codeInput.value = '';
+          codeInput.disabled = false;
+          codeInput.focus(); // Automatikus fókusz
+        }
+        
+        if (resultElement) {
+          resultElement.innerHTML = '';
+        }
+        
+        // Timerek indítása
+        startVerificationTimer(15 * 60); // 15 perc
+        startResendTimer(60); // 60 másodperc
+        
+        // Modal megjelenítése
+        $('#verificationModal').modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+        
+        console.log('✅ Verification modal shown for:', email);
+      }, 100);
+    }
+
+    // Új kód kérése
+    function initResendButton() {
+      const resendBtn = document.getElementById('resendBtn');
+      if (resendBtn) {
+        resendBtn.addEventListener('click', function() {
+          if (this.disabled) return;
+          
+          console.log('🔄 Új verifikációs kód kérése:', currentEmail);
+          
+          // Loading state
+          this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Küldés...';
+          this.disabled = true;
+          
+          // Reseteljük az utolsó kódot
+          lastVerificationCode = '';
+          
+          $.ajax({
+            url: "/Session/ResendVerification",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ Email: currentEmail }),
+            success: function(response) {
+              console.log('✅ Újraküldési válasz:', response);
+              
+              if (response.success) {
+                showMessage('✅ <strong>Új kódot küldtünk!</strong> Ellenőrizd az emailed!', 'success');
+                
+                // Reseteljük az input mezőt
+                const codeInput = document.getElementById('verificationCode');
+                if (codeInput) {
+                  codeInput.value = '';
+                  codeInput.focus();
+                }
+                
+                startVerificationTimer(15 * 60);
+                startResendTimer(60);
+              } else {
+                showMessage('❌ ' + response.message, 'error');
+                const btn = document.getElementById('resendBtn');
+                if (btn) {
+                  btn.innerHTML = 'Új kód küldése';
+                  btn.disabled = false;
+                }
+              }
+            },
+            error: function(xhr) {
+              console.error('❌ Újraküldési hiba:', xhr);
+              showMessage('❌ Hiba történt az új kód küldése során.', 'error');
+              const btn = document.getElementById('resendBtn');
+              if (btn) {
+                btn.innerHTML = 'Új kód küldése';
+                btn.disabled = false;
+              }
+            }
+          });
+        });
+      } else {
+        console.error('❌ Resend button not found');
+      }
+    }
+
+    // Verifikációs form kezelése (manuális beküldésre is)
+    function initVerificationForm() {
+      const verificationForm = document.getElementById('verificationForm');
+      if (verificationForm) {
+        verificationForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const verificationCode = document.getElementById('verificationCode').value.trim();
+          
+          if (verificationCode.length !== 6) {
+            showMessage('⚠️ Kérjük, adjon meg 6 számjegyű kódot!', 'error');
+            return;
+          }
+          
+          // Ha nem ugyanaz a kód, amit már ellenőriztünk
+          if (verificationCode !== lastVerificationCode) {
+            verifyCode(verificationCode);
+          }
+        });
+      } else {
+        console.error('❌ Verification form not found');
+      }
+    }
+
+    // Segédfüggvények
+    function showMessage(message, type) {
+      const resultElement = document.getElementById('verificationResult');
+      if (resultElement) {
+        let className = '';
+        switch(type) {
+          case 'success':
+            className = 'success-message';
+            break;
+          case 'error':
+            className = 'error-message';
+            break;
+          case 'info':
+            className = 'info-message';
+            break;
+          default:
+            className = 'info-message';
+        }
+        
+        resultElement.innerHTML = `<div class="${className}">${message}</div>`;
+        
+        // Auto eltüntetés hibák és info üzenetek esetén
+        if (type === 'error' || type === 'info') {
+          setTimeout(() => {
+            if (resultElement && resultElement.innerHTML.includes(message)) {
+              resultElement.innerHTML = '';
+            }
+          }, type === 'error' ? 5000 : 3000);
+        }
+      } else {
+        console.error('❌ Verification result element not found');
+      }
+    }
+
+    // Modal események inicializálása
+    function initModalEvents() {
+      // Modal bezárásakor timerek resetelése
+      $('#verificationModal').on('hidden.bs.modal', function() {
+        clearInterval(verificationTimer);
+        clearInterval(resendTimer);
+        currentEmail = '';
+        lastVerificationCode = '';
+        console.log('✅ Verification modal closed');
+      });
+
+      // Automatikus fókusz a modal megnyitásakor
+      $('#verificationModal').on('shown.bs.modal', function() {
+        const codeInput = document.getElementById('verificationCode');
+        if (codeInput) {
+          codeInput.focus();
+          console.log('✅ Verification modal focused');
+        }
+      });
+    }
+
+    // CSS hozzáadása az info üzenetekhez
+    function addInfoMessageStyles() {
+      if (!document.querySelector('#info-message-styles')) {
+        const style = document.createElement('style');
+        style.id = 'info-message-styles';
+        style.textContent = `
+          .info-message {
+            background: rgba(23, 162, 184, 0.1);
+            border: 1px solid rgba(23, 162, 184, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            color: #17a2b8;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Fallback navbar betöltés, ha a components.js nem működik
+    $(document).ready(function() {
+      console.log('📄 Signup page loaded');
+      
+      // CSS stílus hozzáadása
+      addInfoMessageStyles();
+      
+      // Inicializálások
+      initPasswordToggle();
+      initResendButton();
+      initVerificationForm();
+      initModalEvents();
+      initAutoVerification(); // ✅ Automatikus ellenőrzés inicializálása
+      
+      // Animációk indítása
+      setTimeout(function() {
+        const signupContainer = document.getElementById('signup-container');
+        const signupFooter = document.getElementById('signup-footer');
+        
+        if (signupContainer) {
+          signupContainer.classList.add('animated');
+          console.log('✅ Signup container animated');
+        }
+        if (signupFooter) {
+          signupFooter.classList.add('animated');
+          console.log('✅ Footer animated');
+        }
+        
+        // Form elemek animációja
+        document.querySelectorAll('.form-group').forEach((group, index) => {
+          setTimeout(() => {
+            group.classList.add('animated');
+          }, 300 + (index * 100));
+        });
+        
+        // Submit gomb animációja
+        setTimeout(() => {
+          const submitBtn = document.querySelector('.submit-btn');
+          if (submitBtn) {
+            submitBtn.classList.add('animated');
+            console.log('✅ Submit button animated');
+          }
+        }, 800);
+        
+        // Link animációja
+        setTimeout(() => {
+          const loginLink = document.querySelector('.login-link');
+          if (loginLink) {
+            loginLink.classList.add('animated');
+            console.log('✅ Login link animated');
+          }
+        }, 1000);
+      }, 300);
+
+      // Regisztrációs form kezelése
+      $("#signupForm").on('submit', function (event) {
+        event.preventDefault();
+        console.log('📝 Regisztrációs form elküldve');
+
+        // Biztonságos érték lekérés
+        var UserName = $("#UserName").val();
+        var Email = $("#Email").val();
+        var UserPassword = $("#UserPassword").val();
+
+        // Trim és null check
+        if (UserName) UserName = UserName.trim();
+        if (Email) Email = Email.trim();
+        if (UserPassword) UserPassword = UserPassword.trim();
+
+        console.log('📧 Regisztrációs adatok:', {
+            UserName: UserName,
+            Email: Email,
+            UserPassword: UserPassword ? '***' + UserPassword.substring(UserPassword.length - 2) : 'üres'
+        });
+
+        if (!UserName || !Email || !UserPassword) {
+            alert("Kérlek, tölts ki minden mezőt!");
+            return;
+        }
+
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(Email)) {
+            alert("Kérlek, érvényes e-mail címet adj meg!");
+            return;
+        }
+
+        if (UserPassword.length < 6) {
+            alert("A jelszónak legalább 6 karakter hosszúnak kell lennie!");
+            return;
+        }
+
+        var parameters = {
+            UserName: UserName,
+            Email: Email,
+            UserPassword: UserPassword
+        };
+
+        console.log('🚀 Regisztráció indítása:', parameters);
+
+        // Loading state
+        const submitBtn = $(this).find('.submit-btn');
+        const originalText = submitBtn.html();
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status"></span> Feldolgozás...');
+        submitBtn.prop('disabled', true);
+
+        // AJAX hívás részletes hibakezeléssel
+        $.ajax({
+            url: "/Session/SignUp",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(parameters),
+            success: function (data, textStatus, xhr) {
+                submitBtn.html(originalText);
+                submitBtn.prop('disabled', false);
+                
+                console.log('✅ Regisztrációs válasz:', data);
+                
+                if (data.success) {
+                    if (data.requiresVerification) {
+                        // Verifikációs modal megjelenítése
+                        console.log('🔄 Showing verification modal for:', Email);
+                        showVerificationModal(Email);
+                    } else {
+                        // Egyből átirányítás (ha nincs verifikáció)
+                        alert("Sikeres regisztráció!");
+                        window.location.href = "login.html";
+                    }
+                } else {
+                    alert(data.message || "Ismeretlen hiba történt.");
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                submitBtn.html(originalText);
+                submitBtn.prop('disabled', false);
+                
+                console.error('❌ Regisztrációs hiba:', {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: errorThrown
+                });
+
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.message || "Ismeretlen hiba történt.");
+                } catch (e) {
+                    if (xhr.status === 409) {
+                        alert("A felhasználónév vagy e-mail cím már foglalt.");
+                    } else if (xhr.status === 400) {
+                        alert("Hibás adatokat adtál meg. Ellenőrizd a mezőket!");
+                    } else if (xhr.status === 500) {
+                        alert("Szerver hiba történt. Kérlek, próbáld újra később.");
+                    } else {
+                        alert("Hálózati hiba történt. Ellenőrizd az internetkapcsolatot.");
+                    }
+                }
+            }
+        });
+      });
+
+      // 3 másodperc után ellenőrizzük, hogy betöltött-e a navbar
+      setTimeout(function() {
+        if (!$('.navbar-custom').length) {
+          console.warn('⚠️ Navbar nem töltődött be automatikusan, fallback betöltés...');
+          loadNavbarFallback();
+        }
+      }, 3000);
+
+      function loadNavbarFallback() {
+        $.get('navbar.html')
+          .done(function(data) {
+            $('#navbar-container').html(data);
+            console.log('✅ Navbar fallback betöltve');
+            initNavbarFunctionality();
+          })
+          .fail(function() {
+            console.error('❌ Navbar fájl nem elérhető');
+            createBasicNavbar();
+          });
+      }
+
+      function createBasicNavbar() {
+        const basicNavbar = `
+          <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000; padding: 15px 0; position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #333;">
+            <div class="container">
+              <a class="navbar-brand" href="index.html" style="color: #fff; font-family: 'Playfair Display', serif; font-weight: 700;">AETHRA</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item"><a class="nav-link" href="index.html" style="color: #fff;">Főoldal</a></li>
+                  <li class="nav-item"><a class="nav-link" href="menu.html" style="color: #fff;">Étlap</a></li>
+                  <li class="nav-item"><a class="nav-link" href="about.html" style="color: #fff;">Rólunk</a></li>
+                  <li class="nav-item"><a class="nav-link" href="contact.html" style="color: #fff;">Kapcsolat</a></li>
+                  <li class="nav-item"><a class="nav-link" href="login.html" style="color: #fff;">Bejelentkezés</a></li>
+                  <li class="nav-item active"><a class="nav-link" href="signup.html" style="color: #fff; font-weight: 600;">Regisztráció</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        `;
+        $('#navbar-container').html(basicNavbar);
+        console.log('✅ Alap navbar létrehozva');
+        initNavbarFunctionality();
+      }
+
+      function initNavbarFunctionality() {
+        // Scroll effekt
+        $(window).on("scroll", function() {
+          if ($(window).scrollTop() > 50) {
+            $(".navbar-custom").addClass("scrolled");
+          } else {
+            $(".navbar-custom").removeClass("scrolled");
+          }
+        });
+
+        // Aktív menüpont
+        const currentPage = window.location.pathname.split('/').pop();
+        $('.navbar-nav .nav-link').each(function() {
+          if ($(this).attr('href') === currentPage) {
+            $(this).addClass('active');
+          }
+        });
+
+        // Mobil menü bezárása
+        $('.navbar-nav .nav-link').on('click', function() {
+          if ($(window).width() < 992) {
+            $('#navbarNav').collapse('hide');
+          }
+        });
+      }
+
+      // Debug információk
+      console.log('🔍 Oldal inicializálva - elemek ellenőrzése:', {
+          UserName: $('#UserName').length > 0,
+          Email: $('#Email').length > 0,
+          UserPassword: $('#UserPassword').length > 0,
+          signupForm: $('#signupForm').length > 0,
+          passwordToggle: $('#passwordToggle').length > 0,
+          verificationModal: $('#verificationModal').length > 0,
+          verificationForm: $('#verificationForm').length > 0,
+          verificationCode: $('#verificationCode').length > 0,
+          resendBtn: $('#resendBtn').length > 0,
+          userEmailDisplay: $('#userEmailDisplay').length > 0,
+          timer: $('#timer').length > 0,
+          verificationResult: $('#verificationResult').length > 0
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHRA - Bejelentkezés</title>
+
+  <!-- BOOTSTRAP + ICONS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/6.7.0/css/flag-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF8C00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4'/><polyline points='10 17 15 12 10 7'/><line x1='15' x2='3' y1='12' y2='12'/></svg>">
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="style">
+  
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+      --accent: #ff6b35;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--black);
+      font-family: 'Merriweather', serif;
+      color: var(--white);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar konténer */
+    #navbar-container {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      border: 3px solid var(--gray-700);
+      border-top: 3px solid var(--white);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fő tartalom */
+    .main-content {
+      flex: 1;
+      padding: 120px 0 60px;
+      background: linear-gradient(to bottom, rgba(11, 11, 11, 0.8), rgba(28, 28, 28, 0));
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Login container */
+    .login-container {
+      display: flex;
+      background: var(--gray-900);
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      width: 900px;
+      max-width: 95%;
+      height: 520px;
+      border: 1px solid var(--gray-800);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .login-container.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-section h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: var(--white);
+      text-align: center;
+      font-family: 'Merriweather', serif;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .form-group.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-group:nth-child(1) { transition-delay: 0.4s; }
+    .form-group:nth-child(2) { transition-delay: 0.5s; }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+      color: var(--gray-300);
+      font-size: 15px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      border-radius: 10px;
+      font-size: 15px;
+      color: var(--white);
+      transition: all 0.3s ease;
+      font-family: 'Merriweather', serif;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+      transform: scale(1.02);
+    }
+
+    input::placeholder {
+      color: var(--gray-500);
+    }
+
+    /* Jelszó megjelenítő ikon */
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      padding: 5px;
+      transition: color 0.3s ease;
+      z-index: 2;
+    }
+
+    .password-toggle:hover {
+      color: var(--accent);
+    }
+
+    .password-toggle i {
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      margin-top: 10px;
+      font-family: 'Merriweather', serif;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease 0.8s;
+    }
+
+    button[type="submit"].animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    button[type="submit"]:hover {
+      background: #e55a2b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    }
+
+    .signup-link {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+      color: var(--gray-300);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease 1s;
+    }
+
+    .signup-link.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .signup-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
+    .image-section {
+      flex: 1;
+      background-image: url('images/food/login_picture.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      width: 120%;
+    }
+
+    .image-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+      z-index: 1;
+    }
+
+    .image-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(15, 15, 15, 0.85), rgba(5, 5, 5, 0.95));
+    }
+
+    /* Footer */
+    .login-footer {
+      background: var(--gray-900);
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--gray-800);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .login-footer.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .login-footer p {
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+
+    /* Reszponzív design */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 100px 0 40px;
+      }
+
+      .login-container {
+        flex-direction: column;
+        height: auto;
+        margin: 10px;
+      }
+
+      .image-section {
+        height: 200px;
+        width: 100%;
+      }
+
+      .form-section {
+        padding: 30px 25px;
+      }
+
+      .form-section h2 {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-section {
+        padding: 20px;
+      }
+
+      .form-section h2 {
+        font-size: 24px;
+      }
+    }
+
+    /* Animation classes */
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: #ff6b35 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ NAVBAR konténer -->
+  <div id="navbar-container">
+    <!-- Ide töltődik be a navbar -->
+    <div class="text-center py-5">
+      <div class="loading-spinner" style="width: 30px; height: 30px; margin: 20px auto;"></div>
+      <p style="color: var(--gray-400);">Navbar betöltése...</p>
+    </div>
+  </div>
+
+  <!-- FŐ TARTALOM -->
+  <div class="main-content">
+    <div class="login-container" id="login-container">
+      <div class="form-section">
+        <h2>Bejelentkezés</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="UserName">Felhasználónév</label>
+            <input type="text" id="UserName" name="UserName" placeholder="Add meg a felhasználóneved/e-mailed">
+          </div>
+          <div class="form-group">
+            <label for="UserPassword">Jelszó</label>
+            <div class="input-group">
+              <input type="password" id="UserPassword" name="UserPassword" placeholder="Add meg a jelszavad">
+              <button type="button" class="password-toggle" id="passwordToggle">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Bejelentkezés</button>
+        </form>
+
+        <div class="signup-link">
+          Még nincs profilod? <a href="signup.html">Regisztrálj itt</a>
+        </div>
+      </div>
+
+      <div class="image-section"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="login-footer" id="login-footer">
+    <div class="container">
+      <p>&copy; 2025 AETHRA . Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript fájlok -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Saját JavaScript fájlok -->
+  <script src="js/components.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/modal-feedback.js"></script>
+  <script src="js/smart-cart-manager.js"></script>
+
+  <script>
+    // Jelszó megjelenítő funkció
+    function initPasswordToggle() {
+      const passwordToggle = document.getElementById('passwordToggle');
+      const passwordInput = document.getElementById('UserPassword');
+      
+      if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          
+          // Ikon váltás
+          const icon = this.querySelector('i');
+          if (type === 'text') {
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+          } else {
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+          }
+        });
+        
+        console.log('✅ Jelszó megjelenítő inicializálva a login oldalon');
+      }
+    }
+
+    // Fallback navbar betöltés, ha a components.js nem működik
+    $(document).ready(function() {
+      // Jelszó megjelenítő inicializálása
+      initPasswordToggle();
+      
+      // Animációk indítása
+      setTimeout(function() {
+        document.getElementById('login-container').classList.add('animated');
+        document.getElementById('login-footer').classList.add('animated');
+        
+        // Form elemek animációja
+        document.querySelectorAll('.form-group').forEach((group, index) => {
+          setTimeout(() => {
+            group.classList.add('animated');
+          }, 300 + (index * 100));
+        });
+        
+        // Submit gomb animációja
+        setTimeout(() => {
+          document.querySelector('.submit-btn').classList.add('animated');
+        }, 800);
+        
+        // Link animációja
+        setTimeout(() => {
+          document.querySelector('.signup-link').classList.add('animated');
+        }, 1000);
+      }, 300);
+
+      // 3 másodperc után ellenőrizzük, hogy betöltött-e a navbar
+      setTimeout(function() {
+        if (!$('.navbar-custom').length) {
+          console.warn('⚠️ Navbar nem töltődött be automatikusan, fallback betöltés...');
+          loadNavbarFallback();
+        }
+      }, 3000);
+
+      function loadNavbarFallback() {
+        $.get('navbar.html')
+          .done(function(data) {
+            $('#navbar-container').html(data);
+            console.log('✅ Navbar fallback betöltve');
+            initNavbarFunctionality();
+          })
+          .fail(function() {
+            console.error('❌ Navbar fájl nem elérhető');
+            createBasicNavbar();
+          });
+      }
+
+      function createBasicNavbar() {
+        const basicNavbar = `
+          <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000; padding: 15px 0; position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #333;">
+            <div class="container">
+              <a class="navbar-brand" href="index.html" style="color: #fff; font-family: 'Playfair Display', serif; font-weight: 700;">AETHRA</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item"><a class="nav-link" href="index.html" style="color: #fff;">Főoldal</a></li>
+                  <li class="nav-item"><a class="nav-link" href="menu.html" style="color: #fff;">Étlap</a></li>
+                  <li class="nav-item"><a class="nav-link" href="about.html" style="color: #fff;">Rólunk</a></li>
+                  <li class="nav-item"><a class="nav-link" href="contact.html" style="color: #fff;">Kapcsolat</a></li>
+                  <li class="nav-item active"><a class="nav-link" href="login.html" style="color: #fff; font-weight: 600;">Bejelentkezés</a></li>
+                  <li class="nav-item"><a class="nav-link" href="signup.html" style="color: #fff;">Regisztráció</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        `;
+        $('#navbar-container').html(basicNavbar);
+        console.log('✅ Alap navbar létrehozva');
+        initNavbarFunctionality();
+      }
+
+      function initNavbarFunctionality() {
+        // Scroll effekt
+        $(window).on("scroll", function() {
+          if ($(window).scrollTop() > 50) {
+            $(".navbar-custom").addClass("scrolled");
+          } else {
+            $(".navbar-custom").removeClass("scrolled");
+          }
+        });
+
+        // Aktív menüpont
+        const currentPage = window.location.pathname.split('/').pop();
+        $('.navbar-nav .nav-link').each(function() {
+          if ($(this).attr('href') === currentPage) {
+            $(this).addClass('active');
+          }
+        });
+
+        // Mobil menü bezárása
+        $('.navbar-nav .nav-link').on('click', function() {
+          if ($(window).width() < 992) {
+            $('#navbarNav').collapse('hide');
+          }
+        });
+      }
+
+      // RÉGI SUBMIT HANDLER TÖRÖLVE
+      // A modal-feedback.js kezeli a bejelentkezést
+    });
+  </script>
+</body>
+</html>

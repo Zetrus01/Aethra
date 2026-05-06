@@ -1,0 +1,730 @@
+/* style.css */
+/* FONT BASE - ERŐSEBB MEGKÖTÉSEK */
+html, body {
+  font-family: 'Merriweather', serif !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- TÉMA VÁLTÓS CSS VÁLTOZÓK --- */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --background-color: #f8f9fa;
+  --text-color: #333333;
+  --card-bg: #f5f5f5; /* SZÜRKÉBB HÁTTÉR */
+  --card-bg-darker: #e8e8e8; /* MÉG SÖTÉTEBB HÁTTÉR KÁRTYÁKHOZ */
+  --border-color: #dee2e6;
+  --navbar-bg: transparent;
+  --navbar-scrolled-bg: rgba(0, 0, 0, 0.85);
+  --navbar-text: #ffffff;
+  --accent-color: #ff6b35;
+  --dropdown-bg: rgba(20, 20, 20, 0.95);
+  --dropdown-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] {
+  --primary-color: #34495e;
+  --secondary-color: #2980b9;
+  --background-color: #1a1a1a;
+  --text-color: #ffffff;
+  --card-bg: #2a2a2a; /* SÖTÉTEBB HÁTTÉR */
+  --card-bg-darker: #242424; /* MÉG SÖTÉTEBB HÁTTÉR KÁRTYÁKHOZ */
+  --border-color: #4a5568;
+  --navbar-bg: transparent;
+  --navbar-scrolled-bg: rgba(0, 0, 0, 0.95);
+  --navbar-text: #ffffff;
+  --accent-color: #ff6b35;
+      --dropdown-bg: rgba(30, 30, 30, 0.98);
+      --dropdown-border: rgba(255, 255, 255, 0.15);
+}
+
+/* --- NAVBAR - ERŐSEBB FONT FIX --- */
+.navbar-custom,
+.navbar-custom *,
+.navbar-brand,
+.navbar-nav .nav-link,
+.navbar-toggler,
+.dropdown-menu,
+.dropdown-item,
+#login-logout-container .btn {
+  font-family: 'Merriweather', serif !important;
+}
+
+.navbar-custom {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  background: var(--navbar-bg);
+  transition: background 0.5s ease;
+  padding: 1rem 0.5rem;
+}
+.navbar-custom.scrolled {
+  background: var(--navbar-scrolled-bg);
+  backdrop-filter: blur(6px);
+}
+
+.navbar-brand {
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: var(--navbar-text) !important;
+  letter-spacing: 1px;
+  margin-left: 10px;
+}
+
+/* NAVBAR MENÜPONTOK - ALAP SZÍN VILÁGOSABB KÉK/TÜRKIZ */
+.navbar-nav .nav-link {
+  color: #4FD1E5 !important; /* Világosabb kék/türkiz alap szín */
+  font-weight: 500 !important;
+  margin-right: 25px;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+/* HOVER EFFECT - SÖTÉTEBB KÉK/TÜRKIZ */
+.navbar-nav .nav-link:hover {
+  color: #2BB7D1 !important; /* Sötétebb kék/türkiz hover */
+}
+
+#login-logout-container .btn {
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+
+}
+
+
+/* --- HERO SLIDESHOW --- */
+.hero-section {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+.hero-slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+.hero-slide.active {
+  opacity: 1;
+}
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.hero-content h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* --- LOADING SPINNER --- */
+.loading-spinner {
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Kör alakú profilgomb - JAVÍTOTT */
+.profile-btn {
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent;
+  border: 1px solid #4FD1E5;
+  color: #4FD1E5 !important;
+  line-height: 1 !important;
+}
+.profile-btn:hover {
+  background-color: rgba(79, 209, 229, 0.2); /* Világos kék/türkiz háttér hover */
+  transform: scale(1.05);
+  color: #4FD1E5 !important;
+  border-color: #4FD1E5;
+}
+
+/* --- DROPDOWN MENU - JAVÍTOTT PROFIL GOMB ELHELYEZÉS --- */
+.profile-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* LÁTHATATLAN HÍD ELEM A GOMB ÉS DROPDOWN KÖZÖTT - ÚJ */
+.profile-dropdown::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  z-index: 1000;
+}
+
+.dropdown-menu {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  padding: 0.35rem 0;
+  min-width: 150px;
+  left: 0 !important;
+  right: auto !important;
+  font-family: 'Merriweather', serif !important;
+  margin-top: 8px;
+}
+
+/* Dropdown megjelenése hover-re - JAVÍTOTT */
+.profile-dropdown:hover .dropdown-menu,
+.dropdown-menu:hover {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) translateX(0);
+}
+
+/* Dropdown elemek - modern design */
+.dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  transition: all 0.25s ease;
+  line-height: 1.3;
+  gap: 0.5rem;
+  border-left: 3px solid transparent;
+  margin: 0 0.25rem;
+  border-radius: 6px;
+  font-family: 'Merriweather', serif !important;
+  background: transparent;
+}
+
+/* Ikonok formázása */
+.dropdown-menu .dropdown-item i,
+.dropdown-menu .dropdown-item .fi {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Zászlók formázása */
+.dropdown-menu .dropdown-item .fi {
+  width: 18px;
+  height: 14px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Hover effektus - SÖTÉTEBB KÉK/TÜRKIZ */
+.dropdown-item:hover {
+  background: var(--stats-bg) !important; /* Gradiens helyett menu.html stílus */
+  color: var(--accent-color) !important; /* Fix szín helyett variable */
+  border-left: 3px solid var(--accent-color);
+  transform: translateX(4px); /* 5px-ről 4px-re */
+  box-shadow: none; /* Törölve */
+  width: calc(100% - 16px); /* Hozzáadva - fix szélesség hoveren is */
+  margin: 2px 8px; /* Hozzáadva - fix margin hoveren is */
+}
+
+/* Divider */
+.dropdown-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0.75rem;
+}
+
+/* Aktív nyelv kiemelése - VILÁGOSABB KÉK/TÜRKIZ */
+.dropdown-item.active {
+  background: rgba(79, 209, 229, 0.2);
+  color: #4FD1E5 !important; /* Világosabb kék/türkiz */
+  border-left: 3px solid #4FD1E5; /* Világosabb kék/türkiz */
+}
+
+.text-warning {
+    color: var(--accent-color) !important;
+}
+
+/* --- AKTÍV MENÜPONT STÍLUS - SÖTÉTEBB KÉK/TÜRKIZ --- */
+.navbar-nav .nav-link.active {
+    color: #2BB7D1 !important; /* Sötétebb kék/türkiz aktív */
+    font-weight: 600;
+    position: relative;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 60%;
+    height: 2px;
+    background-color: #2BB7D1; /* Sötétebb kék/türkiz */
+    border-radius: 2px;
+}
+
+/* Mobil nézetben - JAVÍTOTT: Sötétebb kék/türkiz */
+@media (max-width: 991.98px) {
+    .navbar-nav .nav-link.active::after {
+        bottom: 1px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        max-width: 60%;
+        height: 2px;
+        top: auto;
+        background-color: #2BB7D1; /* Sötétebb kék/türkiz */
+    }
+    
+    /* Profil gomb elhelyezésének javítása mobil nézetben */
+    .profile-dropdown {
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .profile-btn {
+        margin-left: 0 !important;
+    }
+    
+    /* Mobil nézetben ne legyen hover bridge */
+    .profile-dropdown::after {
+        display: none;
+    }
+}
+
+/* EXTRA FONT FIX - NAVBAR ELEMEKRE */
+.navbar-toggler,
+.navbar-toggler-icon,
+.navbar-text {
+  font-family: 'Merriweather', serif !important;
+}
+
+/* Profil gomb konténer javítása */
+#login-logout-container {
+  display: flex;
+  align-items: center;
+}
+
+/* --- TÉMA VÁLTÓ SPECIFIKUS STÍLUSOK --- */
+
+/* Világos téma specifikus beállítások - JAVÍTOTT NAVBAR SZÍNEK */
+[data-theme="light"] {
+  --primary-color: #B0F5FA;
+  --secondary-color: #E0FFFF;
+  --background-color: #FFFFFF;
+  --text-color: #2F4F4F;
+  --card-bg: #f8f8f8; /* SZÜRKÉBB HÁTTÉR */
+  --card-bg-darker: #f0f0f0; /* MÉG SÖTÉTEBB HÁTTÉR KÁRTYÁKHOZ */
+  --border-color: #ECECEC;
+  --navbar-bg: transparent;
+  --navbar-scrolled-bg: #27272A;
+  --navbar-text: #FFFFFF; /* FEHÉR navbar szöveg */
+  --accent-color: #89E6F6;
+  --dropdown-bg: rgba(255, 255, 255, 0.98);
+  --dropdown-border: rgba(176, 245, 250, 0.3);
+  
+  /* NAVBAR ALAP SZÍNEK VILÁGOS TÉMABAN - FEHÉR */
+  .navbar-nav .nav-link {
+    color: #FFFFFF !important; /* FEHÉR alap szín */
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #197FB0 !important; /* Világos kék/türkiz hover */
+  }
+  
+  /* AKTÍV MENÜPONT - VILÁGOS KÉK/TÜRKIZ */
+  .navbar-nav .nav-link.active {
+    color: #4FD1E5 !important; /* Világos kék/türkiz aktív */
+  }
+  
+  .navbar-nav .nav-link.active::after {
+    background-color: #4FD1E5; /* Világos kék/türkiz aláhúzás */
+  }
+  
+  /* Navbar brand színe is fehér */
+  .navbar-brand {
+    color: #FFFFFF !important;
+  }
+  
+  /* Profil gomb világos témában */
+  .profile-btn {
+    border-color: #FFFFFF;
+    color: #FFFFFF !important;
+  }
+  
+  .profile-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF !important;
+    border-color: #FFFFFF;
+  }
+  
+  /* SCROLLED NAVBAR SZÍNEK - SÖTÉT SZÖVEG VILÁGOS HÁTTÉREN */
+  .navbar-custom.scrolled {
+    --navbar-text: #2F4F4F !important; /* Sötét szürke szöveg scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .navbar-nav .nav-link {
+    color: #2F4F4F !important; /* Sötét szürke scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .navbar-nav .nav-link:hover {
+    color: #0CAEED !important; /* Világos kék/türkiz hover scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .navbar-nav .nav-link.active {
+    color: #0C80B0 !important; /* Világos kék/türkiz aktív scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .nav-link.active::after {
+    background-color: #0C80B0 !important; /* Sötét szürke szöveg scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .navbar-brand {
+    color: #2F4F4F !important; /* Sötét szürke brand scrolled állapotban */
+  }
+  
+  .navbar-custom.scrolled .profile-btn {
+    border-color: #2F4F4F;
+    color: #2F4F4F !important;
+  }
+  
+  .navbar-custom.scrolled .profile-btn:hover {
+    background-color: rgba(47, 79, 79, 0.1);
+    color: #2F4F4F !important;
+    border-color: #2F4F4F;
+  }
+  
+  /* NAVBAR-TOGGLER VILÁGOS TÉMABAN */
+  .navbar-custom .navbar-toggler {
+    border-color: #FFFFFF !important;
+  }
+  
+  .navbar-custom .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
+  
+  .navbar-custom.scrolled .navbar-toggler {
+    border-color: #2F4F4F !important;
+  }
+  
+  .navbar-custom.scrolled .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(47, 79, 79, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
+  
+  /* Hero section kontraszt növelése világos témában */
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.65);
+  }
+  
+  /* Dropdown menu világos témában */
+  .dropdown-menu {
+    background: var(--dropdown-bg);
+    border: 1px solid var(--dropdown-border);
+    color: var(--text-color);
+  }
+  
+  .dropdown-menu .dropdown-item {
+    color: var(--text-color);
+  }
+  
+  .dropdown-divider {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dropdown hover világos témában */
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, rgba(79, 209, 229, 0.15), rgba(79, 209, 229, 0.05));
+    color: #4FD1E5 !important; /* Világos kék/türkiz hover */
+    border-left: 3px solid #4FD1E5;
+  }
+  
+  .dropdown-item.active {
+    background: rgba(79, 209, 229, 0.2);
+    color: #4FD1E5 !important; /* Világos kék/türkiz aktív */
+    border-left: 3px solid #4FD1E5;
+  }
+  
+  /* STATISZTIKA SZEKCIÓ JAVÍTÁSA VILÁGOS TÉMABAN */
+  .stats-section::before {
+    opacity: 0.3; /* Növelt opacitás világos módban */
+    filter: brightness(0.7); /* Sötétítjük a képet, hogy jobban látható legyen */
+  }
+}
+
+/* Sötét téma specifikus beállítások */
+[data-theme="dark"] {
+  /* Hero section világosabb overlay sötét témában */
+  .hero-overlay {
+      background: rgb(0 0 0 / 57%);
+  }
+  
+  /* Card stílusok sötét témában */
+  .card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+  }
+  
+  /* Form elemek sötét témában */
+  .form-control {
+    border-color: #4a5568;
+    color: var(--text-color);
+  }
+  
+  .form-control:focus {
+    background-color: #2d3748;
+    border-color: var(--accent-color);
+    color: var(--text-color);
+  }
+  
+  /* Sötét téma navbar alap színek - eredeti */
+  .navbar-nav .nav-link {
+    color: var(--navbar-text) !important;
+  }
+  
+  /* Sötét téma hover effektusok - eredeti narancs */
+  .navbar-nav .nav-link:hover {
+    color: var(--accent-color) !important;
+  }
+  
+  .navbar-nav .nav-link.active {
+    color: var(--accent-color) !important;
+  }
+  
+  .navbar-nav .nav-link.active::after {
+    background-color: var(--accent-color);
+  }
+  
+  /* Profil gomb sötét témában */
+  .profile-btn {
+    border-color: var(--navbar-text);
+    color: var(--navbar-text) !important;
+  }
+  
+  .profile-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--navbar-text) !important;
+  }
+  
+  /* Sötét téma navbar-toggler */
+  .navbar-custom .navbar-toggler {
+    border-color: var(--navbar-text) !important;
+  }
+  
+  .navbar-custom .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
+  
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.05));
+    color: var(--accent-color) !important;
+    border-left: 3px solid var(--accent-color);
+  }
+  
+  .dropdown-item.active {
+    background: rgba(255, 107, 53, 0.2);
+    color: var(--accent-color) !important;
+    border-left: 3px solid var(--accent-color);
+  }
+  
+  /* STATISZTIKA SZEKCIÓ FINOMHANGOLÁSA SÖTÉT TÉMABAN */
+  .stats-section::before {
+    opacity: 0.08; /* Csökkentett opacitás sötét módban */
+  }
+}
+
+/* Téma váltó gomb animáció */
+#theme-toggle-button {
+  transition: all 0.3s ease;
+}
+
+#theme-toggle-button:hover {
+  transform: translateX(3px);
+}
+
+/* Reszponzív beállítások téma váltáshoz */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 140px;
+    transform: translateY(-10px) translateX(-5px);
+  }
+  
+  .profile-dropdown:hover .dropdown-menu {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Navbar smooth theme transition */
+.navbar-custom,
+.navbar-custom.scrolled {
+  transition: background 0.5s ease, background-color 0.3s ease;
+}
+
+/* Ensure text visibility in both themes */
+.navbar-brand,
+.navbar-nav .nav-link,
+#login-logout-container .btn {
+  transition: color 0.3s ease;
+}
+
+/* Dropdown theme compatibility */
+.dropdown-menu,
+.dropdown-item {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Active menu item theme compatibility */
+.navbar-nav .nav-link.active::after {
+  transition: background-color 0.3s ease;
+}
+
+/* STATISZTIKA SZEKCIÓ - ÁLTALÁNOS BEÁLLÍTÁSOK */
+.stats-section {
+  padding: 80px 0;
+  background: var(--stats-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('images/food/index_stats.jpg') center/cover no-repeat;
+  opacity: 0.05;
+  z-index: 0;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.stats-section .container {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Merriweather', serif;
+}
+
+/* KÁRTYÁK SÖTÉTEBB HÁTTÉRÉNEK BEÁLLÍTÁSA */
+.feature-card {
+  background: var(--card-bg-darker) !important; /* SÖTÉTEBB HÁTTÉR */
+  border-radius: 16px;
+  padding: 2.5rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.menu-highlight {
+  background: var(--card-bg-darker) !important; /* SÖTÉTEBB HÁTTÉR */
+  border-radius: 16px;
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+  margin: 2rem 0;
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.6s ease;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+.testimonial-card {
+  background: var(--card-bg-darker) !important; /* SÖTÉTEBB HÁTTÉR */
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 1rem;
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.5s ease;
+  position: relative;
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+/* Hover effektusok a sötétebb kártyákon */
+.feature-card:hover,
+.menu-highlight:hover,
+.testimonial-card:hover {
+  background: var(--card-bg) !important; /* KICSIT VILÁGOSABB HOVER ÁLLAPOTBAN */
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px var(--shadow-color);
+}
