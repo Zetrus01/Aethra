@@ -1,17 +1,27 @@
-
 using SignalRChat.Hubs;
-// using YourProjectNamespace.Data; // <- ide a saját DbContext namespace-ed
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MySQL kapcsolat beállítása - EZT ADTAD HOZZÁ
+// ==================================================
+// ADATBÁZIS KAPCSOLAT BEÁLLÍTÁSA
+// ==================================================
 
+// A connection string beolvasása az appsettings.json-ból
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// A kapcsolat regisztrálása DI container-be (opcionális, de ajánlott)
+builder.Services.AddTransient<MySql.Data.MySqlClient.MySqlConnection>(provider =>
+    new MySql.Data.MySqlClient.MySqlConnection(connectionString)
+);
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+// ==================================================
+// STATIKUS FÁJLOK ÉS ROUTING
+// ==================================================
 app.UseStaticFiles();
 app.UseRouting();
 
