@@ -156,7 +156,7 @@ public class SessionController : ControllerBase
             string salt = PasswordProcessor.GenerateRandomSequence(16);
             string hash = PasswordProcessor.PasswordHash(verificationData.UserPassword, salt);
 
-            await using var connection = new MySqlConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             await using var transaction = await connection.BeginTransactionAsync();
@@ -588,7 +588,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
         string sessionId = PasswordProcessor.GenerateRandomSequence(20);
         long expiryTime = DateTimeOffset.UtcNow.Add(_sessionExpiry).ToUnixTimeSeconds();
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -637,7 +637,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<bool> UserNameExistsAsync(string userName)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -649,7 +649,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<bool> EmailExistsAsync(string email)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -675,7 +675,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<(string Salt, string Hash)?> GetUserAuthDataAsync(string userName)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();

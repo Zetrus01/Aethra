@@ -746,7 +746,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
             
             // Lekérjük a foglalás adatait
             string? reservationDetails = null;
-            await using (var conn = new SqliteConnection(_connectionString))
+            await using (var conn = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
                 var cmd = conn.CreateCommand();

@@ -1522,7 +1522,7 @@ public async Task<IActionResult> GetActiveReservation()
         }
     }
 
-    private async Task NotifyFutureReservationsAsync(SqliteConnection connection, string date, string reason)
+    private async Task NotifyFutureReservationsAsync(MySqlConnection connection, string date, string reason)
     {
         try
         {
