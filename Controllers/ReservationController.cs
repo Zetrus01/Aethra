@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 [Route("[controller]")]
 [ApiController]
@@ -52,7 +53,7 @@ public class ReservationController : ControllerBase
                 });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -174,7 +175,7 @@ public class ReservationController : ControllerBase
             string dbTime = ConvertToDbTimeFormat(model.TimeSlot);
             _logger.LogInformation($"Időpont konvertálva: '{model.TimeSlot}' -> '{dbTime}'");
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -287,7 +288,7 @@ public class ReservationController : ControllerBase
                 }
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             // 1. Ellenőrizzük, hogy van-e már aktív foglalás erre a napra
@@ -419,7 +420,7 @@ public class ReservationController : ControllerBase
                 return BadRequest(new { success = false, message = "Hiányzó dátum paraméter" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             // 1. Ellenőrizzük, hogy le van-e zárva ez a dátum
@@ -525,7 +526,7 @@ public class ReservationController : ControllerBase
         {
             _logger.LogInformation($"Zárt napok lekérdezése: Start={startDate}, End={endDate}");
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -649,7 +650,7 @@ public async Task<IActionResult> GetUserReservations()
             return Unauthorized(new { success = false, message = "Érvénytelen session" });
         }
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -738,7 +739,7 @@ public async Task<IActionResult> GetAllReservations()
             return StatusCode(403, new { success = false, message = "Nincs jogosultság" });
         }
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -829,7 +830,7 @@ public async Task<IActionResult> GetAllReservations()
                 return BadRequest(new { success = false, message = "Hiányzó foglalás azonosító" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -882,7 +883,7 @@ public async Task<IActionResult> GetAllReservations()
                 return BadRequest(new { success = false, message = "Hiányzó foglalás azonosító" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -942,7 +943,7 @@ public async Task<IActionResult> UpdateReservationStatus([FromBody] UpdateReserv
             return BadRequest(new { success = false, message = "Hiányzó státusz" });
         }
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         // Ellenőrizzük, hogy a felhasználóé-e a foglalás
@@ -1206,7 +1207,7 @@ public async Task<IActionResult> CreateReservation([FromBody] CreateReservationM
         string dbTime = ConvertToDbTimeFormat(model.Time);
         _logger.LogInformation($"Időpont konvertálva a mentéshez: '{model.Time}' -> '{dbTime}'");
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         // Generáljunk egyedi ID-t
@@ -1323,7 +1324,7 @@ public async Task<IActionResult> CreateReservation([FromBody] CreateReservationM
                 return Unauthorized(new { success = false, message = "Érvénytelen session" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             // Ellenőrizzük, hogy a felhasználóé-e a foglalás
@@ -1402,7 +1403,7 @@ public async Task<IActionResult> GetActiveReservation()
             return Unauthorized(new { success = false, message = "Érvénytelen session" });
         }
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -1474,7 +1475,7 @@ public async Task<IActionResult> GetActiveReservation()
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1499,7 +1500,7 @@ public async Task<IActionResult> GetActiveReservation()
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1579,7 +1580,7 @@ public async Task<IActionResult> GetActiveReservation()
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1599,7 +1600,7 @@ public async Task<IActionResult> GetActiveReservation()
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1684,7 +1685,7 @@ public async Task<IActionResult> DebugReservations()
 {
     try
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -1785,7 +1786,7 @@ public async Task<IActionResult> DebugReservations()
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             // 1. Táblák listázása
@@ -1897,7 +1898,7 @@ public async Task<IActionResult> SendTomorrowReservationReminders()
         var tomorrow = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
         _logger.LogInformation($"Holnapi dátum: {tomorrow}");
 
-        await using var connection = new SqliteConnection(_connectionString);
+        using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         // Lekérjük a holnapi aktív foglalásokat a felhasználói adatokkal
