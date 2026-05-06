@@ -10,6 +10,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Configuration; // Ehhez kell a NuGet: Microsoft.Extensions.Configuration
+using MySql.Data.MySqlClient;
 
 [Route("Email")]
 public class EmailController : Controller

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
+using MySql.Data.MySqlClient;
 
 [Route("[controller]")]
 public class PushController : Controller

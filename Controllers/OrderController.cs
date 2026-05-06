@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Dynamic;
 using System.Linq;
+using MySql.Data.MySqlClient;
 
 [Route("[controller]")]
 [ApiController]
@@ -41,7 +42,7 @@ public class OrderController : ControllerBase
                 return Unauthorized(new { success = false, message = "Érvénytelen session" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -133,7 +134,7 @@ command.CommandText = @"
                 return StatusCode(403, new { success = false, message = "Nincs jogosultság" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -232,7 +233,7 @@ command.CommandText = @"
                 return Unauthorized(new { success = false, message = "Érvénytelen session" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -320,7 +321,7 @@ command.CommandText = @"
                 return Unauthorized(new { success = false, message = "Érvénytelen session" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -444,7 +445,7 @@ command.CommandText = @"
             }
 
             // Rendelés adatainak lekérdezése
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -518,7 +519,7 @@ command.CommandText = @"
     {
         var items = new List<dynamic>();
         
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -589,7 +590,7 @@ command.CommandText = @"
                 return BadRequest(new { success = false, message = "Hiányzó rendelés azonosító" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -638,7 +639,7 @@ command.CommandText = @"
                 return BadRequest(new { success = false, message = "Hiányzó rendelés azonosító" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -687,7 +688,7 @@ command.CommandText = @"
                 return BadRequest(new { success = false, message = "Hiányzó rendelés azonosító" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -745,7 +746,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
             
             // Lekérjük a foglalás adatait
             string? reservationDetails = null;
-            await using (var conn = new SqliteConnection(_connectionString))
+            await using (var conn = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
                 var cmd = conn.CreateCommand();
@@ -782,7 +783,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
             };
         }
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         await using var transaction = await connection.BeginTransactionAsync();
@@ -1056,7 +1057,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1091,7 +1092,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
                 return Unauthorized(new { success = false, message = "Érvénytelen session" });
             }
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1205,7 +1206,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1225,7 +1226,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -1245,7 +1246,7 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
     {
         try
         {
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();

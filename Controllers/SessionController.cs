@@ -2,12 +2,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using KrajcsovicsChristoferHtml.Utils;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Text.Json;
+using MySql.Data.MySqlClient;
 
 [Route("[controller]")]
 [ApiController]
@@ -155,7 +155,7 @@ public class SessionController : ControllerBase
             string salt = PasswordProcessor.GenerateRandomSequence(16);
             string hash = PasswordProcessor.PasswordHash(verificationData.UserPassword, salt);
 
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             await using var transaction = await connection.BeginTransactionAsync();
@@ -374,7 +374,7 @@ public class SessionController : ControllerBase
         try
         {
             // Törlés az adatbázisból
-            await using var connection = new SqliteConnection(_connectionString);
+            await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
             var command = connection.CreateCommand();
@@ -460,7 +460,7 @@ private async Task<string[]> GetUserRolesFromDatabase(string userName)
 {
     try
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
         
         var roles = new List<string>();
@@ -516,7 +516,7 @@ private async Task<string[]> GetUserPermissionsFromDatabase(string userName)
 {
     try
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
         
         var permissions = new List<string>();
@@ -557,7 +557,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 {
     try
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -587,7 +587,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
         string sessionId = PasswordProcessor.GenerateRandomSequence(20);
         long expiryTime = DateTimeOffset.UtcNow.Add(_sessionExpiry).ToUnixTimeSeconds();
 
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -606,7 +606,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<string?> GetLoggedInUserAsync(string sessionId)
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -623,7 +623,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<string> GetUserEmailAsync(string userName)
     {
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -636,7 +636,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<bool> UserNameExistsAsync(string userName)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -648,7 +648,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<bool> EmailExistsAsync(string email)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -674,7 +674,7 @@ private async Task<bool> IsUserAdminAsync(string userName)
 
     private async Task<(string Salt, string Hash)?> GetUserAuthDataAsync(string userName)
     {
-        await using var connection = new SqliteConnection(_connectionString ?? "");
+        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString ?? "");
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
@@ -857,7 +857,7 @@ public async Task<IActionResult> ConfirmPasswordChange([FromBody] PasswordChange
         string hash = PasswordProcessor.PasswordHash(passwordData.NewPassword, salt);
 
         // Jelszó frissítése az adatbázisban
-        await using var connection = new SqliteConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
         var command = connection.CreateCommand();
