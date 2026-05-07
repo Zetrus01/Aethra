@@ -1,4 +1,4 @@
-// OrderController.cs - TELJESEN TISZTA, MŰKÖDŐ VERZIÓ
+// OrderController.cs - JAVÍTOTT MYSQL VERZIÓ
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -181,6 +181,7 @@ public class OrderController : ControllerBase
                     order.Notes = SafeGetString(reader, "Notes");
                     order.CreatedAt = SafeGetString(reader, "CreatedAt");
                     order.PaymentMethod = SafeGetString(reader, "PaymentMethod");
+                    order.DeliveryAddress = SafeGetString(reader, "DeliveryAddress");
                     
                     if (!reader.IsDBNull(reader.GetOrdinal("ReservationTableName")))
                     {
@@ -260,6 +261,7 @@ public class OrderController : ControllerBase
                     order.ReservationId = SafeGetString(reader, "ReservationId");
                     order.CreatedAt = SafeGetString(reader, "CreatedAt");
                     order.PaymentMethod = SafeGetString(reader, "PaymentMethod");
+                    order.DeliveryAddress = SafeGetString(reader, "DeliveryAddress");
                     
                     orders.Add(order);
                 }
@@ -499,10 +501,10 @@ public class OrderController : ControllerBase
                 command.CommandText = @"
                     INSERT INTO Orders (OrderId, UserId, UserName, OrderDate, TotalPrice, Status, 
                                         ServiceFee, ItemsCount, ReservationId, Notes, 
-                                        PaymentMethod, CreatedAt)
+                                        PaymentMethod, DeliveryAddress, CreatedAt)
                     VALUES (@OrderId, @UserId, @UserName, NOW(), @TotalPrice, 'pending', 
                             @ServiceFee, @ItemsCount, @ReservationId, @Notes, 
-                            @PaymentMethod, NOW())";
+                            @PaymentMethod, @DeliveryAddress, NOW())";
 
                 command.Parameters.AddWithValue("@OrderId", orderId);
                 command.Parameters.AddWithValue("@UserId", model.UserId);
@@ -513,6 +515,14 @@ public class OrderController : ControllerBase
                 command.Parameters.AddWithValue("@ReservationId", string.IsNullOrEmpty(model.ReservationId) ? DBNull.Value : (object)model.ReservationId);
                 command.Parameters.AddWithValue("@Notes", model.Notes ?? string.Empty);
                 command.Parameters.AddWithValue("@PaymentMethod", model.PaymentMethod ?? "card");
+                
+                // Szállítási cím JSON formátumban
+                string? deliveryAddressJson = null;
+                if (model.DeliveryAddress != null)
+                {
+                    deliveryAddressJson = JsonSerializer.Serialize(model.DeliveryAddress);
+                }
+                command.Parameters.AddWithValue("@DeliveryAddress", deliveryAddressJson ?? (object)DBNull.Value);
 
                 await command.ExecuteNonQueryAsync();
 
