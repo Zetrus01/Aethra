@@ -25,12 +25,13 @@ public class EmailController : Controller
     // Konstruktor - itt kapjuk meg a konfigurációt
     public EmailController(IConfiguration configuration)
     {
-        _configuration = configuration;
-        _smtpHost = _configuration["EmailSettings:SmtpHost"] ?? "smtp.gmail.com";
-        _smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "587");
-        _smtpUsername = _configuration["EmailSettings:SmtpUsername"] ?? "aethrarestaurant@gmail.com";
-        _smtpPassword = _configuration["EmailSettings:SmtpPassword"] ?? "bowh bwja uygu pzbf";
-        _senderName = _configuration["EmailSettings:SenderName"] ?? "AETHRA";
+            _configuration = configuration;
+    _smtpHost = _configuration["EmailSettings:SmtpHost"] ?? "smtp.sendgrid.net";
+    _smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"] ?? "587");
+    _smtpUsername = _configuration["EmailSettings:SmtpUsername"] ?? "apikey";
+    _smtpPassword = _configuration["EmailSettings:SmtpPassword"] ?? "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";
+    _senderName = _configuration["EmailSettings:SenderName"] ?? "AETHRA Étterem";
+    _senderEmail = _configuration["EmailSettings:SenderEmail"] ?? "aethrarestaurant@gmail.com";
     }
 
     // 1. MEGLÉVŐ: RENDELÉS MEGERŐSÍTÉS
@@ -74,10 +75,10 @@ public class EmailController : Controller
             model.Items = model.Items ?? new List<OrderItem>();
             
             // Email üzenet létrehozása
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_senderName, _smtpUsername));
-            message.To.Add(new MailboxAddress(model.UserName, model.Email));
-            message.Subject = $"Rendelés megerősítés - #{model.OrderId}";
+var message = new MimeMessage();
+message.From.Add(new MailboxAddress(_senderName, _senderEmail)); // Hitelesített email cím
+message.To.Add(new MailboxAddress(model.UserName, model.Email));
+message.Subject = $"Rendelés megerősítés - #{model.OrderId}";
             
             // Email body generálása
             var emailBody = BuildOrderConfirmationEmail(model);
@@ -549,32 +550,34 @@ public class EmailController : Controller
     }
     
     // KÖZÖS SMTP KÜLDÉSI METÓDUS
-    private async Task<bool> SendEmailAsync(MimeMessage message)
+private async Task<bool> SendEmailAsync(MimeMessage message)
+{
+    try
     {
-        try
-        {
-            using var client = new SmtpClient();
-            
-            // Csatlakozás
-            await client.ConnectAsync(_smtpHost, _smtpPort, SecureSocketOptions.StartTls);
-            
-            // Authentikáció
-            await client.AuthenticateAsync(_smtpUsername, _smtpPassword);
-            
-            // Küldés
-            await client.SendAsync(message);
-            
-            // Szétkapcsolás
-            await client.DisconnectAsync(true);
-            
-            return true;
-        }
-        catch (Exception smtpEx)
-        {
-            Console.WriteLine($"❌ SMTP error: {smtpEx.Message}");
-            return false;
-        }
+        using var client = new SmtpClient();
+        
+        // Csatlakozás a SendGrid SMTP szerverhez
+        await client.ConnectAsync(_smtpHost, _smtpPort, SecureSocketOptions.StartTls);
+        
+        // Authentikáció - SendGrid requires "apikey" as username and API key as password
+        await client.AuthenticateAsync(_smtpUsername, _smtpPassword);
+        
+        // Küldés
+        await client.SendAsync(message);
+        
+        // Szétkapcsolás
+        await client.DisconnectAsync(true);
+        
+        Console.WriteLine($"✅ Email sikeresen elküldve: {message.To}");
+        return true;
     }
+    catch (Exception smtpEx)
+    {
+        Console.WriteLine($"❌ SMTP error: {smtpEx.Message}");
+        Console.WriteLine($"❌ SMTP stack trace: {smtpEx.StackTrace}");
+        return false;
+    }
+}
     
     // FOGLALÁS ELFOGADÁSI EMAIL
     private string BuildReservationApprovalEmail(ReservationApprovalModel model)
