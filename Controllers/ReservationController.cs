@@ -467,8 +467,8 @@ public class ReservationController : ControllerBase
             updateCommand.CommandText = @"
                 UPDATE ClosedDays 
                 SET IsActive = 0,
-                    UpdatedAt = datetime('now'),
-                    ReopenedAt = datetime('now'),
+                    UpdatedAt = NOW(),
+                    ReopenedAt = NOW(),
                     ReopenedBy = @ReopenedBy
                 WHERE Id = @Id";
 
@@ -836,7 +836,7 @@ public async Task<IActionResult> GetAllReservations()
             command.CommandText = @"
                 UPDATE Reservations 
                 SET Status = 'approved',
-                    UpdatedAt = datetime('now') 
+                    UpdatedAt = UpdatedAt = NOW()
                 WHERE ReservationId = @ReservationId";
             command.Parameters.AddWithValue("@ReservationId", model.ReservationId);
 
@@ -889,7 +889,7 @@ public async Task<IActionResult> GetAllReservations()
             command.CommandText = @"
                 UPDATE Reservations 
                 SET Status = 'cancelled',
-                    UpdatedAt = datetime('now') 
+                    UpdatedAt = UpdatedAt = NOW()
                 WHERE ReservationId = @ReservationId";
             command.Parameters.AddWithValue("@ReservationId", model.ReservationId);
 
@@ -1034,7 +1034,7 @@ public async Task<IActionResult> UpdateReservationStatus([FromBody] UpdateReserv
             }
         }
         
-        sqlParts.Add("UpdatedAt = datetime('now')");
+        sqlParts.Add("UpdatedAt = UpdatedAt = NOW()");
         
         var updateSql = $"UPDATE Reservations SET {string.Join(", ", sqlParts)} WHERE ReservationId = @ReservationId";
         parameters.Add("@ReservationId", model.ReservationId);
