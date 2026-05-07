@@ -5341,7 +5341,6 @@ async enrichReservationsWithEmails() {
         // RENDELÉSEK BETÖLTÉSE
 async loadOrdersFromDatabase() {
     try {
-        // Adminként mindig az összes rendelést töltsük be
         let url = this.isAdmin ? "/Order/GetAllOrders" : "/Order/GetUserOrders";
         
         console.log(`🌐 API hívás: ${url} (admin: ${this.isAdmin})`);
@@ -5349,7 +5348,16 @@ async loadOrdersFromDatabase() {
         const response = await $.ajax({
             type: "GET",
             url: url,
-            timeout: 15000
+            timeout: 15000,
+            error: function(xhr, status, error) {
+                console.error("AJAX hiba részletesen:", {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: error
+                });
+                throw new Error(`API hiba (${xhr.status}): ${xhr.responseText || error}`);
+            }
         });
 
         if (response && Array.isArray(response)) {
@@ -5365,8 +5373,8 @@ async loadOrdersFromDatabase() {
         
     } catch (error) {
         console.error("❌ Hiba a rendelések betöltésekor:", error);
+        this.displayOrdersError(error.message || "Ismeretlen hiba");
         this.ordersData = [];
-        this.displayOrdersError();
     }
 }
 
