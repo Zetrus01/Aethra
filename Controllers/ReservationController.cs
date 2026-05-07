@@ -555,18 +555,18 @@ public class ReservationController : ControllerBase
             {
                 while (await reader.ReadAsync())
                 {
-                    closedDays.Add(new
-                    {
-                        Id = reader.GetInt32(0),
-                        Date = reader.GetString(1),
-                        Reason = !reader.IsDBNull(2) ? reader.GetString(2) : null,
-                        ClosedBy = !reader.IsDBNull(3) ? reader.GetString(3) : null,
-                        IsActive = reader.GetInt32(4) == 1,
-                        CreatedAt = reader.GetString(5),
-                        UpdatedAt = !reader.IsDBNull(6) ? reader.GetString(6) : null,
-                        ReopenedAt = !reader.IsDBNull(7) ? reader.GetString(7) : null,
-                        ReopenedBy = !reader.IsDBNull(8) ? reader.GetString(8) : null
-                    });
+                closedDays.Add(new
+                {
+                    Id = reader.GetInt32(0),
+                    Date = reader.GetDateTime(1).ToString("yyyy-MM-dd"), 
+                    Reason = !reader.IsDBNull(2) ? reader.GetString(2) : null,
+                    ClosedBy = !reader.IsDBNull(3) ? reader.GetString(3) : null,
+                    IsActive = reader.GetInt32(4) == 1,
+                    CreatedAt = reader.GetDateTime(5).ToString("yyyy-MM-dd HH:mm:ss"), 
+                    UpdatedAt = !reader.IsDBNull(6) ? reader.GetDateTime(6).ToString("yyyy-MM-dd HH:mm:ss") : null, 
+                    ReopenedAt = !reader.IsDBNull(7) ? reader.GetDateTime(7).ToString("yyyy-MM-dd HH:mm:ss") : null, 
+                    ReopenedBy = !reader.IsDBNull(8) ? reader.GetString(8) : null
+                });
                 }
             }
 
