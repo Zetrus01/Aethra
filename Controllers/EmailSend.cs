@@ -21,6 +21,7 @@ public class EmailController : Controller
     private readonly string _smtpUsername;
     private readonly string _smtpPassword;
     private readonly string _senderName;
+    private readonly string _senderEmail; 
 
     // Konstruktor - itt kapjuk meg a konfigurációt
     public EmailController(IConfiguration configuration)
@@ -76,7 +77,7 @@ public class EmailController : Controller
             
             // Email üzenet létrehozása
 var message = new MimeMessage();
-message.From.Add(new MailboxAddress(_senderName, _senderEmail)); // Hitelesített email cím
+message.From.Add(new MailboxAddress(_senderName, _senderEmail));
 message.To.Add(new MailboxAddress(model.UserName, model.Email));
 message.Subject = $"Rendelés megerősítés - #{model.OrderId}";
             
@@ -165,7 +166,7 @@ message.Subject = $"Rendelés megerősítés - #{model.OrderId}";
             
             // Email üzenet létrehozása
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("AETHRA Étterem", _smtpUsername));
+            message.From.Add(new MailboxAddress("AETHRA Étterem", _senderEmail));
             message.To.Add(new MailboxAddress(model.UserName, model.Email));
             message.Subject = $"✅ Foglalásodat elfogadtuk! - #{model.ReservationId}";
             
