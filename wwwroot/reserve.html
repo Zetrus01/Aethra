@@ -7725,12 +7725,19 @@ updateUserInfoContainer() {
         }
     }
     
-    initGuestsManager() {
-        if (typeof GuestsManager !== 'undefined') {
-            window.guestsManager = new GuestsManager();
-            console.log('👥 GuestsManager inicializálva NavbarManager-ben');
-        }
+initGuestsManager() {
+    if (window.guestsManager) {
+        console.log('👥 GuestsManager már létezik (globális), nem hozunk létre újat');
+        return;
     }
+    
+    if (typeof GuestsManager !== 'undefined') {
+        window.guestsManager = new GuestsManager();
+        console.log('👥 GuestsManager inicializálva NavbarManager-ben (mert nem volt)');
+    } else {
+        console.warn('⚠️ GuestsManager osztály nem található');
+    }
+}
     
     loadNavbar() {
         if (this.navbarLoaded) return;
@@ -7876,10 +7883,7 @@ updateUserInfoContainer() {
         this.updateUserInfoContainer();
     }
 }
-
-    // ============================================================================
     // GLOBÁLIS INICIALIZÁLÁS
-    // ============================================================================
     $(document).ready(function() {
         console.log("🚀 Reserve oldal betöltése...");
         
@@ -7887,6 +7891,18 @@ updateUserInfoContainer() {
         localStorage.removeItem('userData');
         console.log("🗑️ Régi localStorage userData törölve");
         
+    setTimeout(function() {
+        try {
+            if (typeof GuestsManager !== 'undefined') {
+                window.guestsManager = new GuestsManager();
+                console.log("✅ GuestsManager sikeresen inicializálva (globálisan)");
+            } else {
+                console.error("❌ GuestsManager osztály nem található!");
+            }
+        } catch (error) {
+            console.error("❌ Hiba a GuestsManager inicializálásakor:", error);
+        }
+    }, 100);
         // 2. GLOBÁLIS PROFILE MANAGER LÉTREHOZÁSA
         window.profileManager = new ProfileManager();
         console.log("✅ Globális ProfileManager létrehozva");
