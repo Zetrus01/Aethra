@@ -5268,6 +5268,13 @@ async loadReservationsFromDatabase() {
     try {
         console.log("📅 Foglalások betöltése...");
         
+        // Ellenőrizzük, hogy van-e bejelentkezett felhasználó
+        if (!this.userData || !this.userData.userName) {
+            console.log("⚠️ Nincs bejelentkezett felhasználó, foglalások betöltése kihagyva");
+            this.displayNoReservations();
+            return;
+        }
+        
         // Adminként mindig az összes foglalást töltsük be
         let url = this.isAdmin ? "/Reservation/GetAllReservations" : "/Reservation/GetUserReservations";
         
@@ -5285,22 +5292,21 @@ async loadReservationsFromDatabase() {
         
         if (response && response.success && response.reservations) {
             this.reservationsData = response.reservations;
+            console.log(`✅ Foglalások betöltve: ${this.reservationsData.length} db`);
+            this.displayReservations(this.reservationsData);
         } else if (Array.isArray(response)) {
             this.reservationsData = response;
-        } else {
-            this.reservationsData = [];
-        }
-        
-        console.log(`✅ Foglalások betöltve: ${this.reservationsData.length} db`);
-        
-        if (this.reservationsData.length === 0) {
-            this.displayNoReservations();
-        } else {
+            console.log(`✅ Foglalások betöltve (tömb): ${this.reservationsData.length} db`);
             this.displayReservations(this.reservationsData);
+        } else {
+            console.warn("⚠️ Nem sikerült foglalásokat betölteni, válasz formátum:", response);
+            this.reservationsData = [];
+            this.displayNoReservations();
         }
         
     } catch (error) {
         console.error("❌ Hiba a foglalások betöltésekor:", error);
+        this.reservationsData = [];
         this.displayReservationsError();
     }
 }
@@ -5378,7 +5384,7 @@ async loadOrdersFromDatabase() {
     }
 }
 
-// FOGLALÁSOK MEGJELENÍTÉSE - JAVÍTOTT (extra badge csak adminnak)
+// FOGLALÁSOK MEGJELENÍTÉSE 
 displayReservations(reservations) {
     console.log("🔄 Foglalások megjelenítése:", reservations);
     
@@ -5404,27 +5410,6 @@ displayReservations(reservations) {
         const status = reservation.Status || reservation.status || 'pending';
         const userName = reservation.UserName || reservation.userName || reservation.UserId || reservation.userId || '';
         const message = reservation.Message || reservation.message || '';
-        
-        // **Extra szolgáltatások - CSAK ADMINNAK MUTATJUK A LISTÁBAN**
-        const extraServices = reservation.ExtraServices || reservation.extraServices;
-        let extraServicesInfo = '';
-        
-        if (extraServices && this.isAdmin) {
-            try {
-                const services = JSON.parse(extraServices);
-                if (Array.isArray(services) && services.length > 0) {
-                    extraServicesInfo = `<div class="item-details">
-                        <small><strong>Extra szolgáltatások:</strong> ${services.map(s => 
-                            s.name || s.id
-                        ).join(', ')}</small>
-                    </div>`;
-                }
-            } catch (e) {
-                extraServicesInfo = `<div class="item-details">
-                    <small><strong>Extra szolgáltatások:</strong> ${extraServices}</small>
-                </div>`;
-            }
-        }
         
         // Státusz formázás
         let statusClass = 'status-pending';
@@ -5461,7 +5446,7 @@ displayReservations(reservations) {
             
         // Megjegyzés (ha van)
         const messageInfo = message ? 
-            `<div class="item-details"><small><strong>Megjegyzés:</strong> ${message}</small></div>` : 
+            `<div class="item-details"><small><strong>Megjegyzés:</strong> ${message.substring(0, 100)}${message.length > 100 ? '...' : ''}</small></div>` : 
             '';
 
         html += `
@@ -5470,21 +5455,17 @@ displayReservations(reservations) {
                     <div class="item-title">
                         ${tableName} • ${guests} fő
                         ${mineBadge}
-                        <!-- EXTRA BADGE CSAK ADMINNAK -->
-                        ${extraServices && this.isAdmin ? '<span class="item-status status-confirmed" style="margin-left: 8px; font-size: 0.7rem;">✨ Extra</span>' : ''}
                     </div>
                     <div class="item-details">
                         ${date} ${time} ${tableNumber ? `• Asztal #${tableNumber}` : ''}
                         ${userInfo}
                         ${tableInfo}
                         ${messageInfo}
-                        ${extraServicesInfo}
                         <small><strong>Foglalás ID:</strong> ${reservationId}</small>
                     </div>
                     <span class="item-status ${statusClass}">${statusText}</span>
                 </div>
                 
-                <!-- MINDEN FELHASZNÁLÓ LÁTHATJA A SZEM IKONT A RÉSZLETESEKHEZ -->
                 <div class="admin-actions">
                     <button class="view-details-btn" 
                             data-reservation-id="${reservationId}"
@@ -5493,16 +5474,14 @@ displayReservations(reservations) {
                         <i class="bi bi-eye"></i>
                     </button>
                     
-                    <!-- ADMIN GOMB - CSAK HA ADMIN -->
                     ${this.isAdmin ? `
                     <button class="admin-control-btn" 
                             data-toggle="modal" 
                             data-target="#adminReservationModal" 
                             data-reservation-id="${reservationId}" 
                             data-reservation-status="${status}"
-                            data-extra-services='${JSON.stringify(extraServices || '')}'
                             title="Foglalás kezelése">
-                        <i class="bi bi-gear"></i> Kezelés
+                        <i class="bi bi-gear"></i>
                     </button>
                     ` : ''}
                 </div>
@@ -5515,15 +5494,6 @@ displayReservations(reservations) {
     
     // Részletek gomb eseménykezelő
     this.setupDetailsButtons();
-    
-    // Animációk
-    setTimeout(() => {
-        document.querySelectorAll('#reservations-list li').forEach((item, idx) => {
-            setTimeout(() => {
-                item.classList.add('animated');
-            }, 100 + (idx * 100));
-        });
-    }, 300);
 }
 // RÉSZLETES NÉZET GOMBOK BEÁLLÍTÁSA
 setupDetailsButtons() {
@@ -7033,20 +7003,23 @@ displayReservationsError(message = "Kérjük, próbáld újra később") {
             }
         }
 
+// ProfileManager osztály - JAVÍTOTT loadUserData metódus
 async loadUserData() {
     console.log("🔍 Felhasználói adatok betöltése ProfileManager-ben...");
     
     // Várjunk az AuthManager-re
     let attempts = 0;
-    while (!window.authManager && attempts < 20) {
+    while (!window.authManager && attempts < 50) {  // 5 másodperc timeout
         await new Promise(resolve => setTimeout(resolve, 100));
         attempts++;
     }
     
     if (window.authManager) {
-        // Várjunk a jogosultságok betöltésére
-        if (!window.authManager.permissionManager || window.authManager.permissionManager.userRoles.length === 0) {
-            await new Promise(resolve => setTimeout(resolve, 500));
+        // Várjunk a jogosultságok betöltésére is
+        let permAttempts = 0;
+        while ((!window.authManager.permissionManager || window.authManager.permissionManager.userRoles.length === 0) && permAttempts < 30) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            permAttempts++;
         }
         
         this.userData = window.authManager.userData;
@@ -7056,9 +7029,7 @@ async loadUserData() {
         console.log("✅ AuthManager-ből átvéve:", {
             userData: this.userData,
             isAuthenticated: this.isAuthenticated,
-            isAdmin: this.isAdmin,
-            roles: window.authManager.permissionManager?.userRoles,
-            permissions: window.authManager.permissionManager?.userPermissions
+            isAdmin: this.isAdmin
         });
         
         // Profil UI frissítése
@@ -7067,15 +7038,15 @@ async loadUserData() {
         this.showAdminQuickMenu();
         this.setupAdminQuickMenu();
         
-        // Admin módban töltsük be az összes adatot, különben csak a sajátokat
+        // **FONTOS: Admin módban összes, különben saját foglalások**
         if (this.isAdmin) {
             console.log("👑 Admin mód: összes adat betöltése...");
-            await this.loadAllReservations();
-            await this.loadAllOrders();
+            await this.loadAllReservations();  // Ez töltsön be minden foglalást
+            await this.loadAllOrders();        // Ez töltsön be minden rendelést
         } else {
             console.log("👤 User mód: saját adatok betöltése...");
-            await this.loadReservationsFromDatabase();
-            await this.loadOrdersFromDatabase();
+            await this.loadReservationsFromDatabase();  // Ez csak a saját foglalásokat
+            await this.loadOrdersFromDatabase();        // Ez csak a saját rendeléseket
         }
         
         await this.loadInvoicesFromDatabase();
@@ -7159,6 +7130,8 @@ async loadAllReservations() {
             timeout: 15000
         });
 
+        console.log("📊 Admin API válasz:", response);
+        
         if (response && response.success && response.reservations) {
             this.reservationsData = response.reservations;
         } else if (Array.isArray(response)) {
