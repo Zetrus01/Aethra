@@ -805,13 +805,14 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
                 deliveryAddressJson = JsonSerializer.Serialize(model.DeliveryAddress);
                 _logger.LogInformation("Szállítási cím mentése: {Address}", deliveryAddressJson);
             }
-command.CommandText = @"
-    INSERT INTO Orders (OrderId, UserId, UserName, OrderDate, TotalPrice, Status, 
-                        ServiceFee, ItemsCount, ReservationId, Notes, 
-                        PaymentMethod, DeliveryAddress, CreatedAt)
-    VALUES (@OrderId, @UserId, @UserName, @OrderDate, @TotalPrice, @Status, 
-            @ServiceFee, @ItemsCount, @ReservationId, @Notes, 
-            @PaymentMethod, @DeliveryAddress, NOW())";
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                INSERT INTO Orders (OrderId, UserId, UserName, OrderDate, TotalPrice, Status, 
+                                    ServiceFee, ItemsCount, ReservationId, Notes, 
+                                    PaymentMethod, DeliveryAddress, CreatedAt)
+                VALUES (@OrderId, @UserId, @UserName, @OrderDate, @TotalPrice, @Status, 
+                        @ServiceFee, @ItemsCount, @ReservationId, @Notes, 
+                        @PaymentMethod, @DeliveryAddress, NOW())";
 
             command.Parameters.AddWithValue("@OrderId", orderId);
             command.Parameters.AddWithValue("@UserId", model.UserId);
@@ -935,7 +936,7 @@ command.CommandText = @"
                         UPDATE Reservations 
                         SET Status = 'ordered', 
                             OrderId = @OrderId,
-                            UpdatedAt = datetime('now')
+                            UpdatedAt = NOW()
                         WHERE ReservationId = @ReservationId 
                         AND UserId = @UserId";
                     
