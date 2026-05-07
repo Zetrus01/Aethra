@@ -1191,8 +1191,8 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
                     order.CreatedAt = !reader.IsDBNull(reader.GetOrdinal("CreatedAt")) 
-    ? reader.GetDateTime(reader.GetOrdinal("CreatedAt")).ToString("yyyy-MM-dd HH:mm:ss")
-    : null;
+                        ? reader.GetDateTime(reader.GetOrdinal("CreatedAt")).ToString("yyyy-MM-dd HH:mm:ss")
+                        : null;
                     // Tételek betöltése
                     order.Items = await GetOrderItemsAsync(order.OrderId);
 
