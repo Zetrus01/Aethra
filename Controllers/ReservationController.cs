@@ -693,9 +693,9 @@ public async Task<IActionResult> GetUserReservations()
                              reader.GetString(reader.GetOrdinal("Message")) : null,
                     ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ? 
                                    reader.GetString(reader.GetOrdinal("ExtraServices")) : null,
-                    CreatedAt = SafeGetString(reader, "CreatedAt"),
+                    CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt")),
                     UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? 
-                               SafeGetString(reader, "UpdatedAt") : null
+                            reader.GetString(reader.GetOrdinal("UpdatedAt")) : null
                 });
             }
         }
@@ -796,9 +796,9 @@ public async Task<IActionResult> GetAllReservations()
                              reader.GetString(reader.GetOrdinal("Message")) : null,
                     ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ? 
                                    reader.GetString(reader.GetOrdinal("ExtraServices")) : null,
-                    CreatedAt = SafeGetString(reader, "CreatedAt"),
+                    CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt")),
                     UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? 
-                               SafeGetString(reader, "UpdatedAt") : null
+                            reader.GetString(reader.GetOrdinal("UpdatedAt")) : null
                 });
             }
         }
