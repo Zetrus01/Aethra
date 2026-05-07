@@ -95,7 +95,15 @@ command.CommandText = @"
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-                    order.CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt"));
+                    if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+{
+    var createdAtRaw = reader.GetValue(reader.GetOrdinal("CreatedAt"));
+    order.CreatedAt = createdAtRaw is DateTime dt ? dt.ToString("yyyy-MM-dd HH:mm:ss") : createdAtRaw.ToString();
+}
+else
+{
+    order.CreatedAt = null;
+}
                     
                     orders.Add(order);
                 }
@@ -1174,7 +1182,16 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-                    order.CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt"));
+                    // CreatedAt kezelése - DateTime -> string konverzió
+if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+{
+    var createdAtRaw = reader.GetValue(reader.GetOrdinal("CreatedAt"));
+    order.CreatedAt = createdAtRaw is DateTime dt ? dt.ToString("yyyy-MM-dd HH:mm:ss") : createdAtRaw.ToString();
+}
+else
+{
+    order.CreatedAt = null;
+}
                     
                     // Tételek betöltése
                     order.Items = await GetOrderItemsAsync(order.OrderId);
