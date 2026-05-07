@@ -7726,14 +7726,16 @@ updateUserInfoContainer() {
     }
     
 initGuestsManager() {
+    // HA MÁR LÉTEZIK A WINDOW.GUESTSMANAGER, NE CSINÁLJUNK SEMMIT!
     if (window.guestsManager) {
-        console.log('👥 GuestsManager már létezik (globális), nem hozunk létre újat');
+        console.log('👥 GuestsManager már létezik (globális), NavbarManager nem hoz létre újat');
         return;
     }
     
+    // Biztonsági mentés: ha még sincs, akkor hozzuk létre 
     if (typeof GuestsManager !== 'undefined') {
         window.guestsManager = new GuestsManager();
-        console.log('👥 GuestsManager inicializálva NavbarManager-ben (mert nem volt)');
+        console.log('👥 GuestsManager inicializálva NavbarManager-ben (emergency fallback)');
     } else {
         console.warn('⚠️ GuestsManager osztály nem található');
     }
@@ -7968,26 +7970,33 @@ initGuestsManager() {
                     }
                 }
             } else {
-                if (guestsManager) {
-                    guestsManager.reset();
-                }
-                console.log(`🔄 Asztal kijelölés törölve`);
-                
-                const datetimeInput = document.getElementById('datetime');
-                if (datetimeInput && datetimeInput.value && window.navbarManager && window.navbarManager.datetimePicker) {
-                    window.navbarManager.datetimePicker.resetTimeSlotButtons();
-                }
-            }
+    // EZT JAVÍTSD: guestsManager helyett window.guestsManager
+    if (window.guestsManager) {
+        window.guestsManager.reset();
+    }
+    console.log(`🔄 Asztal kijelölés törölve`);
+    
+    const datetimeInput = document.getElementById('datetime');
+    if (datetimeInput && datetimeInput.value && window.navbarManager && window.navbarManager.datetimePicker) {
+        window.navbarManager.datetimePicker.resetTimeSlotButtons();
+    }
+}
         });
 
 // 6. FOGLALÁSI ŰRLAP ESEMÉNYKEZELŐ - JAVÍTOTT VERZIÓ
 $("#reservationForm").on("submit", async function(e){
     e.preventDefault();
-    e.stopPropagation(); // Fontos: megakadályozzuk a továbbterjedést
+    e.stopPropagation(); //  megakadályozzuk a továbbterjedést
     
     console.log("📋 Foglalási űrlap elküldve");
+    const guestsMgr = window.guestsManager;
     
-    // Ellenőrizzük, hogy van-e asztal kiválasztva (MINDEN másképp validáció ELŐTT)
+    if (!guestsMgr) {
+        console.error("❌ window.guestsManager nem elérhető!");
+        alert("Hiba: A vendégkezelő nem elérhető, kérjük frissítsd az oldalt!");
+        return false;
+    }
+    // Ellenőrizzük, hogy van-e asztal kiválasztva ( validáció elott)
     const selectedTable = document.querySelector(".table-card.selected");
     if (!selectedTable || selectedTable.length === 0) {
         console.log("❌ Nincs kiválasztott asztal - validáció megállítja a folyamatot");
@@ -7996,7 +8005,7 @@ $("#reservationForm").on("submit", async function(e){
         setTimeout(() => {
             $(".tables-section").removeClass('shake');
         }, 500);
-        return false; // Fontos: return false megállítja a továbbterjedést
+        return false; // return false megállítja a továbbterjedést
     }
     
     console.log("✅ Van kiválasztott asztal:", selectedTable.dataset.table);
