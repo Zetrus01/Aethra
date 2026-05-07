@@ -95,12 +95,21 @@ command.CommandText = @"
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+try
 {
-    var createdAtRaw = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-    order.CreatedAt = createdAtRaw.ToString("yyyy-MM-dd HH:mm:ss");
+    var createdAtValue = reader["CreatedAt"];
+    if (createdAtValue != DBNull.Value)
+    {
+        order.CreatedAt = createdAtValue is DateTime dt 
+            ? dt.ToString("yyyy-MM-dd HH:mm:ss") 
+            : createdAtValue.ToString();
+    }
+    else
+    {
+        order.CreatedAt = null;
+    }
 }
-else
+catch (Exception)
 {
     order.CreatedAt = null;
 }
@@ -198,15 +207,24 @@ else
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
-{
-    var createdAtRaw = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-    order.CreatedAt = createdAtRaw.ToString("yyyy-MM-dd HH:mm:ss");
-}
-else
-{
-    order.CreatedAt = null;
-}
+                    try
+                    {
+                        var createdAtValue = reader["CreatedAt"];
+                        if (createdAtValue != DBNull.Value)
+                        {
+                            order.CreatedAt = createdAtValue is DateTime dt 
+                                ? dt.ToString("yyyy-MM-dd HH:mm:ss") 
+                                : createdAtValue.ToString();
+                        }
+                        else
+                        {
+                            order.CreatedAt = null;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        order.CreatedAt = null;
+                    }
                     order.DeliveryAddress = !reader.IsDBNull(reader.GetOrdinal("DeliveryAddress")) ? 
                     reader.GetString(reader.GetOrdinal("DeliveryAddress")) : null;
                                 order.PaymentMethod = !reader.IsDBNull(reader.GetOrdinal("PaymentMethod")) ? 
