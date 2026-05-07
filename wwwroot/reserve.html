@@ -7287,6 +7287,8 @@ class NavbarManager {
         setTimeout(() => this.init(), 100);
     }
 
+// A NavbarManager osztály init() metódusában, a loadNavbar() után:
+
 async init() {
     console.log("🚀 NavbarManager inicializálása...");
     
@@ -7305,17 +7307,43 @@ async init() {
     await this.loadClosedDaysForCalendar();
     this.initReservationAnimations();
     this.initExtraServicesManager();
-    this.initAdminButtonAndEmailFill();
     
-    // NE hívd meg a startAuthStateMonitoring-ot!
-    // this.startAuthStateMonitoring();
+    // 
+    this.setupPeriodicFormFill();
+}
+
+// ÚJ METÓDUS - rendszeresen ellenőrzi és kitölti az adatokat
+setupPeriodicFormFill() {
+    // Első kitöltés késleltetve
+    setTimeout(() => {
+        this.fillUserEmail();
+        this.fillUserName();
+        this.updateUserInfoContainer();
+        this.handleAdminButton();
+    }, 500);
     
-    // Csak az eseményfigyelőket állítsuk be
-    this.setupEventListeners();
+    // Második kitöltés még később (biztos, ami biztos)
+    setTimeout(() => {
+        this.fillUserEmail();
+        this.fillUserName();
+        this.handleAdminButton();
+    }, 1500);
     
-    console.log('✅ NavbarManager sikeresen inicializálva');
-    console.log(`   Felhasználó: ${this.userData?.userName || 'Nincs'}`);
-    console.log(`   Admin: ${this.isAdmin}`);
+    // Rendszeres ellenőrzés (minden 2 másodpercben, de csak ha még üres a mező)
+    this.formFillInterval = setInterval(() => {
+        const emailInput = document.getElementById('email');
+        const nameInput = document.getElementById('name');
+        
+        // Csak akkor töltjük ki, ha a mezők üresek
+        if (this.isAuthenticated && this.userData) {
+            if (emailInput && (!emailInput.value || emailInput.value.trim() === '')) {
+                this.fillUserEmail();
+            }
+            if (nameInput && (!nameInput.value || nameInput.value.trim() === '')) {
+                this.fillUserName();
+            }
+        }
+    }, 2000);
 }
     
     // Auth állapot figyelése intervallummal
@@ -7604,18 +7632,56 @@ createAdminButton() {
     }
     
     // E-mail automatikus kitöltése
-    fillUserEmail() {
-        if (!this.isAuthenticated || !this.userData) {
-            console.log("👤 Nincs bejelentkezett felhasználó, e-mail nem töltődik ki");
-            return;
-        }
-        
-        if (this.profileManager && this.profileManager.fillUserEmailInReservationForm) {
-            this.profileManager.fillUserEmailInReservationForm();
-        } else {
-            this.fillUserEmailFallback();
-        }
+fillUserEmail() {
+    if (!this.isAuthenticated || !this.userData) {
+        console.log("👤 Nincs bejelentkezett felhasználó, e-mail nem töltődik ki");
+        return;
     }
+    
+    // KÖZVETLENÜL az input mező kitöltése, nem a ProfileManagerre várva
+    const emailInput = document.getElementById('email');
+    if (!emailInput) {
+        console.log("⚠️ E-mail input mező nem található");
+        return;
+    }
+    
+    // Ellenőrizzük, hogy üres-e a mező
+    if (emailInput.value && emailInput.value.trim() !== '') {
+        console.log(`ℹ️ E-mail mező már kitöltve: ${emailInput.value}`);
+        return;
+    }
+    
+    let userEmail = '';
+    
+    // Keresd az e-mailt különböző mezőkben
+    if (this.userData.email && typeof this.userData.email === 'string') {
+        userEmail = this.userData.email.trim();
+    } else if (this.userData.Email && typeof this.userData.Email === 'string') {
+        userEmail = this.userData.Email.trim();
+    } else if (this.userData.UserEmail && typeof this.userData.UserEmail === 'string') {
+        userEmail = this.userData.UserEmail.trim();
+    }
+    
+    // Ellenőrizzük az e-mail formátumát
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (userEmail && userEmail !== '' && emailRegex.test(userEmail)) {
+        emailInput.value = userEmail;
+        console.log(`✅ E-mail automatikusan kitöltve: ${userEmail}`);
+        
+        // Vizuális visszajelzés
+        emailInput.style.borderColor = '#28a745';
+        emailInput.style.boxShadow = '0 0 0 2px rgba(40, 167, 69, 0.2)';
+        
+        setTimeout(() => {
+            emailInput.style.borderColor = '';
+            emailInput.style.boxShadow = '';
+        }, 2000);
+    } else {
+        console.log("ℹ️ Felhasználónak nincs érvényes e-mail címe:", this.userData);
+    }
+}
+
     
     fillUserEmailFallback() {
         const emailInput = document.getElementById('email');
@@ -7641,18 +7707,56 @@ createAdminButton() {
     }
     
     // Felhasználó név automatikus kitöltése
-    fillUserName() {
-        if (!this.isAuthenticated || !this.userData) {
-            console.log("👤 Nincs bejelentkezett felhasználó, név nem töltődik ki");
-            return;
-        }
-        
-        if (this.profileManager && this.profileManager.fillUserNameInReservationForm) {
-            this.profileManager.fillUserNameInReservationForm();
-        } else {
-            this.fillUserNameFallback();
-        }
+fillUserName() {
+    if (!this.isAuthenticated || !this.userData) {
+        console.log("👤 Nincs bejelentkezett felhasználó, név nem töltődik ki");
+        return;
     }
+    
+    // KÖZVETLENÜL az input mező kitöltése
+    const nameInput = document.getElementById('name');
+    if (!nameInput) {
+        console.log("⚠️ Név input mező nem található");
+        return;
+    }
+    
+    // Ellenőrizzük, hogy üres-e a mező
+    if (nameInput.value && nameInput.value.trim() !== '') {
+        console.log(`ℹ️ Név mező már kitöltve: ${nameInput.value}`);
+        return;
+    }
+    
+    let fullName = '';
+    
+    // Név összeállítása különböző forrásokból
+    if (this.userData.fullName && typeof this.userData.fullName === 'string') {
+        fullName = this.userData.fullName.trim();
+    } else if (this.userData.firstName && this.userData.lastName) {
+        const firstName = typeof this.userData.firstName === 'string' ? this.userData.firstName.trim() : '';
+        const lastName = typeof this.userData.lastName === 'string' ? this.userData.lastName.trim() : '';
+        fullName = `${firstName} ${lastName}`.trim();
+    } else if (this.userData.userName && typeof this.userData.userName === 'string') {
+        fullName = this.userData.userName.trim();
+    } else if (this.userData.name && typeof this.userData.name === 'string') {
+        fullName = this.userData.name.trim();
+    }
+    
+    if (fullName && fullName !== '') {
+        nameInput.value = fullName;
+        console.log(`✅ Név automatikusan kitöltve: ${fullName}`);
+        
+        // Vizuális visszajelzés
+        nameInput.style.borderColor = '#28a745';
+        nameInput.style.boxShadow = '0 0 0 2px rgba(40, 167, 69, 0.2)';
+        
+        setTimeout(() => {
+            nameInput.style.borderColor = '';
+            nameInput.style.boxShadow = '';
+        }, 2000);
+    } else {
+        console.log("ℹ️ Felhasználónak nincs megjeleníthető neve:", this.userData);
+    }
+}
     
     fillUserNameFallback() {
         const nameInput = document.getElementById('name');
@@ -7725,13 +7829,11 @@ updateUserInfoContainer() {
         }
     }
     
-    initGuestsManager() {
-        if (typeof GuestsManager !== 'undefined') {
-            window.guestsManager = new GuestsManager();
+
+        initGuestsManager() {
+            guestsManager = new GuestsManager();
             console.log('👥 GuestsManager inicializálva NavbarManager-ben');
         }
-    }
-    
     loadNavbar() {
         if (this.navbarLoaded) return;
         
@@ -7876,249 +7978,349 @@ updateUserInfoContainer() {
         this.updateUserInfoContainer();
     }
 }
-
-    // ============================================================================
-    // GLOBÁLIS INICIALIZÁLÁS
-    // ============================================================================
-    $(document).ready(function() {
-        console.log("🚀 Reserve oldal betöltése...");
-        
-        // 1. TÖRÖLJÜK A RÉGI USERDATA-T (hogy az AuthManager friss adatokat töltsön be)
-        localStorage.removeItem('userData');
-        console.log("🗑️ Régi localStorage userData törölve");
-        
-        // 2. GLOBÁLIS PROFILE MANAGER LÉTREHOZÁSA
-        window.profileManager = new ProfileManager();
-        console.log("✅ Globális ProfileManager létrehozva");
-        
-        // 3. GLOBÁLIS EXTRA SZOLGÁLTATÁSOK MANAGER LÉTREHOZÁSA
-        window.extraServicesManager = new ExtraServicesManager();
-        console.log("✅ Globális ExtraServicesManager létrehozva");
-        
-        // 4. NAVBAR MANAGER INICIALIZÁLÁSA
-        setTimeout(() => {
-            window.navbarManager = new NavbarManager();
-            console.log("✅ NavbarManager inicializálva");
-        }, 200);
-        
-        // 5. ASZTAL KIVÁLASZTÁS ESEMÉNYKEZELŐ
-        $(".table-select-btn").on("click", function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const tableCard = $(this).closest(".table-card");
-            const tableNumber = tableCard.data('table');
-            const minGuests = tableCard.data('min-guests') || 1;
-            const maxGuests = tableCard.data('max-guests') || 20;
-            const isSelected = $(this).hasClass('selected');
-            
-            console.log(`🪑 Asztal ${tableNumber} kiválasztva: ${minGuests}-${maxGuests} fő`);
-            
-            if (!isSelected) {
-                $(this).addClass('shake');
-                setTimeout(() => {
-                    $(this).removeClass('shake');
-                }, 500);
-            }
-            
-            $(".table-card").removeClass("selected");
-            $(".table-select-btn").removeClass("selected").text("Kiválasztás");
-            
-            if (!isSelected) {
-                $(this).addClass("selected").text("Kiválasztva");
-                tableCard.addClass("selected");
-                
-                const tableSelectedEvent = new CustomEvent('tableSelected', {
-                    detail: {
-                        tableNumber: tableNumber,
-                        minGuests: minGuests,
-                        maxGuests: maxGuests
-                    }
-                });
-                document.dispatchEvent(tableSelectedEvent);
-                
-                console.log(`✅ Asztal ${tableNumber} kiválasztva (${minGuests}-${maxGuests} fő)`);
-                
-                const datetimeInput = document.getElementById('datetime');
-                if (datetimeInput && datetimeInput.value) {
-                    const isoDate = datetimeInput.value;
-                    if (window.navbarManager && window.navbarManager.datetimePicker) {
-                        window.navbarManager.datetimePicker.checkReservedTimeSlotsIfTableSelected(isoDate);
-                    }
-                } else {
-                    const today = DateHelper.formatDateToYYYYMMDD(new Date());
-                    if (window.navbarManager && window.navbarManager.datetimePicker) {
-                        window.navbarManager.datetimePicker.checkReservedTimeSlotsIfTableSelected(today);
-                    }
-                }
-            } else {
-                if (guestsManager) {
-                    guestsManager.reset();
-                }
-                console.log(`🔄 Asztal kijelölés törölve`);
-                
-                const datetimeInput = document.getElementById('datetime');
-                if (datetimeInput && datetimeInput.value && window.navbarManager && window.navbarManager.datetimePicker) {
-                    window.navbarManager.datetimePicker.resetTimeSlotButtons();
-                }
-            }
-        });
-
-// 6. FOGLALÁSI ŰRLAP ESEMÉNYKEZELŐ - JAVÍTOTT VERZIÓ
-$("#reservationForm").on("submit", async function(e){
-    e.preventDefault();
-    e.stopPropagation(); // Fontos: megakadályozzuk a továbbterjedést
+  // JAVÍTOTT: GLOBÁLIS INICIALIZÁLÁS
+$(document).ready(function() {
+    console.log("🚀 Reserve oldal betöltése...");
     
-    console.log("📋 Foglalási űrlap elküldve");
+    // Töröljük a régi userData-t (hogy az AuthManager friss adatokat töltsön be)
+    localStorage.removeItem('userData');
+    console.log("🗑️ Régi localStorage userData törölve");
+
+    // GLOBÁLIS GUESTS MANAGER LÉTREHOZÁSA
+    window.guestsManager = new GuestsManager();
+    console.log("✅ Globális GuestsManager létrehozva");
     
-    // Ellenőrizzük, hogy van-e asztal kiválasztva (MINDEN másképp validáció ELŐTT)
-    const selectedTable = document.querySelector(".table-card.selected");
-    if (!selectedTable || selectedTable.length === 0) {
-        console.log("❌ Nincs kiválasztott asztal - validáció megállítja a folyamatot");
-        alert("Kérjük, válasszon asztalt!");
-        $(".tables-section").addClass('shake');
+    // GLOBÁLIS PROFILE MANAGER LÉTREHOZÁSA
+    window.profileManager = new ProfileManager();
+    console.log("✅ Globális ProfileManager létrehozva");
+    
+    // GLOBÁLIS EXTRA SZOLGÁLTATÁSOK MANAGER LÉTREHOZÁSA
+    window.extraServicesManager = new ExtraServicesManager();
+    console.log("✅ Globális ExtraServicesManager létrehozva");
+
+    // NAVBAR MANAGER INICIALIZÁLÁSA
+    setTimeout(() => {
+        window.navbarManager = new NavbarManager();
+        console.log("✅ NavbarManager inicializálva");
+        
+        // Biztosítjuk, hogy az adatok kitöltődjenek
         setTimeout(() => {
-            $(".tables-section").removeClass('shake');
+            if (window.navbarManager.isAuthenticated && window.navbarManager.userData) {
+                console.log("🔄 Adatok kitöltése a navbarManager-ből...");
+                fillUserDataFromNavbarManager();
+            } else if (window.authManager && window.authManager.isAuthenticated) {
+                console.log("🔄 Adatok kitöltése az authManager-ből...");
+                fillUserDataFromAuthManager();
+            }
         }, 500);
-        return false; // Fontos: return false megállítja a továbbterjedést
-    }
-    
-    console.log("✅ Van kiválasztott asztal:", selectedTable.dataset.table);
-    
-    // Vendégek validációja
-    if (guestsManager) {
-        const guestsValidation = guestsManager.validateForSelectedTable();
-        if (!guestsValidation.valid) {
-            alert(guestsValidation.message);
-            $(".tables-section").addClass('shake');
-            setTimeout(() => {
-                $(".tables-section").removeClass('shake');
-            }, 500);
-            return false;
-        }
-    } else {
-        console.error("❌ GuestsManager nem elérhető");
-        return false;
-    }
-    
-    // Időpont validáció
-    const timeSlot = document.getElementById('time-slot').value;
-    if (!timeSlot) {
-        alert("Kérjük, válasszon időpontot!");
-        return false;
-    }
-    
-    // Dátum validáció
-    const datetime = document.getElementById('datetime').value;
-    if (!datetime) {
-        alert("Kérjük, válasszon dátumot!");
-        return false;
-    }
-    
-    // Extra szolgáltatások hozzáadása
-    let extraServicesData = [];
-    try {
-        const extraServicesInput = document.getElementById('extra-services');
-        if (extraServicesInput && extraServicesInput.value) {
-            extraServicesData = JSON.parse(extraServicesInput.value);
-        }
-    } catch (error) {
-        console.warn('⚠️ Hiba az extra szolgáltatások feldolgozásakor:', error);
-    }
-    
-    try {
-        // Adatok összegyűjtése
-        const reservationData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            guests: parseInt(document.getElementById('guests').value),
-            datetime: datetime,
-            timeSlot: timeSlot,
-            tableNumber: selectedTable.dataset.table,
-            type: document.getElementById('type').value,
-            message: document.getElementById('message').value,
-            extraServices: extraServicesData,
-            isoDate: datetime,
-            localDate: document.getElementById('datetime-display').textContent
-        };
         
-        console.log("📤 Foglalás küldése:", reservationData);
+        // Rendszeres ellenőrzés (minden másodpercben)
+        const fillInterval = setInterval(() => {
+            if (window.navbarManager && window.navbarManager.isAuthenticated && window.navbarManager.userData) {
+                fillUserDataFromNavbarManager();
+            } else if (window.authManager && window.authManager.isAuthenticated && window.authManager.userData) {
+                fillUserDataFromAuthManager();
+            } else {
+                // Ha nincs bejelentkezett felhasználó, de van session cookie, próbáljunk újra
+                const sessionCookie = document.cookie.split('; ').find(row => row.startsWith('SessionID='));
+                if (sessionCookie && window.authManager && !window.authManager.isAuthenticated) {
+                    console.log("🔄 Session cookie van, de authManager nincs hitelesítve, újrapróbálkozás...");
+                    if (window.authManager.checkAuth) {
+                        window.authManager.checkAuth();
+                    }
+                }
+            }
+        }, 1000);
         
-        // Ellenőrizzük, hogy van-e SmartCartManager
-        if (window.cartManager) {
-            // Hozzáadjuk a kosárhoz
-            const result = await window.cartManager.addReservation({
-                tableName: selectedTable.querySelector('.table-name').textContent,
-                tableNumber: selectedTable.dataset.table,
-                tableLocation: selectedTable.querySelector('.table-location').textContent,
-                guests: reservationData.guests,
-                date: reservationData.datetime,
-                originalDate: reservationData.datetime,
-                time: reservationData.timeSlot,
-                originalTime: reservationData.timeSlot,
-                message: reservationData.message,
-                tableId: reservationData.tableNumber,
-                type: reservationData.type,
-                name: reservationData.name,
-                email: reservationData.email,
-                extraServices: reservationData.extraServices
-            });
-            
-            if (result.success) {
-                console.log('✅ Foglalás sikeresen hozzáadva a kosárhoz');
+        // 10 másodperc után töröljük az intervallumot, ha már kitöltődött
+        setTimeout(() => {
+            clearInterval(fillInterval);
+            console.log("⏹️ Adatkitöltő intervallum leállítva");
+        }, 10000);
+    }, 200);
+    
+    // Segédfüggvények az adatok kitöltéséhez
+    function fillUserDataFromNavbarManager() {
+        if (!window.navbarManager || !window.navbarManager.isAuthenticated) return;
+        
+        const userData = window.navbarManager.userData;
+        console.log("📝 Adatok kitöltése navbarManager-ből:", userData);
+        
+        // E-mail kitöltése
+        const emailInput = document.getElementById('email');
+        if (emailInput && (!emailInput.value || emailInput.value.trim() === '')) {
+            let userEmail = userData.email || userData.Email || userData.UserEmail || '';
+            if (userEmail && userEmail.trim() !== '' && userEmail.includes('@')) {
+                emailInput.value = userEmail;
+                console.log(`✅ E-mail kitöltve: ${userEmail}`);
+                showSuccessHighlight(emailInput);
             }
         }
         
-        // Sikeres üzenet megjelenítése
-        const successContainer = document.getElementById('success-message-container');
-        if (successContainer) {
-            successContainer.classList.add('show');
+        // Név kitöltése
+        const nameInput = document.getElementById('name');
+        if (nameInput && (!nameInput.value || nameInput.value.trim() === '')) {
+            let fullName = userData.fullName || userData.userName || userData.name || '';
+            if (fullName && fullName.trim() !== '') {
+                nameInput.value = fullName;
+                console.log(`✅ Név kitöltve: ${fullName}`);
+                showSuccessHighlight(nameInput);
+            }
         }
         
-        // Űrlap visszaállítása
-        $("#reservationForm")[0].reset();
+        // Felhasználói info container frissítése
+        updateUserInfoContainer(userData);
+    }
+    
+    function fillUserDataFromAuthManager() {
+        if (!window.authManager || !window.authManager.isAuthenticated) return;
         
-        // Asztal kijelölés törlése
+        const userData = window.authManager.userData;
+        console.log("📝 Adatok kitöltése authManager-ből:", userData);
+        
+        // E-mail kitöltése
+        const emailInput = document.getElementById('email');
+        if (emailInput && (!emailInput.value || emailInput.value.trim() === '')) {
+            let userEmail = userData.email || userData.Email || userData.UserEmail || '';
+            if (userEmail && userEmail.trim() !== '' && userEmail.includes('@')) {
+                emailInput.value = userEmail;
+                console.log(`✅ E-mail kitöltve: ${userEmail}`);
+                showSuccessHighlight(emailInput);
+            }
+        }
+        
+        // Név kitöltése
+        const nameInput = document.getElementById('name');
+        if (nameInput && (!nameInput.value || nameInput.value.trim() === '')) {
+            let fullName = userData.fullName || userData.userName || userData.name || '';
+            if (fullName && fullName.trim() !== '') {
+                nameInput.value = fullName;
+                console.log(`✅ Név kitöltve: ${fullName}`);
+                showSuccessHighlight(nameInput);
+            }
+        }
+        
+        // Felhasználói info container frissítése
+        updateUserInfoContainer(userData);
+    }
+    
+    function showSuccessHighlight(element) {
+        if (!element) return;
+        element.style.borderColor = '#28a745';
+        element.style.boxShadow = '0 0 0 2px rgba(40, 167, 69, 0.2)';
+        setTimeout(() => {
+            element.style.borderColor = '';
+            element.style.boxShadow = '';
+        }, 2000);
+    }
+    
+    function updateUserInfoContainer(userData) {
+        const userInfoContainer = document.getElementById('user-info-container');
+        const userNameElement = document.getElementById('user-name');
+        
+        if (!userInfoContainer) return;
+        
+        if (userData && userData.userName) {
+            let displayName = userData.userName;
+            if (userData.userName === 'admin' || userData.isAdmin === true) {
+                displayName = `${userData.userName} 👑`;
+            }
+            
+            if (userNameElement) {
+                userNameElement.textContent = displayName;
+            }
+            
+            userInfoContainer.style.display = 'block';
+            if (!userInfoContainer.classList.contains('animated')) {
+                userInfoContainer.classList.add('animated');
+            }
+            console.log(`✅ Felhasználói info frissítve: ${displayName}`);
+        } else {
+            userInfoContainer.style.display = 'none';
+        }
+    }
+
+    // ASZTAL KIVÁLASZTÁS ESEMÉNYKEZELŐ
+    $(".table-select-btn").on("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const tableCard = $(this).closest(".table-card");
+        const tableNumber = tableCard.data('table');
+        const minGuests = tableCard.data('min-guests') || 1;
+        const maxGuests = tableCard.data('max-guests') || 20;
+        const isSelected = $(this).hasClass('selected');
+        
+        console.log(`🪑 Asztal ${tableNumber} kiválasztva: ${minGuests}-${maxGuests} fő`);
+        
+        // Animáció
+        if (!isSelected) {
+            $(this).addClass('shake');
+            setTimeout(() => $(this).removeClass('shake'), 500);
+        }
+        
         $(".table-card").removeClass("selected");
         $(".table-select-btn").removeClass("selected").text("Kiválasztás");
         
-        if (guestsManager) {
-            guestsManager.reset();
+        if (!isSelected) {
+            $(this).addClass("selected").text("Kiválasztva");
+            tableCard.addClass("selected");
+            
+            const tableSelectedEvent = new CustomEvent('tableSelected', {
+                detail: {
+                    tableNumber: tableNumber,
+                    minGuests: minGuests,
+                    maxGuests: maxGuests
+                }
+            });
+            document.dispatchEvent(tableSelectedEvent);
+            
+            console.log(`✅ Asztal ${tableNumber} kiválasztva (${minGuests}-${maxGuests} fő)`);
+            
+            // Foglalt időpontok ellenőrzése
+            const datetimeInput = document.getElementById('datetime');
+            if (datetimeInput && datetimeInput.value && window.navbarManager && window.navbarManager.datetimePicker) {
+                window.navbarManager.datetimePicker.checkReservedTimeSlotsIfTableSelected(datetimeInput.value);
+            }
+        } else {
+            if (window.guestsManager) {
+                window.guestsManager.reset();
+            }
+            console.log(`🔄 Asztal kijelölés törölve`);
+            
+            const datetimeInput = document.getElementById('datetime');
+            if (datetimeInput && datetimeInput.value && window.navbarManager && window.navbarManager.datetimePicker) {
+                window.navbarManager.datetimePicker.resetTimeSlotButtons();
+            }
         }
-        
-        // Extra szolgáltatások visszaállítása
-        if (window.extraServicesManager) {
-            window.extraServicesManager.reset();
-        }
-        
-        console.log("✅ Foglalás sikeresen elküldve");
-        
-    } catch (error) {
-        console.error("❌ Hiba a foglalás elküldésekor:", error);
-        alert("Hiba történt a foglalás elküldésekor. Kérjük, próbálja újra!");
-    }
-    
-    return false; // Biztos, ami biztos
-});
-
-// 7. SIKERES ÜZENET BECSUKÁSA
-$("#close-success-message").on("click", function() {
-    const successContainer = document.getElementById('success-message-container');
-    if (successContainer) {
-        successContainer.classList.remove('show');
-    }
-});
-
-$("#success-message-cart").on("click", function() {
-    const successContainer = document.getElementById('success-message-container');
-    if (successContainer) {
-        successContainer.classList.remove('show');
-    }
-    
-    // Átirányítás a kosár oldalra
-    window.location.href = "cart.html";
-});
     });
+
+    // FOGLALÁSI ŰRLAP ESEMÉNYKEZELŐ
+    $("#reservationForm").on("submit", async function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log("📋 Foglalási űrlap elküldve");
+        
+        // Ellenőrizzük, hogy van-e asztal kiválasztva
+        const selectedTable = document.querySelector(".table-card.selected");
+        if (!selectedTable) {
+            console.log("❌ Nincs kiválasztott asztal");
+            alert("Kérjük, válasszon asztalt!");
+            $(".tables-section").addClass('shake');
+            setTimeout(() => $(".tables-section").removeClass('shake'), 500);
+            return false;
+        }
+        
+        console.log("✅ Van kiválasztott asztal:", selectedTable.dataset.table);
+        
+        // Vendégek validációja
+        if (window.guestsManager) {
+            const guestsValidation = window.guestsManager.validateForSelectedTable();
+            if (!guestsValidation.valid) {
+                alert(guestsValidation.message);
+                $(".tables-section").addClass('shake');
+                setTimeout(() => $(".tables-section").removeClass('shake'), 500);
+                return false;
+            }
+        }
+        
+        // Időpont validáció
+        const timeSlot = document.getElementById('time-slot').value;
+        if (!timeSlot) {
+            alert("Kérjük, válasszon időpontot!");
+            return false;
+        }
+        
+        // Dátum validáció
+        const datetime = document.getElementById('datetime').value;
+        if (!datetime) {
+            alert("Kérjük, válasszon dátumot!");
+            return false;
+        }
+        
+        // Extra szolgáltatások
+        let extraServicesData = [];
+        try {
+            const extraServicesInput = document.getElementById('extra-services');
+            if (extraServicesInput && extraServicesInput.value) {
+                extraServicesData = JSON.parse(extraServicesInput.value);
+            }
+        } catch (error) {
+            console.warn('⚠️ Hiba az extra szolgáltatások feldolgozásakor:', error);
+        }
+        
+        try {
+            const reservationData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                guests: parseInt(document.getElementById('guests').value),
+                datetime: datetime,
+                timeSlot: timeSlot,
+                tableNumber: selectedTable.dataset.table,
+                type: document.getElementById('type').value,
+                message: document.getElementById('message').value,
+                extraServices: extraServicesData,
+                isoDate: datetime,
+                localDate: document.getElementById('datetime-display').textContent,
+                tableName: selectedTable.querySelector('.table-name').textContent,
+                tableLocation: selectedTable.querySelector('.table-location').textContent
+            };
+            
+            console.log("📤 Foglalás küldése:", reservationData);
+            
+            if (window.cartManager) {
+                const result = await window.cartManager.addReservation(reservationData);
+                if (result.success) {
+                    console.log('✅ Foglalás sikeresen hozzáadva a kosárhoz');
+                }
+            }
+            
+            // Sikeres üzenet
+            const successContainer = document.getElementById('success-message-container');
+            if (successContainer) {
+                successContainer.classList.add('show');
+            }
+            
+            // Űrlap visszaállítása
+            $("#reservationForm")[0].reset();
+            $(".table-card").removeClass("selected");
+            $(".table-select-btn").removeClass("selected").text("Kiválasztás");
+            
+            if (window.guestsManager) {
+                window.guestsManager.reset();
+            }
+            if (window.extraServicesManager) {
+                window.extraServicesManager.reset();
+            }
+            
+            // Adatok újratöltése bejelentkezett felhasználó esetén
+            if (window.navbarManager && window.navbarManager.isAuthenticated) {
+                fillUserDataFromNavbarManager();
+            } else if (window.authManager && window.authManager.isAuthenticated) {
+                fillUserDataFromAuthManager();
+            }
+            
+            console.log("✅ Foglalás sikeresen elküldve");
+            
+        } catch (error) {
+            console.error("❌ Hiba a foglalás elküldésekor:", error);
+            alert("Hiba történt a foglalás elküldésekor. Kérjük, próbálja újra!");
+        }
+        
+        return false;
+    });
+
+    // SIKERES ÜZENET GOMBOK
+    $("#close-success-message").on("click", function() {
+        $("#success-message-container").removeClass('show');
+    });
+    
+    $("#success-message-cart").on("click", function() {
+        $("#success-message-container").removeClass('show');
+        window.location.href = "cart.html";
+    });
+});
 </script>
 <script>
 

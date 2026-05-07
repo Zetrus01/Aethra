@@ -1,0 +1,106 @@
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\appsettings.Development.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\appsettings.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.staticwebassets.runtime.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.staticwebassets.endpoints.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.exe
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.deps.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.runtimeconfig.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Krajcsovics Christofer.pdb
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Google.Protobuf.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\K4os.Compression.LZ4.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\K4os.Compression.LZ4.Streams.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\K4os.Hash.xxHash.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\MailKit.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Microsoft.Data.Sqlite.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\MimeKit.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\MySql.Data.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\MySqlConnector.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\SQLitePCLRaw.batteries_v2.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\SQLitePCLRaw.core.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Data.SQLite.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Security.Permissions.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\System.Windows.Extensions.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\ZstdSharp.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\comerr64.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\gssapi64.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\k5sprt64.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\krb5_64.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\krbcc64.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\alpine-arm\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\alpine-arm64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\alpine-x64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\browser-wasm\nativeassets\net7.0\e_sqlite3.a
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-arm\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-arm64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-armel\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-mips64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-musl-arm\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-musl-arm64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-musl-x64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-s390x\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-x64\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-x86\native\libe_sqlite3.so
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\maccatalyst-arm64\native\libe_sqlite3.dylib
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\maccatalyst-x64\native\libe_sqlite3.dylib
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\osx-arm64\native\libe_sqlite3.dylib
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\osx-x64\native\libe_sqlite3.dylib
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-arm\native\e_sqlite3.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-arm64\native\e_sqlite3.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\linux-x64\native\SQLite.Interop.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\osx-x64\native\SQLite.Interop.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x64\native\SQLite.Interop.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win-x86\native\SQLite.Interop.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.csproj.AssemblyReference.cache
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.csproj.CoreCompileInputs.cache
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.sourcelink.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\scopedcss\bundle\Krajcsovics Christofer.styles.css
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\ehzs044pmb-ncnnkd11l8.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\c4ngqdae47-18n3xhkjgd.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\7ippbf9o26-r3saconb5q.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\j8uimpg1b3-66ucwk2aqg.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\p3j0ydig2b-qa7b0ev5vy.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\qr1bqq4021-337g9fyrta.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\ktn0ek3v8v-otx4yp4h1g.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\jerz50zg35-hh77k2fgzf.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\ynfyx6if5b-b5k2qpy72q.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\5yj9r6qrz5-wl3n7xdm9q.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\7cj0xsnb7i-5m9ohjlaa9.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\d2owfb3ucl-jv3e6jg58v.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\sfjyulevqe-u2e0zgbmks.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\r4q5a3cq7z-f90fh0hgph.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\qtgju4j2lp-6tok2xhxyc.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\2c6yn72fo8-zhbhmhhczu.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\bui4wrw5w8-917fw381fv.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\18g6frvooi-4grswbdbg0.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\pslj1qgyjg-r66f7ew98o.gz
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\staticwebassets.build.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\staticwebassets.build.json.cache
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\staticwebassets.development.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsov.E9360DC8.Up2Date
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\refint\Krajcsovics Christofer.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.pdb
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\Krajcsovics Christofer.genruntimeconfig.cache
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\ref\Krajcsovics Christofer.dll
+C:\Users\zetru\Desktop\backend\AethraRestaurant\obj\Debug\net9.0\compressed\2k9s325vv8-zuixb3d4dg.gz
