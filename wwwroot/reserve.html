@@ -7732,15 +7732,14 @@ initGuestsManager() {
         return;
     }
     
-    // Biztonsági mentés: ha még sincs, akkor hozzuk létre 
+    // Biztonsági mentés: ha még sincs, akkor hozzuk létre (de ezt már nem kellene elérnünk)
     if (typeof GuestsManager !== 'undefined') {
         window.guestsManager = new GuestsManager();
         console.log('👥 GuestsManager inicializálva NavbarManager-ben (emergency fallback)');
     } else {
         console.warn('⚠️ GuestsManager osztály nem található');
     }
-}
-    
+}  
     loadNavbar() {
         if (this.navbarLoaded) return;
         
@@ -7906,18 +7905,18 @@ initGuestsManager() {
         }
     }, 100);
         // 2. GLOBÁLIS PROFILE MANAGER LÉTREHOZÁSA
-        window.profileManager = new ProfileManager();
-        console.log("✅ Globális ProfileManager létrehozva");
+    window.profileManager = new ProfileManager();
+    console.log("✅ Globális ProfileManager létrehozva");
         
         // 3. GLOBÁLIS EXTRA SZOLGÁLTATÁSOK MANAGER LÉTREHOZÁSA
-        window.extraServicesManager = new ExtraServicesManager();
-        console.log("✅ Globális ExtraServicesManager létrehozva");
+    window.extraServicesManager = new ExtraServicesManager();
+    console.log("✅ Globális ExtraServicesManager létrehozva");
         
         // 4. NAVBAR MANAGER INICIALIZÁLÁSA
-        setTimeout(() => {
-            window.navbarManager = new NavbarManager();
-            console.log("✅ NavbarManager inicializálva");
-        }, 200);
+            setTimeout(() => {
+        window.navbarManager = new NavbarManager();
+        console.log("✅ NavbarManager inicializálva");
+    }, 300);
         
         // 5. ASZTAL KIVÁLASZTÁS ESEMÉNYKEZELŐ
         $(".table-select-btn").on("click", function(e){
