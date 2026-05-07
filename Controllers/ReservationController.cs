@@ -642,17 +642,16 @@ public async Task<IActionResult> GetUserReservations()
             return Unauthorized(new { success = false, message = "Nincs érvényes session" });
         }
 
-        // Felhasználónév lekérése
         var userName = await GetUserNameFromSessionAsync(sessionId);
         if (string.IsNullOrEmpty(userName))
         {
             return Unauthorized(new { success = false, message = "Érvénytelen session" });
         }
 
-        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = @"
             SELECT r.*, 
                    u.Email as UserEmail
@@ -664,7 +663,7 @@ public async Task<IActionResult> GetUserReservations()
         command.Parameters.AddWithValue("@UserId", userName);
 
         var reservations = new List<object>();
-        await using (var reader = await command.ExecuteReaderAsync())
+        using (var reader = await command.ExecuteReaderAsync())
         {
             while (await reader.ReadAsync())
             {
@@ -692,11 +691,11 @@ public async Task<IActionResult> GetUserReservations()
                              reader.GetString(reader.GetOrdinal("OrderId")) : null,
                     Message = !reader.IsDBNull(reader.GetOrdinal("Message")) ? 
                              reader.GetString(reader.GetOrdinal("Message")) : null,
-                    ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ?  // <-- ÚJ
+                    ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ? 
                                    reader.GetString(reader.GetOrdinal("ExtraServices")) : null,
-                    CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt")),
+                    CreatedAt = SafeGetString(reader, "CreatedAt"),
                     UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? 
-                               reader.GetString(reader.GetOrdinal("UpdatedAt")) : null
+                               SafeGetString(reader, "UpdatedAt") : null
                 });
             }
         }
@@ -719,7 +718,25 @@ public async Task<IActionResult> GetUserReservations()
         });
     }
 }
-
+private string SafeGetString(MySqlDataReader reader, string columnName)
+{
+    try
+    {
+        var idx = reader.GetOrdinal(columnName);
+        if (reader.IsDBNull(idx))
+            return null;
+        
+        var value = reader.GetValue(idx);
+        if (value is DateTime dt)
+            return dt.ToString("yyyy-MM-dd HH:mm:ss");
+        
+        return value.ToString();
+    }
+    catch
+    {
+        return null;
+    }
+}
 [HttpGet("GetAllReservations")]
 public async Task<IActionResult> GetAllReservations()
 {
@@ -731,17 +748,16 @@ public async Task<IActionResult> GetAllReservations()
             return Unauthorized(new { success = false, message = "Nincs érvényes session" });
         }
 
-        // Ellenőrizzük, hogy admin-e
         var isAdmin = await IsUserAdminAsync(sessionId);
         if (!isAdmin)
         {
             return StatusCode(403, new { success = false, message = "Nincs jogosultság" });
         }
 
-        await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
+        await using var connection = new MySqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = @"
             SELECT r.*, 
                    u.Email as UserEmail
@@ -750,7 +766,7 @@ public async Task<IActionResult> GetAllReservations()
             ORDER BY r.Date DESC, r.Time DESC";
 
         var reservations = new List<object>();
-        await using (var reader = await command.ExecuteReaderAsync())
+        using (var reader = await command.ExecuteReaderAsync())
         {
             while (await reader.ReadAsync())
             {
@@ -778,11 +794,11 @@ public async Task<IActionResult> GetAllReservations()
                              reader.GetString(reader.GetOrdinal("OrderId")) : null,
                     Message = !reader.IsDBNull(reader.GetOrdinal("Message")) ? 
                              reader.GetString(reader.GetOrdinal("Message")) : null,
-                    ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ?  // <-- ÚJ
+                    ExtraServices = !reader.IsDBNull(reader.GetOrdinal("ExtraServices")) ? 
                                    reader.GetString(reader.GetOrdinal("ExtraServices")) : null,
-                    CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt")),
+                    CreatedAt = SafeGetString(reader, "CreatedAt"),
                     UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? 
-                               reader.GetString(reader.GetOrdinal("UpdatedAt")) : null
+                               SafeGetString(reader, "UpdatedAt") : null
                 });
             }
         }
@@ -1575,50 +1591,50 @@ public async Task<IActionResult> GetActiveReservation()
         }
     }
 
-    private async Task<string?> GetUserNameFromSessionAsync(string sessionId)
+private async Task<string?> GetUserNameFromSessionAsync(string sessionId)
+{
+    try
     {
-        try
-        {
-            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
-            await connection.OpenAsync();
+        await using var connection = new MySqlConnection(_connectionString);
+        await connection.OpenAsync();
 
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT UserName FROM Session WHERE SessionID = @SessionId";
-            command.Parameters.AddWithValue("@SessionId", sessionId);
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT UserName FROM Session WHERE SessionID = @SessionId";
+        command.Parameters.AddWithValue("@SessionId", sessionId);
 
-            var result = await command.ExecuteScalarAsync();
-            return result?.ToString();
-        }
-        catch
-        {
-            return null;
-        }
+        var result = await command.ExecuteScalarAsync();
+        return result?.ToString();
     }
-
-    private async Task<bool> IsUserAdminAsync(string sessionId)
+    catch
     {
-        try
-        {
-            await using var connection = new MySql.Data.MySqlClient.MySqlConnection(_connectionString);
-            await connection.OpenAsync();
-
-            var command = connection.CreateCommand();
-            command.CommandText = @"
-                SELECT u.UserName
-                FROM Session s
-                JOIN User u ON s.UserName = u.UserName
-                WHERE s.SessionID = @SessionId AND u.UserName = 'admin'";
-
-            command.Parameters.AddWithValue("@SessionId", sessionId);
-
-            var result = await command.ExecuteScalarAsync();
-            return result != null && result.ToString() == "admin";
-        }
-        catch
-        {
-            return false;
-        }
+        return null;
     }
+}
+
+private async Task<bool> IsUserAdminAsync(string sessionId)
+{
+    try
+    {
+        await using var connection = new MySqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = @"
+            SELECT u.UserName
+            FROM Session s
+            JOIN User u ON s.UserName = u.UserName
+            WHERE s.SessionID = @SessionId AND u.IsAdmin = 1";
+
+        command.Parameters.AddWithValue("@SessionId", sessionId);
+
+        var result = await command.ExecuteScalarAsync();
+        return result != null;
+    }
+    catch
+    {
+        return false;
+    }
+}
 
     // ========== TIME FORMAT CONVERSION METHODS ==========
 
