@@ -95,9 +95,15 @@ command.CommandText = @"
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-                    order.CreatedAt = !reader.IsDBNull(reader.GetOrdinal("CreatedAt")) 
-                        ? reader.GetString(reader.GetOrdinal("CreatedAt")) 
-                        : null;
+if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+{
+    var createdAtRaw = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+    order.CreatedAt = createdAtRaw.ToString("yyyy-MM-dd HH:mm:ss");
+}
+else
+{
+    order.CreatedAt = null;
+}
 
                     orders.Add(order);
                 }
@@ -192,10 +198,15 @@ command.CommandText = @"
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-                    // Cseréld erre:
-order.CreatedAt = !reader.IsDBNull(reader.GetOrdinal("CreatedAt")) 
-    ? reader.GetString(reader.GetOrdinal("CreatedAt")) 
-    : null;
+if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+{
+    var createdAtRaw = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+    order.CreatedAt = createdAtRaw.ToString("yyyy-MM-dd HH:mm:ss");
+}
+else
+{
+    order.CreatedAt = null;
+}
                     order.DeliveryAddress = !reader.IsDBNull(reader.GetOrdinal("DeliveryAddress")) ? 
                     reader.GetString(reader.GetOrdinal("DeliveryAddress")) : null;
                                 order.PaymentMethod = !reader.IsDBNull(reader.GetOrdinal("PaymentMethod")) ? 
@@ -1180,9 +1191,8 @@ public async Task<IActionResult> CreateOrder([FromBody] OrderModel model)
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
                     order.CreatedAt = !reader.IsDBNull(reader.GetOrdinal("CreatedAt")) 
-                        ? reader.GetString(reader.GetOrdinal("CreatedAt")) 
-                        : null;
-                    
+    ? reader.GetDateTime(reader.GetOrdinal("CreatedAt")).ToString("yyyy-MM-dd HH:mm:ss")
+    : null;
                     // Tételek betöltése
                     order.Items = await GetOrderItemsAsync(order.OrderId);
 
