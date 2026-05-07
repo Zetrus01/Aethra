@@ -198,7 +198,15 @@ else
                     
                     order.Notes = !reader.IsDBNull(reader.GetOrdinal("Notes")) ? 
                                  reader.GetString(reader.GetOrdinal("Notes")) : null;
-                    order.CreatedAt = reader.GetString(reader.GetOrdinal("CreatedAt"));
+                    if (!reader.IsDBNull(reader.GetOrdinal("CreatedAt")))
+{
+    var createdAtRaw = reader.GetValue(reader.GetOrdinal("CreatedAt"));
+    order.CreatedAt = createdAtRaw is DateTime dt ? dt.ToString("yyyy-MM-dd HH:mm:ss") : createdAtRaw.ToString();
+}
+else
+{
+    order.CreatedAt = null;
+}
                     order.DeliveryAddress = !reader.IsDBNull(reader.GetOrdinal("DeliveryAddress")) ? 
                     reader.GetString(reader.GetOrdinal("DeliveryAddress")) : null;
                                 order.PaymentMethod = !reader.IsDBNull(reader.GetOrdinal("PaymentMethod")) ? 
